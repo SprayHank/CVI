@@ -1,4 +1,4 @@
-;define("jquery/cvi/jquery.cvi", [],function(require, exports, module) {
+
 
 (function(){
 var div = document.createElement("DIV");
@@ -29,55 +29,56 @@ if(typeof (div.style.borderRadius) === "undefined"){
 }
 })();
 
-var SUPPORT_CANVAS ;//代替     document.all && !window.opera && !window.XMLHttpRequest && (!document.documentMode || document.documentMode < 9)
-(function(){
-	try{
-		var canvas = document.createElement('canvas');
-		if(canvas.getContext("2d")) {
-			SUPPORT_CANVAS = true;
-		}
-	} catch (e){
-		SUPPORT_CANVAS = false;
-	}
-})();
 
-var cvi={};
-cvi.SUPPORT_CANVAS=SUPPORT_CANVAS;
-cvi.version=1.6;
-cvi.VML_NAMESPACES=function(){
-	//return function(){
-		if (document.namespaces["v"] == null) {
-			var e = ["shape", "shapetype", "group", "background", "path", "formulas", "handles", 
-			"fill", "stroke", "shadow", "textbox", "textpath", "imagedata", "line", "polyline", 
-			"curve", "roundrect", "oval", "rect", "arc", "image"], s = document.createStyleSheet();
-			for (var i = 0; i < e.length; i++) {
+(function() {
+	var SUPPORT_CANVAS;//代替     document.all && !window.opera && !window.XMLHttpRequest && (!document.documentMode || document.documentMode < 9)
+	(function() {
+		try {
+			var canvas = document.createElement('canvas');
+			if(canvas.getContext("2d")) {
+				SUPPORT_CANVAS = true;
+			}
+		} catch(e) {
+			SUPPORT_CANVAS = false;
+		}
+	})();
+
+	var cvi = {};
+	cvi.SUPPORT_CANVAS = SUPPORT_CANVAS;
+	cvi.version = 1.6;
+	cvi.VML_NAMESPACES = function() {
+		//return function(){
+		if(document.namespaces["v"] == null) {
+			var e = ["shape", "shapetype", "group", "background", "path", "formulas", "handles",
+				"fill", "stroke", "shadow", "textbox", "textpath", "imagedata", "line", "polyline",
+				"curve", "roundrect", "oval", "rect", "arc", "image"], s = document.createStyleSheet();
+			for(var i = 0; i < e.length; i++) {
 				s.addRule("v\\:" + e[i], "behavior: url(#default#VML);");
 			}
 			document.namespaces.add("v", "urn:schemas-microsoft-com:vml");
 		}
-	//}
-};
+		//}
+	};
 
-cvi.ease={
-	linear:[0.0,0.0,1.0,1.0],
-	wkitDef:[0.25,0.1,0.25,1.0],
-	wkitIn:[0.42,0.0,1.0,1.0],
-	wkitOut:[0.0,0.58,1.0,1.0],
-	wkitInOut:[0.42,0.58,1.0,1.0],
-	wkitOutIn:[0.0,0.42,1.0,0.58],
-	sineIn:[0.25,0.0,1.0,1.0],
-	sineOut:[0.0,0.25,1.0,1.0],
-	sineInOut:[0.25,0.0,0.75,1.0],
-	sineOutIn:[0.0,0.25,1.0,0.75],
-	medIn:[0.5,0.0,1.0,1.0],
-	medOut:[0.0,0.5,1.0,1.0],
-	medInOut:[0.5,0.0,0.5,1.0],
-	medOutIn:[0.0,0.5,1.0,0.5],
-	maxIn:[1.0,0.0,1.0,1.0],
-	maxOut:[0.0,1.0,1.0,1.0],
-	maxInOut:[1.0,0.0,0.0,1.0],
-	maxOutIn:[0.0,1.0,1.0,0.0]
-};
-
-module.exports = cvi;
-});
+	cvi.ease = {
+		linear: [0.0, 0.0, 1.0, 1.0],
+		wkitDef: [0.25, 0.1, 0.25, 1.0],
+		wkitIn: [0.42, 0.0, 1.0, 1.0],
+		wkitOut: [0.0, 0.58, 1.0, 1.0],
+		wkitInOut: [0.42, 0.58, 1.0, 1.0],
+		wkitOutIn: [0.0, 0.42, 1.0, 0.58],
+		sineIn: [0.25, 0.0, 1.0, 1.0],
+		sineOut: [0.0, 0.25, 1.0, 1.0],
+		sineInOut: [0.25, 0.0, 0.75, 1.0],
+		sineOutIn: [0.0, 0.25, 1.0, 0.75],
+		medIn: [0.5, 0.0, 1.0, 1.0],
+		medOut: [0.0, 0.5, 1.0, 1.0],
+		medInOut: [0.5, 0.0, 0.5, 1.0],
+		medOutIn: [0.0, 0.5, 1.0, 0.5],
+		maxIn: [1.0, 0.0, 1.0, 1.0],
+		maxOut: [0.0, 1.0, 1.0, 1.0],
+		maxInOut: [1.0, 0.0, 0.0, 1.0],
+		maxOutIn: [0.0, 1.0, 1.0, 0.0]
+	};
+	window.cvi = cvi;
+})();
