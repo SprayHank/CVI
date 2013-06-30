@@ -1,0 +1,103 @@
+/* text style sheets for wrapper */
+#wrapper { 
+	padding: 0px; 
+	border: none;
+	font-size: 1em;
+	font-family: arial, helvetica, verdana, sans-serif;
+}
+
+/* imprint text */
+#wrapper_ip_content { 
+	text-align: center;
+	vertical-align: middle;
+}
+/* imprint text > header */
+#wrapper_ip_content span big { 
+	font-family: verdana, sans-serif;
+	font-size: 138%;
+	line-height: 200%; 
+}
+/* imprint text > body */
+#wrapper_ip_content span em { 
+	color: #eeeeee; 
+	font-size: 110%;
+	font-weight: normal;
+	font-family: arial, helvetica, sans-serif;
+	font-style: normal;
+}
+	#wrapper_ip_content span em b { 
+		color: #ffcc00; 
+		font-weight: bold;
+	}
+	#wrapper_ip_content span em tt { 
+		color: #eeeeee; 
+		font-family: arial, helvetica, sans-serif;
+		font-size: smaller;
+		font-style: normal;
+	}
+		#wrapper_ip_content span em tt b { 
+			color: #eeeeee; 
+			font-weight: bold;
+		}
+/* imprint text > footer */
+#wrapper_ip_content span small { 
+	color: #dddddd; 
+	font-size: smaller;
+	font-family: sans-serif;
+}
+
+/* info text > caption */
+#wrapper_lt_content span big, #wrapper_rb_content span big { 
+	font-family: verdana, sans-serif;
+	font-size: 138%;
+	line-height: 200%; 
+}
+/* info text > comment */
+#wrapper_lt_content span em, #wrapper_rb_content span em { 
+	color: #eeeeee; 
+	font-size: 110%;
+	font-weight: normal;
+	font-family: arial, helvetica, sans-serif;
+	font-style: normal;
+}
+	#wrapper_lt_content span em b, #wrapper_rb_content span em b { 
+		color: #ffcc00; 
+		font-weight: bold;
+	}
+	/* info text > image info text */
+	#wrapper_lt_content span em tt, #wrapper_rb_content span em tt { 
+		color: #eeeeee; 
+		font-family: arial, helvetica, sans-serif;
+		font-size: smaller;
+		font-style: normal;
+	}
+		#wrapper_lt_content span em tt b, #wrapper_rb_content span em tt b { 
+			color: #eeeeee; 
+			font-weight: bold;
+		}
+	/* info text > image info text */
+	#wrapper_lt_content span em pre, #wrapper_rb_content span em pre { 
+		color: #eeeeee; 
+		font-family: 'Andale mono', 'Lucida Console', Monaco, monospace;
+		font-style: normal;
+	}
+		
+/* info text image > no. */
+#wrapper_lt_content span small, #wrapper_rb_content span small { 
+	color: #dddddd; 
+	font-size: smaller;
+	font-family: sans-serif;
+}
+
+#wrapper_thumb_text small {
+	color: #dddddd; 
+	font-size: smaller;
+	font-family: sans-serif;
+}
+	#wrapper_thumb_text small b {
+		color: white; 
+		font-size: small;
+		font-weight: bold;
+		font-family: sans-serif;
+	}
+

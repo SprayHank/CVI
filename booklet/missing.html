@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Missing people</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-language" content="en" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="icon" href="favicon.ico" type="image/ico" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="bookmark" type="text/html" title="booklet.js" href="http://www.netzgesta.de/booklet/" />
+	<meta name="Description" lang="en" content="booklet.js simulates an authentic looking book presenting photos on your webpages through unobtrusive javascript" />
+	<meta name="Keywords" lang="en" content="booklet.js, javascript, photo, image, picture, book, gallery, Internet Explorer, Mozilla, Firefox, Opera, Safari, Chrome" />
+	<style type="text/css">
+		body { 
+			background: #a0a0a0 url(images/backgrnd.jpg);
+		}
+		div#wrapper { 
+			display: block; 
+			position: relative;
+			overflow: visible;
+			width: 982px; 
+			height: auto;
+			min-height: 662px;
+			padding: 0px; 
+			margin: 20px auto;
+			border: 0px none;
+			font-family: verdana, arial, helvetica, sans-serif;
+		}
+		p { 
+			clear: left;
+			display: block; 
+			position: relative;
+			overflow: visible;
+			margin: 0px auto; 
+			padding: 0;
+			padding-top: .5em; 
+			font-size: 1em;
+			line-height: 130%;
+			text-align: center;
+			font-family: Tahoma, Arial, Helvetica, sans-serif; 
+			text-shadow: 0px 2px 3px #666;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" media="all" href="booklet.css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<script src="booklet_lang.js" type="text/javascript"></script>
+	<script src="booklet.js" type="text/javascript"></script>
+<script type="text/javascript">
+<!--
+var ltxt="If you have any information, please ";
+var rtxt=" If this case has been closed, please inform the webmaster [at] netzgesta.de";
+var photos = new Array();
+photos = [
+	{source:'missing/Alan_Lewis.jpg', comment:ltxt+'call <b>077-60-20-10-03</b>.'+rtxt},	{source:'missing/Amber_Hoope.jpg', comment:ltxt+'call <b>208-522-1983</b>.'+rtxt},	{source:'missing/Andrew_Brunelli.jpg', comment:ltxt+'call <b>928-638-7805</b>.'+rtxt},	{source:'missing/Benedetta_Bentley.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/Bonnie_Thayer.jpg', comment:ltxt+'call <b>203-393-4200</b>.'+rtxt},	{source:'missing/Brandy_Hanna.jpg', comment:ltxt+'call <b>843-745-1015</b>.'+rtxt},	{source:'missing/Brian_O_Tuama.jpg', comment:ltxt+'call <b>021-452-2000</b>.'+rtxt},
+	{source:'missing/Bethanie_Dougherty.jpg', comment:ltxt+'call <b>607-778-1911</b>.'+rtxt},	{source:'missing/Charlie_Gragg.jpg', comment:ltxt+'call <b>918-485-3124</b>.'+rtxt},	{source:'missing/Chris_Gaines.jpg', comment:ltxt+'visit <b>crisgainesinitiative.org</b>.'+rtxt},
+	{source:'missing/Christine_Marie_Sheddy.jpg', comment:ltxt+'call <b>80-811-8396</b>.'+rtxt},
+	{source:'missing/Cindie_Kogle.jpg', comment:ltxt+'call <b>541-682-8544</b>.'+rtxt},	{source:'missing/Crystal_Wilson.jpg', comment:ltxt+'call <b>614-654-4670</b>.'+rtxt},	{source:'missing/Eric_Peterson.jpg', comment:ltxt+'call <b>952-985-2800</b>.'+rtxt},	{source:'missing/Gina_Allison_Lourde.jpg', comment:ltxt+'visit <b>www.rawstudios.com/darkcountry</b>.'+rtxt},	{source:'missing/Heather_Riggio.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/James_Lewis.jpg', comment:ltxt+'call <b>202-727-9099</b>.'+rtxt},	{source:'missing/Jennifer_Kesse.jpg', comment:ltxt+'call <b>321-235-5300</b>.'+rtxt},	{source:'missing/Joseph_Pike.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/Lindsey_Brouillette.jpg', comment:ltxt+'call <b>337-394-3071</b>.'+rtxt},	{source:'missing/Lynne_Petrie.jpg', comment:ltxt+'call <b>845-600-5700</b>.'+rtxt},
+	{source:'missing/Michelle_Orphalee_McMullen.jpg', comment:ltxt+'call <b>717-943-6100</b>.'+rtxt},
+	{source:'missing/Moysis_Pericleous.jpg', comment:ltxt+'call <b>041-828-4414</b>.'+rtxt},
+	{source:'missing/Nailah_Franklin.jpg', comment:ltxt+'call <b>312-746-9259</b>.'+rtxt},	{source:'missing/Pamela_Biggers.jpg', comment:ltxt+'call <b>850-747-4700</b>.'+rtxt},	{source:'missing/Pamela_Bradshaw.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/Patrick_DiFrancesco.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/Rachel_Conger.jpg', comment:ltxt+'call <b>731-642-1672</b>.'+rtxt},	{source:'missing/Si_Young_Yoon.jpg', comment:ltxt+'call <b>323-890-5500</b>.'+rtxt},	{source:'missing/Susan_Powell.jpg', comment:ltxt+'call <b>801-840-4000</b>.'+rtxt},	{source:'missing/Suzanne_Lyall.jpg', comment:ltxt+'call <b>518-783-3211</b>.'+rtxt},	{source:'missing/Yongsheng_Li.jpg', comment:ltxt+'call <b>706-542-2200</b>.'+rtxt}
+];
+window.onload = function() {
+	booklet.add(document.getElementById('wrapper'),{
+		imagearray: photos,
+		language: get_Booklet_Language(),
+		overlayimage: 'missing/overlay.gif',
+		overlaystyle: "font-weight:normal; font-size:18px; color:#ffcc00; text-shadow: 1px 1px 3px black;",
+		buttonfgcolor: '#e0e0e0',
+		buttonbgcolor: '#404040',
+		covercolor: '#f8f8f8',
+		infobgopacity: 75,
+		buttonradius: 50, 
+		buttonsize: 32, 
+		playdelay: 10,
+		mainwidth: 982, 
+		mainheight: 662,
+		playdelay: 10,
+		forcecaption: true,
+		autoplay: true,
+		nocover: true,
+		meter: true,
+		mfgcolor: '#00ff00',
+		msize: 64,
+		verbose: false
+	});
+}
+-->
+</script>
+</head>
+<body>
+<div id="wrapper"></div>
+<p class="header"><b>Images maybe copyrighted and used for demonstration only</b>. <a href="http://booklet.netzgesta.de/">Back to booklet</a>.</p>
+</body>
+</html>

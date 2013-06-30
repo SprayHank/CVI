@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Booklet features</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-language" content="en" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="icon" href="favicon.ico" type="image/ico" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="bookmark" type="text/html" title="booklet.js" href="http://www.netzgesta.de/booklet/" />
+	<meta name="Description" lang="en" content="booklet.js simulates an authentic looking book presenting photos on your webpages through unobtrusive javascript" />
+	<meta name="Keywords" lang="en" content="booklet.js, javascript, photo, image, picture, book, gallery, Internet Explorer, Mozilla, Firefox, Opera, Safari, Chrome" />
+	<style type="text/css">
+		body { 
+			background: #a0a0a0 url(images/backgrnd.jpg);
+		}
+		button {
+			margin: 0px;
+		}
+		p { 
+			margin: 0; 
+			margin-top: -.5em; 
+			margin-bottom: .5em; 
+			padding: 0;
+			font-size: 1em;
+			line-height: 130%;
+			font-family: Tahoma, Arial, Helvetica, sans-serif; 
+			text-align: justify;
+			text-shadow: 0px 2px 3px #666;
+		}
+		div#wrapper { 
+			display: block; 
+			position: relative;
+			overflow: visible;
+			width: 800px; 
+			height: auto;
+			min-height: 600px;
+			padding: 0px; 
+			margin: 20px auto;
+			border: 0px none;
+			font-family: arial, helvetica, verdana, sans-serif;
+		}
+		div#control { 
+			display: block; 
+			position: relative;
+			width: 800px; 
+			height: auto;
+			min-height: 86px;
+			padding: 0px; 
+			margin: 0px auto;
+			border: 0px none;
+			font-family: arial, helvetica, verdana, sans-serif;
+		}
+		.toggle { 
+			padding: 7px 6px; 
+			background: #f0f0f0;
+			margin: 0px 8px 0px 0px;
+			outline: 1px solid grey;
+			border: 1px solid white;
+			text-align: center;
+			font-size: 70%;
+			float: left;
+		}
+		.shadow { 
+    		-webkit-box-shadow: 8px 8px 16px #666;
+    		-moz-box-shadow: 8px 8px 16px #666;
+    		-ms-box-shadow: 8px 8px 16px #666; 
+    		-o-box-shadow: 8px 8px 16px #666; 
+    		box-shadow: 8px 8px 16px #666;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" media="all" href="booklet.css" />
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<script src="cvi_stackblur.js" type="text/javascript"></script>
+	<script src="cvi_filter_lib.js" type="text/javascript"></script>
+	<script src="booklet_lang.js" type="text/javascript"></script>
+	<script src="booklet.js" type="text/javascript"></script>
+<script type="text/javascript">
+<!--
+var photos = new Array();
+photos = [
+	/* this is the way to reference external images, if you want to us filters on the image
+	{source:'imgproxy.php?url=http://www.netzgesta.de/lab/images/example/screen.jpg', caption:'external image'}, 
+	*/
+	{source:'album/landscape.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'anaglyph'}]},
+	{source:'album/palmtree.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'anaglyph'}]},
+	{source:'album/dolphins.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'posterize',s:3}], delay:2, imgshift:0.001},
+	{source:'album/parrot.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'invert'}], delay:3},
+	{source:'album/coffee.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'solarize'}], delay:4, imgshift:0.5},
+	{source:'album/knock.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'smooth',s:4}], delay:5, caption:'Knocking on heavens door!'},
+	{source:'album/beacon.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'motionblur',s:[32,90]}]},
+	{source:'album/polarbear.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'solarize'}]},
+	{source:'album/rose.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'grayscale'}]},
+	{source:'album/sky.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'sepia'}]},
+	{source:'album/smarties.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'adjustrgba',s:[1,2,3,1]}]},
+	{source:'album/sunset.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'mixrgb',s:[[0,0,255],[0,0,0]]}]},
+	{source:'album/wetleaves.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'gamma',s:1.2}]},
+	{source:'album/wickermesh.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'tritone'}]},
+	{source:'album/maize.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'brightness',s:1.2}]},
+	{source:'album/mushroom.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'contrast',s:1.5}]},
+	{source:'album/overcloud.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'exposure',s:2}]},
+	{source:'album/palmtrees.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/peacock.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/penguin.jpg', comment:'Source: www.publicdomainpictures.net', caption:'Fly like a penguin!'},
+	{source:'album/forest.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/fruits.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/green.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/heart.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/hippo.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/jeans.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/jellyfishes.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/chocolate.jpg', comment:'Source: www.publicdomainpictures.net', link:'http://www.publicdomainpictures.net/view-image.php?image=1151&picture=schokolade', target:'_blank'},
+	{source:'album/clownfish.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/dart.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/dolphins.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/ferriswheel.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/field.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/fire.jpg', comment:'Source: www.publicdomainpictures.net', caption:'A strong burning fire!'},
+	{source:'album/batteries.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/book.jpg', comment:'Source: www.publicdomainpictures.net'},
+	{source:'album/butterfly.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'motionblur',s:[32,270]}]},
+	{source:'album/bushflowers.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'zoomblur',s:16}]},
+	{source:'album/cathedral.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'smooth',s:6}]},
+	{source:'album/cereals.jpg', comment:'Source: www.publicdomainpictures.net', filter:[{f:'spinblur',s:4}]},
+	{source:'album/bankok.jpg', comment:'Image is copyrighted and used for demonstration only!', filter:[{f:'adjusthsba',s:[1,2,1,1]},{f:'tiltshift',s:[.576,.3,0,4]}]},
+	{source:'album/capital.jpg', comment:'Image is copyrighted and used for demonstration only!', filter:[{f:'adjusthsba',s:[1,2,1,1]},{f:'tiltshift',s:[.33,.3,1,3]}]},
+];
+var calendarmode=0,doublepage=0;
+var opts={
+	filter: null,
+	imagearray: photos,
+	language: get_Booklet_Language(),
+	covertexture: 'album/cover.jpg',
+	overlayimage: 'album/overlay.png',
+	imprintheader: 'Booklet.js <b>1.3</b> (02-Feb-2011)',
+	imprintbody: 'Distributed under Netzgestade Software License Agreement.<br/>This license permits free of charge use on non-commercial<br/> and private web sites only under special conditions<br/><i>(as described in the license)</i>. This license equals neither<br/>"<span style="text-decoration: line-through;">open source</span>" nor "<span style="text-decoration: line-through;">public domain</span>". There are also Commercial<br/>Software Licenses available via cvi[at]netzgesta.de.<br/><br/>Read more at... http://www.netzgesta.de/cvi/LICENSE.html<br/><br/>Compatible browsers: Firefox 2+, Safari 2+, Chrome 4+, Internet Explorer 6+, Opera 9+.',
+	imprintfooter: '<br/>(c) 2011 by Christian Effenberger. All Rights Reserved.<br/><br/>YOU AGREE TO ALL CONDITIONS OF THIS LICENCE AGREEMENT<br/>CONCERNING THE USE OF THE SOFTWARE BY ACCEPTING THIS LICENCE.<br/>IF YOU DO NOT AGREE TO ALL CONDITIONS OF THIS AGREEMENT,<br/>YOU SHALL NOT INSTALL THE SOFTWARE, OR USE IT IN OTHER WAYS.',
+	buttonradius: 50, 
+	buttonsize: 32,
+	playdelay: 5,
+	poweroftwo: 4,
+	mainwidth: 800, 
+	mainheight: 600,
+	calendarmode: calendarmode,
+	doublepage: doublepage,
+	forcecaption: true,
+	forceimginfo: true,
+	forceglobal: true,
+	filtertoc: true,
+	tocfirst: true,
+	notrans: true,
+	meter: true,
+	mfgcolor: '#00ff00',
+	mbgcolor: '#ff0000',
+	msize: 64,
+	verbose: false
+};
+function addBooklet() {
+	opts.calendarmode=document.getElementById('vertical').checked;
+	opts.doublepage=document.getElementById('double').checked;
+	booklet.remove(document.getElementById('wrapper'),false);
+	booklet.add(document.getElementById('wrapper'),opts);
+}
+window.onload = function() {
+	booklet.add(document.getElementById('wrapper'),opts);
+}
+-->
+</script>
+</head>
+<body>
+<div id="wrapper"></div>
+<div id="control">
+	<p><b>Images maybe copyrighted and used for demonstration only</b>. <a href="http://booklet.netzgesta.de/">Back to booklet</a>.</p> 
+	<div class="toggle shadow"><img src="album/vertical.png" border="0" alt="gray" /><br/><input type="checkbox" id="vertical" name="vertical" onclick="addBooklet();" value="" />vertical</div>
+	<div class="toggle shadow"><img src="album/double.png" border="0" alt="gray" /><br/><input type="checkbox" id="double" name="double" onclick="addBooklet();" value="" />double</div>
+	<div style="float: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+	<div class="shadow" style="float: left;">
+		<button type="button" onclick="booklet.play(document.getElementById('wrapper'),true);"><img src="album/play.png" border="0" alt="play" /><br/>play</button>
+		<button type="button" onclick="booklet.stop(document.getElementById('wrapper'));"><img src="album/stop.png" border="0" alt="stop" /><br/>stop</button>
+	</div>
+	<div style="float: left;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+	<div class="shadow" style="float: left;">
+		<button type="button" onclick="booklet.data(document.getElementById('wrapper'),photos,{filter:null,forceglobal:false,filtertoc:true});"><img src="album/filter_on.png" border="0" alt="gray" /><br/>filter: on</button>
+		<button type="button" onclick="booklet.data(document.getElementById('wrapper'),photos,{filter:null,forceglobal:true});"><img src="album/filter_off.png" border="0" alt="gray" /><br/>filter: off</button>
+		<button type="button" onclick="booklet.data(document.getElementById('wrapper'),photos,{filter:[{f:'grayscale'}],forceglobal:true,filtertoc:true});"><img src="album/filter_gray.png" border="0" alt="gray" /><br/>filter: gray</button>
+		<button type="button" onclick="booklet.data(document.getElementById('wrapper'),photos,{filter:[{f:'sepia'}],forceglobal:true,filtertoc:true});"><img src="album/filter_sepia.png" border="0" alt="sepia" /><br/>filter: sepia</button>
+	</div>
+</div>
+<div><p>&nbsp;</p></div>
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>booklet.js (javascript book a like functionality for images)</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-language" content="en">
+	<link rel="bookmark" type="text/html" title="booklet.js" href="http://www.netzgesta.de/booklet/">
+	<meta name="Author" lang="en" content="booklet.netzgesta.de - Christian Effenberger">	<meta name="Publisher" lang="en" content="www.netzgesta.de">	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">	<meta name="Generator" lang="en" content="Christian Effenberger">
+	<meta name="Description" lang="en" content="booklet.js 1.3 simulates an authentic looking book presenting photos on your webpages through unobtrusive javascript">
+	<meta name="Keywords" lang="en" content="booklet.js, javascript, photo, image, picture, book, gallery, Internet Explorer, Mozilla, Firefox, Opera, Chrome, Safari">
+	<meta http-equiv="imagetoolbar" content="no">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	<script type="text/javascript" src="../cvi/scripts/projectmenu.js"></script>
+	<script type="text/javascript" src="../cvi/scripts/accordion.js"></script>
+	<script type="text/javascript" src="../filter/cvi_filter_lib.js"></script>
+	<meta http-equiv="Content-Style-Type" content="text/css">
+<style type="text/css">
+a { color: blue; font-style:italic; text-decoration:none; }
+tt {color: green;}
+b {color: darkred;}
+body { background: url(images/backgrnd.jpg) silver; color: black; font-family: Georgia,serif; line-height: 1.5; margin: 0.5em 1em;}
+h2 { font-family: Verdana,Arial,Helvetica,sans-serif; }
+.tab { border: 1px solid gray; background: white; padding: 0.25em; } 
+.demo { float: left; padding: 16px; margin: 0px; text-align: center;}
+.box { 
+	-webkit-box-shadow: 8px 8px 16px #666;
+	-moz-box-shadow: 8px 8px 16px #666;
+	-ms-box-shadow: 8px 8px 16px #666; 
+	-o-box-shadow: 8px 8px 16px #666; 
+	box-shadow: 8px 8px 16px #666; 
+}
+#guru { padding: 4px; width: 99%; height: auto; text-align: center; background-color: black; }
+#guru div { border: solid 3px red; padding: 4px; font-family: monospace; font-size: 1.25em; width: auto; height: auto; color: red; text-align: center; text-decoration: blink; }
+#header { margin-bottom: 0; font-weight: normal; font-style: italic; color: gray; }
+.bookmarks { white-space: nowrap; width: 98%; margin: 0; padding-top: 10px; border-top: 1px dotted gray;}
+</style>
+</head>
+<body><noscript><div id="guru" title="By this you can recognize the Amiga fan!"><div><strong>Guru Meditation</strong> - With deactivated JavaScript: Images stay unmodified!</div></div></noscript>
+
+<table>
+<tr><td valign="top"><img src="images/logo.jpg" class="box" border="0" width="320" height="238" alt="booklet.js" /></td><td>&nbsp;&nbsp;</td>
+<td style="line-height: 1.5; font-style: italic; vertical-align: top;"><strong>Booklet.js</strong> 1.3 simulates an authentic looking album or book presenting photos, images and pictures of all sizes and with any aspect ratio. Includes covering, navigation, information, linking and auto generated visual table of contents.
+Supports realtime filters in conjunction with the cvi_filter library (inc. tiltshift a.k.a. miniature fake filter). It also allows you to build interactive applications through the various user commands. It uses unobtrusive javascript to keep your code clean.
+<p>It works in all the major browsers: Mozilla Firefox 2+, Safari 2+, Chrome 4+, IE 6+ and Opera 9+. 
+On older browsers, it'll degrade and your visitors won't notice a thing.</p>
+</td></tr>
+</table>
+
+<h2>Demonstration</h2>
+<div class="demo"><a href="calendar.html" target="DEMO" class="lWOn nip"><img class="box" src="calendar.jpg" title="Calendar (top-down)" alt="calendar" width="300" height="200" border="0" /><br />Calendar <b>(top-down)</b></a></div>
+<div class="demo"><a href="missing.html" target="DEMO" class="lWOn nip"><img class="box" src="missing.jpg" title="Missing (no cover)" alt="missing" width="300" height="200" border="0" /><br />Missing <b>(no cover)</b></a></div>
+<div class="demo"><a href="sunrise.html" target="DEMO" class="lWOn nip"><img class="box" src="sunrise.jpg" title="Sunrise (double page)" alt="sunrise" width="360" height="200" border="0" /><br />Sunrise <b>(double page)</b></a></div>
+<div class="demo"><a href="mixed.html" target="DEMO" class="lWOn nip"><img class="box" src="mixed.jpg" title="Mixed (features)" alt="mixed" width="267" height="200" border="0" /><br />Mixed <b>(features)</b></a></div>
+<p style="clear:both"></p>
+
+<h2>Setting Up</h2>
+<p>Download the <b>Booklet</b> archive and include the following files <i>(consider the order)</i> into your webpage.</p>
+<p>
+<code>
+// only if you want to use image filters<br/>
+&lt;script type="text/javascript" src="<tt>cvi_filter_lib.js</tt>"&gt;&lt;/script&gt;<br/>
+// if you want to use language translations [de|el|en|es|fr|it|ja|ko|nl|pt|ru|zh]<br/>
+&lt;script type="text/javascript" src="<tt>booklet_lang.js</tt>"&gt;&lt;/script&gt;<br/>
+// this one is mandatory<br/>
+&lt;script type="text/javascript" src="<tt>booklet.js</tt>"&gt;&lt;/script&gt;
+</code>
+</p>
+
+
+<h2>Using It</h2>
+<p>To add a booklet object, just execute the function "<tt>booklet.add( <b>element</b>, { <b>options</b> } );</tt>" to a block-level element.</p>
+
+<h2>Usage</h2>
+<dl>
+	<dt>Set defaults</dt>
+  	<dd>
+		<code>booklet.<b>defaultCallback</b> &nbsp; &nbsp; &nbsp; = <tt>""</tt>; //STR function name</code><br />
+		<code>booklet.<b>defaultLanguage</b> &nbsp; &nbsp; &nbsp; = <tt>null</tt>; //OBJ e.g. [language format]</code><br />
+		<code>booklet.<b>defaultImagearray</b> &nbsp; &nbsp; = <tt>null</tt>; //OBJ [data format]</code><br />
+		<code>booklet.<b>defaultMainwidth</b> &nbsp; &nbsp;&nbsp; = <tt>600</tt>; //INT 280|180-n (px width)</code><br />
+		<code>booklet.<b>defaultMainheight</b> &nbsp; &nbsp; = <tt>400</tt>; //INT 180|280-n (px height)</code><br />
+		<code>booklet.<b>defaultShade</b> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; = <tt>50</tt>; //INT 1-100 (% opacity)</code><br />
+		<code>booklet.<b>defaultShadow</b> &nbsp; &nbsp; &nbsp; &nbsp; = <tt>50</tt>; //INT 1-100 (% opacity)</code><br />
+		<code>booklet.<b>defaultDoublepage</b> &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN 1 image fills 2 pages</code><br />
+		<code>booklet.<b>defaultCalendarmode</b>&nbsp;&nbsp; = <tt>false</tt>; //BOOLEAN Top 2 Bottom instead of Left 2 Right</code><br />
+		<code>booklet.<b>defaultTopdownshadow</b>&nbsp; = <tt>false</tt>; //BOOLEAN instead of leftTop to RightBottom</code><br />
+		<code>booklet.<b>defaultForcecaption</b>&nbsp;&nbsp; = <tt>false</tt>; //BOOLEAN use the filename if caption is missing</code><br />
+		<code>booklet.<b>defaultForceimginfo</b>&nbsp;&nbsp; = <tt>false</tt>; //BOOLEAN append image dimensions and used filters to comment</code><br />
+		<code>booklet.<b>defaultAutoplay</b> &nbsp; &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN set automode to on|off</code><br />
+		<code>booklet.<b>defaultVerbose</b> &nbsp; &nbsp;&nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN console output is more chatty (warnings)</code><br />
+		<code>booklet.<b>defaultBuffered</b> &nbsp; &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN set render buffer to on|off</code><br />
+		<code>booklet.<b>defaultNoshadow</b> &nbsp; &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN set shadow to on|off</code><br />
+		<code>booklet.<b>defaultNocover</b> &nbsp; &nbsp;&nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN set cover to on|off</code><br />
+		<code>booklet.<b>defaultNopanel</b> &nbsp; &nbsp;&nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN lock the navigation panel</code><br />
+		<code>booklet.<b>defaultNoradius</b> &nbsp; &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN set cover radius to on|off</code><br />
+		<code>booklet.<b>defaultNotoc</b> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN toc equals table of contents</code><br />
+		<code>booklet.<b>defaultTocfirst</b> &nbsp; &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN startup with Table Of Contents</code><br />
+		<code>booklet.<b>defaultToctooltip</b> &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN tooltip instead of overlay text</code><br />
+		<code>booklet.<b>defaultPoweroftwo</b> &nbsp; &nbsp; = <tt>4</tt>; //INT 2x2 | 3x3 | 4x4 ... TOC thumbs per page</code><br />
+		<code>booklet.<b>defaultPagecolor</b> &nbsp; &nbsp;&nbsp; = <tt>'#f8f8f8'</tt>;	//STR '#000000'-'#ffffff'</code><br />
+		<code>booklet.<b>defaultCovercolor</b> &nbsp; &nbsp; = <tt>'#808080'</tt>;	//STR '#000000'-'#ffffff'</code><br />
+		<code>booklet.<b>defaultSelectorcolor</b>&nbsp; = <tt>'#000000'</tt>; //STR '#000000'-'#ffffff'</code><br />
+		<code>booklet.<b>defaultCovertexture</b> &nbsp; = <tt>''</tt>; //STR (image source)</code><br />
+		<code>booklet.<b>defaultTextureopacity</b> = <tt>100</tt>; //FLT 1-100 (% opacity)</code><br />
+		<code>booklet.<b>defaultInfobgopacity</b>&nbsp; = <tt>50</tt>; //FLT 1-100 (% opacity)</code><br />
+		<code>booklet.<b>defaultLayeropacity</b> &nbsp; = <tt>50</tt>; //FLT 1-100 (% opacity)</code><br />
+		<code>booklet.<b>defaultLayercolor</b> &nbsp; &nbsp; = <tt>'#ffffff'</tt>; //STR '#000000'-'#ffffff'</code><br />
+		<code>booklet.<b>defaultInfobgcolor</b> &nbsp;&nbsp; = <tt>'#000000'</tt>; //STR '#000000'-'#ffffff'</code><br />
+		<code>booklet.<b>defaultInfotxcolor</b> &nbsp;&nbsp; = <tt>'#ffffff'</tt>; //STR '#000000'-'#ffffff'</code><br />
+		<code>booklet.<b>defaultImprintheader</b>&nbsp; = <tt>""</tt>; //STR</code><br />
+		<code>booklet.<b>defaultImprintbody</b> &nbsp;&nbsp; = <tt>""</tt>; //STR</code><br />
+		<code>booklet.<b>defaultImprintfooter</b>&nbsp; = <tt>""</tt>; //STR</code><br />
+		<code>booklet.<b>defaultNotrans</b> &nbsp; &nbsp;&nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN no transposing from Mfgcolor to Mftcolor</code><br />
+		<code>booklet.<b>defaultMeter</b> &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN show delay meter while auto playing</code><br />
+		<code>booklet.<b>defaultMfgcolor</b> &nbsp; &nbsp; &nbsp; = <tt>'#008000'</tt>; //STR meter foreground color</code><br />
+		<code>booklet.<b>defaultMftcolor</b> &nbsp; &nbsp; &nbsp; = <tt>'#ff0000'</tt>; //STR meter foreground destination color</code><br />
+		<code>booklet.<b>defaultMbgcolor</b> &nbsp; &nbsp; &nbsp; = <tt>'#ffffff'</tt>; //STR meter background color</code><br />
+		<code>booklet.<b>defaultMopacity</b> &nbsp; &nbsp; &nbsp; = <tt>0.5</tt>; //FLOAT 0.1-1.0 meter opacity</code><br />
+		<code>booklet.<b>defaultMsize</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; = <tt>32</tt>; //INT 24-min(width,height) meter dimension</code><br />
+		<code>booklet.<b>defaultMposx</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; = <tt>10</tt>; //INT 0-(width-msize) meter position x</code><br />
+		<code>booklet.<b>defaultMposy</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; = <tt>10</tt>; //INT 0-(height-msize) meter position y</code><br />
+		<code>*** depends on: cvi_filter_lib.js (syntax at: <a href="http://filter.netzgesta.de/">filter.netzgesta.de</a>) ***</code><br />
+		<code>booklet.<b>defaultFilter</b> &nbsp; &nbsp; &nbsp; &nbsp; = <tt>null</tt>; //OBJ e.g. [{f:'grayscale'},{f:'emboss', s:1}...]</code><br />
+		<code>booklet.<b>defaultFiltertoc</b> &nbsp; &nbsp;&nbsp; = <tt>false</tt>; //BOOLEAN filter also the thumbnails</code><br />
+		<code>booklet.<b>defaultForceglobal</b> &nbsp;&nbsp; = <tt>false</tt>; //BOOLEAN force global filter over local filter</code><br />
+		<code>**********************************************************************</code><br />
+		<code>booklet.<b>defaultAnimsteps</b> &nbsp;&nbsp; &nbsp; = <tt>0</tt>; //INT 0-n equals anim steps (0 == use pxperstep value)</code><br />
+		<code>booklet.<b>defaultPxperstep</b> &nbsp;&nbsp; &nbsp; = <tt>16</tt>; //INT 1-n equals pixel per step</code><br />
+		<code>booklet.<b>defaultFramedelay</b> &nbsp;&nbsp;&nbsp; = <tt>33</tt>; //INT 20-50 equals milli seconds (1/1000)</code><br />
+		<code>booklet.<b>defaultPlaydelay</b> &nbsp;&nbsp; &nbsp; = <tt>0</tt>; //INT 0-n equals seconds</code><br />
+		<code>booklet.<b>defaultLoadtimeout</b> &nbsp;&nbsp; = <tt>3</tt>; //INT 1-60 equals seconds</code><br />
+		<code>booklet.<b>defaultButtonsize</b> &nbsp;&nbsp;&nbsp; = <tt>32</tt>; //INT 24|32|40|48|56|64 (px)</code><br />
+		<code>booklet.<b>defaultButtonradius</b> &nbsp; = <tt>100</tt>; //FLT 0.001-100 (% of half size)</code><br />
+		<code>booklet.<b>defaultButtonfgcolor</b>&nbsp; = <tt>'#ffffff'</tt>; //STR (text) hex color declaration '#000000'-'#ffffff'</code><br />
+		<code>booklet.<b>defaultButtonbgcolor</b>&nbsp; = <tt>'#000000'</tt>; //STR (background) hex color declaration '#000000'-'#ffffff'</code><br />
+		<code>booklet.<b>defaultOverlayimage</b> &nbsp; = <tt>"images/logo.png"</tt>; //STR (text) background-image</code><br />
+		<code>booklet.<b>defaultOverlaystyle</b> &nbsp; = <tt>"font-weight:bold; font-size:14px; color:grey;"</tt>; //STR (text) style sheet declaration e.g. "color: black;" or style sheet classes e.g. "overlay text"</code><br />
+		<code>booklet.<b>defaultOverlayoptions</b> = <tt>{color:'white', opacity:0.5}</tt>; //OBJ default values [overlay syntax]</code><br />
+		<code>booklet.<b>defaultBusyoptions</b> &nbsp;&nbsp; = <tt>{color:'#000000', size:100, type:'o'}</tt>; //OBJ default values [busy syntax]</code><br />
+		<dl><dt>overlay syntax:</dt>
+	  	<dd>
+			<code><b>color</b> &nbsp; : <tt>'white'</tt>	//STR css color declaration e.g. 'black' or '#000000' or 'rgb(0,0,0)'</code><br />
+			<code><b>opacity</b> : <tt>0.5</tt>		//FLT 0.001 - 1.0</code><br />
+		</dd></dl>
+		<dl><dt>busy syntax:</dt>
+	  	<dd>
+			<code><b>color</b> &nbsp; : <tt>'#000'</tt>	//STR '#000000' - '#ffffff' or '#000' - '#fff'</code><br />
+			<code><b>size</b> &nbsp;&nbsp; : <tt>32</tt>		//INT 16 - 512 (pixel)</code><br />
+			<code><b>type</b> &nbsp;&nbsp; : <tt>'tube'</tt>	//STR 'circle|oval|polygon|rectangle|tube' or 'c|o|p|r|t'</code><br />
+			<code><b>iradius</b> : <tt>8</tt>		//INT 6 - 254 (pixel)</code><br />
+			<code><b>weight</b>&nbsp; : <tt>3</tt>		//INT 1 - 254 (pixel)</code><br />
+			<code><b>count</b> &nbsp; : <tt>12</tt>		//INT 5 - 36 (rays)</code><br />
+			<code><b>speed</b> &nbsp; : <tt>96</tt>		//INT 30 - 1000 (millisec)</code><br />
+			<code><b>minopac</b> : <tt>0.25</tt>	//FLT 0.0 - 0.5 (opacity)</code><br />
+		</dd></dl>	
+		<dl><dt>language format:</dt>
+	  	<dd>
+			<code>lang.<b>overlaytext</b> = <tt>"loading images..."</tt>;</code><br />
+			<code>lang.<b>playbutton</b>&nbsp; = <tt>"play/pause"</tt>;</code><br />
+			<code>lang.<b>nextbutton</b>&nbsp; = <tt>"next"</tt>;</code><br />
+			<code>lang.<b>prevbutton</b>&nbsp; = <tt>"previous"</tt>;</code><br />
+			<code>lang.<b>firstbutton</b> = <tt>"first"</tt>;</code><br />
+			<code>lang.<b>lastbutton</b>&nbsp; = <tt>"last"</tt>;</code><br />
+			<code>lang.<b>fwardbutton</b> = <tt>"5x forward"</tt>;</code><br />
+			<code>lang.<b>bwardbutton</b> = <tt>"5x backward"</tt>;</code><br />
+			<code>lang.<b>menubutton</b>&nbsp; = <tt>"back to contents"</tt>;</code><br />
+			<code>lang.<b>listbutton</b>&nbsp; = <tt>"imprint/epilog"</tt>;</code><br />
+			<code>lang.<b>tablebutton</b> = <tt>"table of contents"</tt>;</code><br />
+		</dd></dl>
+		<dl><dt>data format:</dt>
+	  	<dd>
+			<dl><dt><code><tt>data</tt> = [{</code></dt>
+			<dd>
+				<code><b>source</b> &nbsp; : <tt>'path/file.jpg'</tt>, //STR mandatory image path &amp; file (minimum dimension 64x64)</code><br />
+				<code><b>imgshift</b> : <tt>0.5</tt>,	//FLT optional image shift value (0==top|left, 0.5==center, 1==bottom|right)</code><br />
+				<code><b>delay</b> &nbsp;&nbsp; : <tt>null</tt>,		//FLT optional delay value (seconds)</code><br />
+				<code><b>caption</b>&nbsp; : <tt>''</tt>,		//STR optional caption</code><br />
+				<code><b>comment</b>&nbsp; : <tt>''</tt>,		//STR optional comment (inc. html-tags)</code><br />
+				<code><b>title</b> &nbsp;&nbsp; : <tt>''</tt>,		//STR optional tooltip</code><br />
+				<code><b>link</b> &nbsp; &nbsp; : <tt>''</tt>,			//STR optional URL (js-function by "javascript:...")</code><br />
+				<code><b>target</b> &nbsp; : <tt>'_self'</tt>,	//STR optional target ('_self'|'_blank'|'...')</code><br />
+				<code><b>filter</b> &nbsp; : <tt>[{f:'grayscale'},{f:'emboss', s:1}...]</tt>, //OBJ optional (depends on cvi_filter_lib.js)</code>
+	  		</dd><dt><code>}, {<b>source</b>: <tt>'image.jpg'</tt>}]</code></dt></dl>
+	  		<p></p>
+		</dd></dl>
+  		<p></p>
+	</dd>
+	<dt>Add booklet</dt>
+  	<dd>
+  		<code>booklet.add(<tt>element</tt>[, <tt>options</tt>]);</code><br />
+		<dl><dt><code><tt>element</tt> == block-level element</code></dt></dl>
+		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; e.g. {<b>mainwidth</b>: <tt>180</tt>, <b>mainheight</b>: <tt>280</tt>, ...}</code></dt>
+		<dd>
+			<!-- cover -->
+			<img src="images/layer_cover.png" width="214" height="164" title="cover" align="right" border="0" alt="cover" />
+			<h3>Cover oriented Options</h3>
+			<code><b>shade</b> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; : <tt>50</tt>, //INT 1-100 (% opacity)</code><br />
+			<code><b>shadow</b> &nbsp; &nbsp; &nbsp; &nbsp; : <tt>50</tt>, //INT 1-100 (% opacity)</code><br />
+			<code><b>covercolor</b> &nbsp; &nbsp; : <tt>'#808080'</tt>,	//STR '#000000'-'#ffffff'</code><br />
+			<code><b>covertexture</b> &nbsp; : <tt>''</tt>, //STR (image source)</code><br />
+			<code><b>textureopacity</b> : <tt>100</tt>, //FLT 1-100 (% opacity)</code><br />
+			<code><b>topdownshadow</b>&nbsp; : <tt>false</tt>, //BOOLEAN instead of leftTop to RightBottom</code><br />
+			<code><b>noshadow</b> &nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN set shadow to on|off</code><br />
+			<code><b>nocover</b> &nbsp; &nbsp;&nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN set cover to on|off</code><br />
+			<code><b>noradius</b> &nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN set cover radius to on|off</code><br />
+			<!-- busy -->
+			<img src="images/layer_busy.png" width="214" height="164" title="busy" align="right" border="0" alt="busy" />
+			<h3>Busy-panel oriented Options</h3>
+			<code><b>overlayimage</b> &nbsp; : <tt>"images/logo.png"</tt>, //STR (text) background-image</code><br />
+			<code><b>overlaystyle</b> &nbsp; : <tt>"font-weight:bold; font-size:14px; color:grey;"</tt>, //STR (text) style sheet declaration e.g. "color: black;" or style sheet classes e.g. "overlay text"</code><br />
+			<code><b>overlayoptions</b> : <tt>{color:'white', opacity:0.5}</tt>, //OBJ default values [overlay syntax]</code><br />
+			<code><b>busyoptions</b> &nbsp;&nbsp; : <tt>{color:'#000000', size:100, type:'o'}</tt>, //OBJ default values [busy syntax]</code><br />
+			<!-- general -->
+			<img src="images/layer_pages.png" width="214" height="164" title="general" align="right" border="0" alt="general" />
+			<h3>Pages oriented Options</h3>
+			<code><b>callback</b> &nbsp; &nbsp; &nbsp; : <tt>""</tt>, //STR function name</code><br />
+			<code><b>language</b> &nbsp; &nbsp; &nbsp; : <tt>null</tt>, //OBJ e.g. [language format]</code><br />
+			<code><b>imagearray</b> &nbsp; &nbsp; : <tt>null</tt>, //OBJ [data format]</code><br />
+			<code><b>mainwidth</b> &nbsp; &nbsp;&nbsp; : <tt>600</tt>, //INT 280|180-n (px width)</code><br />
+			<code><b>mainheight</b> &nbsp; &nbsp; : <tt>400</tt>, //INT 180|280-n (px height)</code><br />
+			<code><b>doublepage</b> &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN 1 image fills 2 pages</code><br />
+			<code><b>calendarmode</b>&nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN Top-2-Bottom instead of Left-2-Right</code><br />
+			<code><b>autoplay</b> &nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN set automode to on|off</code><br />
+			<code><b>verbose</b> &nbsp; &nbsp;&nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN console output is more chatty (warnings)</code><br />
+			<code><b>buffered</b> &nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN set render buffer to on|off</code><br />
+			<code><b>nopanel</b> &nbsp; &nbsp;&nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN lock the navigation panel</code><br />
+			<code><b>animsteps</b> &nbsp;&nbsp; &nbsp; : <tt>0</tt>, //INT 0-n equals anim steps (0 == use pxperstep value)</code><br />
+			<code><b>pxperstep</b> &nbsp;&nbsp; &nbsp; : <tt>16</tt>, //INT 1-n equals pixel per step</code><br />
+			<code><b>framedelay</b> &nbsp;&nbsp;&nbsp; : <tt>33</tt>, //INT 20-50 equals milli seconds (1/1000)</code><br />
+			<code><b>playdelay</b> &nbsp;&nbsp; &nbsp; : <tt>0</tt>, //INT 0-n equals seconds</code><br />
+			<code><b>loadtimeout</b> &nbsp;&nbsp; : <tt>3</tt>, //INT 1-60 equals seconds</code><br />
+			<code><b>pagecolor</b> &nbsp; &nbsp;&nbsp; : <tt>'#f8f8f8'</tt>,	//STR '#000000'-'#ffffff'</code><br />
+			<!-- filter -->
+			<img src="images/layer_filter.png" width="214" height="164" title="filter" align="right" border="0" alt="filter" />
+			<h3>Filter oriented Options</h3>
+			<code><b>filter</b> &nbsp; &nbsp; &nbsp; &nbsp; : <tt>null</tt>, //OBJ e.g. [{f:'grayscale'},{f:'emboss', s:1}...]</code><br />
+			<code><b>filtertoc</b> &nbsp; &nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN filter also the thumbnails</code><br />
+			<code><b>forceglobal</b> &nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN force global filter over local filter</code><br />
+			<code>*** depends on: cvi_filter_lib.js (syntax at: <a href="http://filter.netzgesta.de/">filter.netzgesta.de</a>) ***</code><br /><br />
+			<!-- toc -->
+			<img src="images/layer_toc.png" width="214" height="164" title="toc" align="right" border="0" alt="toc" />
+			<h3>TOC oriented Options</h3>
+			<code><b>notoc</b> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN toc equals Table of contents</code><br />
+			<code><b>poweroftwo</b> &nbsp; &nbsp; : <tt>4</tt>, //INT 2x2 | 3x3 | 4x4 ... toc thumbs per page</code><br />
+			<code><b>tocfirst</b> &nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN startup with Table Of Contents</code><br />
+			<code><b>toctooltip</b> &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN tooltip instead of overlay text</code><br />
+			<code><b>selectorcolor</b>&nbsp; : <tt>'#000000'</tt>, //STR '#000000'-'#ffffff'</code><br />
+			<code><b>layeropacity</b> &nbsp; : <tt>50</tt>, //FLT 1-100 (% opacity)</code><br />
+			<code><b>layercolor</b> &nbsp; &nbsp; : <tt>'#ffffff'</tt>, //STR '#000000'-'#ffffff'</code><br />
+			<!-- info -->
+			<img src="images/layer_info.png" width="214" height="164" title="info" align="right" border="0" alt="info" />
+			<h3>Info-panel oriented Options</h3>
+			<code><b>forcecaption</b>&nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN use the filename if caption is missing</code><br />
+			<code><b>forceimginfo</b>&nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN append image dimensions and used filters to comment</code><br />
+			<code><b>infobgopacity</b>&nbsp; : <tt>50</tt>, //FLT 1-100 (% opacity)</code><br />
+			<code><b>infobgcolor</b> &nbsp;&nbsp; : <tt>'#000000'</tt>, //STR '#000000'-'#ffffff'</code><br />
+			<code><b>infotxcolor</b> &nbsp;&nbsp; : <tt>'#ffffff'</tt>, //STR '#000000'-'#ffffff'</code><br />
+			<code><b>imprintheader</b>&nbsp; : <tt>""</tt>, //STR</code><br />
+			<code><b>imprintbody</b> &nbsp;&nbsp; : <tt>""</tt>, //STR</code><br />
+			<code><b>imprintfooter</b>&nbsp; : <tt>""</tt>, //STR</code><br />
+			<!-- ctrl -->
+			<img src="images/layer_ctrl.png" width="214" height="164" title="ctrl" align="right" border="0" alt="ctrl" />
+			<h3>Ctrl-panel oriented Options</h3>
+			<code><b>buttonsize</b> &nbsp;&nbsp;&nbsp; : <tt>32</tt>, //INT 24|32|40|48|56|64 (px)</code><br />
+			<code><b>buttonradius</b> &nbsp; : <tt>100</tt>, //FLT 0.001-100 (% of half size)</code><br />
+			<code><b>buttonfgcolor</b>&nbsp; : <tt>'#ffffff'</tt>, //STR (text) hex color declaration '#000000'-'#ffffff'</code><br />
+			<code><b>buttonbgcolor</b>&nbsp; : <tt>'#000000'</tt>, //STR (background) hex color declaration '#000000'-'#ffffff'</code><br />
+			<!-- meter -->
+			<img src="images/layer_meter.png" width="214" height="164" title="meter" align="right" border="0" alt="meter" />
+			<h3>Meter oriented Options</h3>
+			<code><b>notrans</b> &nbsp; &nbsp;&nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN no transposing from Mfgcolor to Mftcolor</code><br />
+			<code><b>meter</b> &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN show delay meter while auto playing</code><br />
+			<code><b>mfgcolor</b> &nbsp; &nbsp; &nbsp; : <tt>'#008000'</tt>, //STR meter foreground color</code><br />
+			<code><b>mftcolor</b> &nbsp; &nbsp; &nbsp; : <tt>'#ff0000'</tt>, //STR meter foreground destination color</code><br />
+			<code><b>mbgcolor</b> &nbsp; &nbsp; &nbsp; : <tt>'#ffffff'</tt>, //STR meter background color</code><br />
+			<code><b>mopacity</b> &nbsp; &nbsp; &nbsp; : <tt>0.5</tt>, //FLOAT 0.1-1.0 meter opacity</code><br />
+			<code><b>msize</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : <tt>32</tt>, //INT 24-min(width,height) meter dimension</code><br />
+			<code><b>mposx</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : <tt>10</tt>, //INT 0-(width-msize) meter position x</code><br />
+			<code><b>mposy</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : <tt>10</tt>, //INT 0-(height-msize) meter position y</code><br />
+  		</dd></dl>
+  		<p></p>
+  	</dd>
+	<dt>Load imagearray</dt>
+  	<dd>
+  		<code>booklet.data(<tt>element</tt>, <tt>imagearray</tt> [, <tt>options</tt>]);</code><br />
+		<code><tt>element</tt> &nbsp;&nbsp; == block-level element</code><br />
+		<code><tt>imagearray</tt> == OBJECT [data format]</code><br />
+		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; e.g. {<b>framedelay</b>: <tt>40</tt>, <b>nopanel</b>: <tt>false</tt>, ...}</code></dt>
+		<dd>
+			<code><b>callback</b> &nbsp; &nbsp; &nbsp; : <tt>""</tt>, //STR function name</code><br />
+			<code><b>language</b> &nbsp; &nbsp; &nbsp; : <tt>null</tt>, //OBJ e.g. [language format]</code><br />
+			<code><b>forcecaption</b>&nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN use the filename if caption is missing</code><br />
+			<code><b>forceimginfo</b>&nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN append image dimensions and used filters to comment</code><br />
+			<code><b>filter</b> &nbsp; &nbsp; &nbsp; &nbsp; : <tt>null</tt>, //OBJ e.g. [{f:'grayscale'},{f:'emboss', s:1}...]</code><br />
+			<code><b>filtertoc</b> &nbsp; &nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN filter also the thumbnails</code><br />
+			<code><b>tocfirst</b> &nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN startup with Table Of Contents</code><br />
+			<code><b>forceglobal</b> &nbsp;&nbsp; : <tt>false</tt>, //BOOLEAN force global filter over local filter</code><br />
+			<code><b>autoplay</b> &nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN set automode to on|off</code><br />
+			<code><b>verbose</b> &nbsp; &nbsp;&nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN console output is more chatty (warnings)</code><br />
+			<code><b>buffered</b> &nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN set render buffer to on|off</code><br />
+			<code><b>nopanel</b> &nbsp; &nbsp;&nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN lock the navigation panel</code><br />
+			<code><b>toctooltip</b> &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN tooltip instead of overlay text</code><br />
+			<code><b>imprintheader</b>&nbsp; : <tt>""</tt>, //STR</code><br />
+			<code><b>imprintbody</b> &nbsp;&nbsp; : <tt>""</tt>, //STR</code><br />
+			<code><b>imprintfooter</b>&nbsp; : <tt>""</tt>, //STR</code><br />
+			<code><b>notrans</b> &nbsp; &nbsp;&nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN no transposing from Mfgcolor to Mftcolor</code><br />
+			<code><b>meter</b> &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; : <tt>false</tt>, //BOOLEAN show delay meter while auto playing</code><br />
+			<code><b>mfgcolor</b> &nbsp; &nbsp; &nbsp; : <tt>'#008000'</tt>, //STR meter foreground color</code><br />
+			<code><b>mftcolor</b> &nbsp; &nbsp; &nbsp; : <tt>'#ff0000'</tt>, //STR meter foreground destination color</code><br />
+			<code><b>mbgcolor</b> &nbsp; &nbsp; &nbsp; : <tt>'#ffffff'</tt>, //STR meter background color</code><br />
+			<code><b>mopacity</b> &nbsp; &nbsp; &nbsp; : <tt>0.5</tt>, //FLOAT 0.1-1.0 meter opacity</code><br />
+			<code><b>msize</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : <tt>32</tt>, //INT 24-min(width,height) meter dimension</code><br />
+			<code><b>mposx</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : <tt>10</tt>, //INT 0-(width-msize) meter position x</code><br />
+			<code><b>mposy</b> &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; : <tt>10</tt>, //INT 0-(height-msize) meter position y</code><br />
+			<code><b>animsteps</b> &nbsp;&nbsp; &nbsp; : <tt>0</tt>, //INT 0-n equals anim steps (0 == use pxperstep value)</code><br />
+			<code><b>pxperstep</b> &nbsp;&nbsp; &nbsp; : <tt>16</tt>, //INT 1-n equals pixel per step</code><br />
+			<code><b>framedelay</b> &nbsp;&nbsp;&nbsp; : <tt>33</tt>, //INT 20-50 equals milli seconds (1/1000)</code><br />
+			<code><b>playdelay</b> &nbsp;&nbsp; &nbsp; : <tt>0</tt>, //INT 0-n equals seconds</code><br />
+			<code><b>loadtimeout</b> &nbsp;&nbsp; : <tt>3</tt>, //INT 1-60 equals seconds</code><br />
+  		</dd></dl>
+  		<p></p>
+  	</dd>
+	<dt>Remote control</dt>
+  	<dd>
+  		<code>booklet.<b>play</b>(<tt>element</tt>);</code> <em>(<small>start playing</small>)</em><br />
+  		<code>booklet.<b>stop</b>(<tt>element</tt>);</code> <em>(<small>stop playing</small>)</em><br />
+  		<code>booklet.<b>first</b>(<tt>element</tt>);</code> <em>(<small>show first image</small>)</em><br />
+  		<code>booklet.<b>prev</b>(<tt>element</tt>);</code> <em>(<small>show previous image</small>)</em><br />
+  		<code>booklet.<b>show</b>(<tt>element</tt>, <tt>image_number</tt>);</code> <em>(<small>show this image</small>)</em><br />
+  		<code>booklet.<b>next</b>(<tt>element</tt>);</code> <em>(<small>show next image</small>)</em><br />
+  		<code>booklet.<b>last</b>(<tt>element</tt>);</code> <em>(<small>show last image</small>)</em><br />
+  		<p></p>
+  	</dd>
+	<dt>Get some informations</dt>
+	<dd>
+		<code><tt>FLOAT</tt> &nbsp; = booklet.version;</code><br />
+		<code><tt>STRING</tt> &nbsp;= booklet.released;</code><br />
+		<code><tt>BOOLEAN</tt> = booklet.canvas();</code><br />
+		<dl><dt><code><tt>BOL</tt>|<tt>INT</tt>|<tt>STR</tt> = booklet.get(<tt>element</tt>, ['<b>setup</b>'|'<b>blocked</b>'|'<b>curling</b>'|'<b>playing</b>'|'<b>current</b>'|'<b>total</b>'|'<b>viewmode</b>'|'<b>origin</b>'|'<b>imginfo</b>', image_number] );</code></dt>
+			<dd>
+			<code><b>setup</b> &nbsp;&nbsp; == <tt>BOOLEAN</tt> uninitialized</code><br />
+			<code><b>blocked</b> &nbsp;== <tt>BOOLEAN</tt> unaccessible</code><br />
+			<code><b>curling</b> &nbsp;== <tt>BOOLEAN</tt> transition in action</code><br />
+			<code><b>playing</b> &nbsp;== <tt>BOOLEAN</tt> autoplay in action</code><br />
+			<code><b>current</b> &nbsp;== <tt>INTEGER</tt> current image number (starting with zero)</code><br />
+			<code><b>total</b>	&nbsp;&nbsp; == <tt>INTEGER</tt> no. of all images</code><br />
+			<code><b>viewmode</b> == <tt>STRING</tt> matches "image" or "toc"</code><br />
+			<code><b>origin</b> &nbsp; == <tt>STRING</tt> location protocol & host</code><br />
+			<code><b>imginfo</b> &nbsp;== <tt>OBJECT</tt> [name|source|abs_url|diff_origin|filter|width|height]</code><br />
+			</dd></dl>
+  		<p></p>
+	</dd>
+	<dt>Set some values</dt>
+	<dd>
+		<code>booklet.set(<tt>element</tt>, ['<b>playdelay</b>'|'<b>nopanel</b>'], value);</code><br />
+		<code><b>playdelay</b> == <tt>INTEGER</tt> 0 - n seconds</code><br />
+		<code><b>nopanel</b> == <tt>BOOLEAN</tt> true | false</code>
+  		<p></p>
+	</dd>
+	<dt>Remove booklet</dt>
+	<dd>
+		<code>booklet.remove(<tt>image</tt>, <b>value</b>);</code><br />
+		<code><b>value</b> == <tt>BOOLEAN</tt> (fade out)</code>
+  		<p></p>
+	</dd>
+	<dt>Examples</dt>
+	<dd>
+  		<code>booklet.add(<tt>document.getElementById('my_div')</tt>);</code><br />
+		<code>if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}}</code><br />
+		<code>if(booklet.canvas()) {booklet.add(<tt>$('my_div')</tt>);} else {alert('Sorry jurassic-guy!');}</code><br />
+  		<code>booklet.add(<tt>$('my_div')</tt>, {<b>mainwidth</b>:<tt>800</tt>, <b>mainheight</b>:<tt>600</tt>});</code><br />
+  		<code>booklet.set(<tt>$('my_div')</tt>,'<b>nopanel</b>',<tt>false</tt>);</code><br />
+		<code>&lt;button type="button" onclick="booklet.set(<tt>$('my_div')</tt>,'<b>play</b>',<tt>true</tt>);"&gt; > &lt;/button&gt;</code><br />
+		<code>&lt;button type="button" onclick="booklet.set(<tt>$('my_div')</tt>,'<b>stop</b>',<tt>true</tt>);"&gt; || &lt;/button&gt;</code><br />
+  		<code>alert(booklet.get(<tt>$('my_div')</tt>,'<b>current</b>'));</code><br/>
+  		<code>alert('booklet: '+booklet.version+' ('+booklet.released+')');</code><br/>
+  		<code>booklet.show(<tt>$('my_div')</tt>,<tt>52</tt>);</code><br />
+  		<code>booklet.data(<tt>$('my_div')</tt>,my_options);</code><br />
+  		<code>booklet.remove(<tt>$('my_div')</tt>,<b>true</b>);</code><br />
+  		<p></p>
+	</dd>
+</dl>
+
+<h2>Support libs</h2>
+<p>You'll get access to additional features by the following support libraries <em>(not a part of distribution)</em>:</p>
+<ul>
+<li><b>cvi_filter_lib.js</b> supports image filtering capabilities. <small>[<i><a class="lk" title="Filter capability WYSIWYG-Editor" href="http://lab.netzgesta.de/">WYSIWYG-Editor</a></i>] [<i><a class="lk" title="CVI-Filter Home-Page" href="http://filter.netzgesta.de/">Home-Page</a></i>]</small><br />
+<small><i>Provides image filter capability for Canvas (only if getImageData/setImageData is supported)</i></small>.<br />
+<br />
+<code>filter : [{<tt>#1 filter options</tt>},{<tt>#2 filter options</tt>}...];</code>
+<dt><code><tt>options</tt> &nbsp; e.g. {<b>f</b>: '<tt>contrast</tt>', <b>s</b>: <tt>1.5</tt> }</code></dt>
+<dd>
+	<code><b>f</b> == STRING <b>filter name</b> e.g. "invert" Default: <tt>null</tt> <em>(required)</em><pre>
+     "<tt>anaglyph</tt>"<sup>1.7</sup> Creates a 3D anaglyph from a single image [no args]
+     "<tt>invert</tt>"<sup>1.0</sup> Reverses all colors of the image [no args]
+     "<tt>invertalpha</tt>"<sup>1.0</sup> Reverses the transparency of the image [no args]
+     "<tt>grayscale</tt>"<sup>1.0</sup> Converts the image into grayscale [no args]
+     "<tt>solarize</tt>"<sup>1.0</sup> Solarizes the image by negating the colors [no args]
+     "<tt>sepia</tt>"<sup>1.0</sup> Applies the well-known sepia coloring to the image [no args]
+     "<tt>threshold</tt>"<sup>1.0</sup> Converts the image to black&white (s<1 == darker and s>1 == brighter)
+     "<tt>posterize</tt>"<sup>1.4</sup> Posterizes the image by quantizing each channel to a limited number of levels
+     "<tt>tritone</tt>"<sup>1.5</sup> Applies 3 colors for low|mid|high range according to the brightness of the image
+     "<tt>mixrgb</tt>"<sup>1.5</sup> Mixes the RGB channels with the other two channels
+     "<tt>exposure</tt>"<sup>1.4</sup> Simulates changing the exposure of the image
+     "<tt>gamma</tt>"<sup>1.0</sup> Standard gamma correction (s<1 == darker and s>1 == brighter)
+     "<tt>brightness</tt>"<sup>1.0</sup> Change brightness (s<1 == darker and s>1 == brighter)
+     "<tt>contrast</tt>"<sup>1.0</sup> Change contrast (s<1 == lower and s>1 == higher)
+     "<tt>adjustrgba</tt>"<sup>1.0</sup> Adjust the red & green & blue & alpha channel of the image (s == [r,g,b,a])
+     "<tt>adjusthsba</tt>"<sup>1.0</sup> Adjust hue & saturation & brightness & alpha channel of the image (s == [h,s,b,a])
+     "<tt>adjustyuva</tt>"<sup>1.6</sup> Adjust luminance & blue–yellow chrominance & red–cyan chrominance & alpha channel of the image (s == [y,u,v,a])
+     "<tt>colorkey</tt>"<sup>1.6</sup> Set alpha to 0 if pixel color values are higher than min and lower than max rgb color
+     "<tt>chromakey</tt>"<sup>1.6</sup> Set alpha to 0 if pixel hue & saturation & brightness matches
+     "<tt>multiplyalpha</tt>"<sup>1.0</sup> Multiplies the colors by the alpha values [no args]
+     "<tt>unmultiplyalpha</tt>"<sup>1.0</sup> Unmultiplies the alpha values from the colors [no args]
+     "<tt>alphamask</tt>"<sup>1.0</sup> Creates an alpha mask of the image  [no args]
+     "<tt>stackblur</tt>"<sup>1.0</sup> Blurs the image (result is similar to gaussian bluring)
+     "<tt>smooth</tt>"<sup>1.3</sup> Smoothes the image (result is similar to bluring)
+     "<tt>spinblur</tt>"<sup>1.2</sup> Blurs by rotating the centered image
+     "<tt>zoomblur</tt>"<sup>1.2</sup> Blurs by zooming the centered image
+     "<tt>motionblur</tt>"<sup>1.2</sup> Blurs by moving the image to a defined direction
+     "<tt>tiltshift</tt>"<sup>1.0</sup> Blurs partly to create the miniature fake effect
+     "<tt>outline</tt>"<sup>1.5</sup> Creates grayscaled outline images by different operators (e.g. sobel, prewitt...).
+     "<tt>convolve</tt>"<sup>1.0</sup> Use your own 3x3 matrix via option m=[[n,n,n],[n,n,n],[n,n,n]]
+     "<tt>blur</tt>"<sup>1.0</sup> Bluring the image by (in build and extendable cvi_matrix object) convolution
+     "<tt>median</tt>"<sup>1.0</sup> Smoothes grainy images by (in build and extendable cvi_matrix object) convolution
+     "<tt>sharpen</tt>"<sup>1.0</sup> Makes image sharper by (in build and extendable cvi_matrix object) convolution
+     "<tt>sharper</tt>"<sup>1.0</sup> Makes image even sharper by (in build and extendable cvi_matrix object) convolution
+     "<tt>bumplt</tt>"<sup>1.0</sup> Embosses the image by (in build and extendable cvi_matrix object) convolution
+     "<tt>bumpbr</tt>"<sup>1.0</sup> ... </pre></code>
+	<code><b>s</b> == FLOAT/OBJECT <b>multiplier(s)</b>  e.g. 0-255 Defaults to... <em>(optional)</em> </tt><pre>
+     <tt>1        </tt> if f=="<tt>zoomblur</tt>|<tt>spinblur</tt>" Distance (px)
+     <tt>1        </tt> if f=="<tt>stackblur</tt>" Radius (1-180) (only if cvi_stackblur.js is loaded)
+     <tt>1        </tt> if f=="<tt>smooth</tt>" Radius (px 1-10)
+     <tt>1        </tt> if f=="<tt>posterize</tt>" Number of levels (1-16)
+     <tt>1        </tt> if f=="<tt>threshold</tt>" Multiplier of 127 (0-2)
+     <tt>1        </tt> if f=="<tt>brightness</tt>|<tt>contrast</tt>|<tt>gamma</tt>|<tt>exposure</tt>" Multiplier of existing value (0-255)
+     <tt>[1,0]    </tt> if f=="<tt>motionblur</tt>" Distance (px) and angle (0-360)
+     <tt>[0.5,0.4,</tt> if f=="<tt>tiltshift</tt>" Unmask position (0.0-1.0) and size (0.0-1.0)
+     <tt>     0,4]</tt> and horizontal or vertical orientation (0|1) and blur radius (px 1-8) 
+     <tt>[auto,0] </tt> if f=="<tt>convolve</tt>" or m!=null. Divisor of convolution result (-1==auto), 
+               useable for normalization and bias (0-255) for brightness addition
+     <tt>[1,0,    </tt> if f=="<tt>outline</tt>" Divisor of convolution result, bias (0-255) 
+     <tt>  'name']</tt> and operator ('sobel'|'scharr'|'prewitt'|'kirsh'|'roberts') 
+     <tt>[1,1,1,1]</tt> if f=="<tt>adjustrgba</tt>" red, green, blue, alpha. Multipliers of existing values (0-255)
+     <tt>[1,1,1,1]</tt> if f=="<tt>adjusthsba</tt>" hue, saturation, brightness, alpha. Multiply existing values (0-255)
+     <tt>[1,1,1,1]</tt> if f=="<tt>adjustyuva</tt>" luminance, blue–yellow chrominance, red–cyan chrominance, alpha. Multiply existing values (0-255)
+     <tt>[0,0,0,0,0]</tt>  f=="<tt>chromakey</tt>" hue (0-360) and hue tolerance, min saturation, min brightness, max brightness (0-100)
+     <tt>[[0,0,0],</tt> if f=="<tt>colorkey</tt>" equals rgb min and rgb max triplet (0-255)
+     <tt> [0,0,0]]</tt> 
+     <tt>[[1,1,1],</tt> if f=="<tt>mixrgb</tt>" Mix into r, g, b with...
+     <tt> [1,1,1]]</tt> ...bluegreen, redblue, greenred as triplets [0-255,0-255,0-255]
+     <tt>[[0,0,0],</tt> if f=="<tt>tritone</tt>" low|mid|high range colors as...
+     <tt> [0,0,0],</tt> ...rgb triplets [0-255,0-255,0-255]
+     <tt> [0,0,0]]</tt> </pre></code>
+	<code><b>m</b> == OBJECT <b>kernel matrix</b>  e.g. [[n,n,n],[n,n,n],[n,n,n]] Default: <tt>null</tt> <em>(optional)</em> </code><br />
+</dd>
+</li></ul>
+
+<h2>Restrictions</h2>
+<p><strong>Generally</strong>: The larger the canvas area the higher the needed cpu/gpu power.</p>
+<p>The concept behind booklet <i>(lots of mouse-over events)</i> makes it not very useable on mouseless platforms.
+Nevertheless a nasty webkit bug <i>(iOS only)</i> prevents booklet to view images in the correct manner.
+On the other hand, it runs well on Android.</p>
+<p>There are multiple mouseover-areas, fading panels in and out!<br/>
+<img src="images/mouse_areas.png" alt="mouseover-areas" width="760" height="328" border="0" /></p>
+<p>At initial release of booklet.js, Internet Explorer 9 was not available as a final release <i>(beta only)</i>. 
+So it's canvas implementation was not completed at this stage <i>(missing Composite Operation)</i>, 
+and a few bugs had to be eliminated. That are the reasons why the tiltshift filter is broken, 
+and why some mouse-over elements do not fade softly!</p>
+<p>Due to a bunch of reasons the Internet Explorer 6/7/8 version is missing a lot of features. 
+No table of contents. No filters. No button inverting. No soft fading. Page turn is just a fake.</p>
+<p>If you want to use filters with images from other origins, you need a simple proxy to outsmart the security mechanism.
+This is because of the <a class="overlay lWOn lk" href="http://en.wikipedia.org/wiki/Same_origin_policy" target="_blank">Same origin policy</a>. 
+SOLUTION: use a proxy like "imgproxy.php?url=" as a prefix in path <i>(imgproxy.php is open source and part of the distribution)</i>!
+</p>
+
+<h2>Why use Javascript Booklet.js</h2>
+<ul>
+<li>Fast and easy to implement.</li>
+<li>Works even well with quite a lot of images.</li>
+<li>You doen't have to care about image dimensions or aspect ratios.</li>
+<li>Supports real time filtering (in conjunction with "cvi_filter_lib.js").</li>
+<li>Allows to build interactive applications (e.g. play|stop|data|get|set).</li>
+<li>Works and looks really well. Doesn't require additional resources.</li>
+<li>Includes example css-file and html-structure for fallback strategies.</li>
+</ul>
+<p>In old browsers, the script degrades and your visitors will notice the fallback content.</p>
+
+<h2>History</h2>
+<p>
+Version 1.3<ul><li>Added restricted support for IE 6/7/8</li></ul>
+Version 1.2<ul><li>Added support for startup with TOC</li></ul>
+Version 1.1<ul><li>Added delay meter support</li></ul>
+Version 1.0<ul><li>Initial Release</li></ul>
+</p>
+
+<h2>License</h2>
+<p>Booklet.js is distributed under this <a href="LICENSE.txt">LICENSE</a>. License permits free of charge use on non-commercial and private web sites only under special conditions <em>(as described in the license)</em>. This license equals neither "<span style="text-decoration: line-through;">open source</span>" nor "<span style="text-decoration: line-through;">public domain</span>". There are also <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#099;&#118;&#105;&#064;&#110;&#101;&#116;&#122;&#103;&#101;&#115;&#116;&#097;&#046;&#100;&#101;">Commercial Software Licenses</a> available.</p>
+<h6>YOU AGREE TO ALL CONDITIONS OF THIS LICENCE AGREEMENT CONCERNING THE USE OF THE SOFTWARE BY ACCEPTING THIS LICENCE.
+<br>IF YOU DO NOT AGREE TO ALL CONDITIONS OF THIS AGREEMENT, YOU SHALL NOT INSTALL THE SOFTWARE, OR USE IT IN OTHER WAYS.</h6>
+<p><strong>Images used are copyrighted and are used for demonstration only.</strong></p>
+<p><a href="http://cvi.netzgesta.de/">cvi.netzgesta.de</a>&nbsp;&nbsp;also visit&nbsp;&nbsp;<a href="http://lab.netzgesta.de/">CVI-lab</a>, <a href="http://dev.netzgesta.de/">CVI-dev</a>, <a href="http://s5.netzgesta.de/">S5 Reloaded</a> and <a href="http://ajaxfilmdb.sourceforge.net/">AJAX-FilmDB</a></p>
+
+</body>
+</html>

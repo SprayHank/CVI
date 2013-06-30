@@ -1,0 +1,455 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>tripleb.js (javascript CSS 3 simulation)</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-language" content="en">
+	<link rel="bookmark" type="text/html" title="TripleB.js" href="http://www.netzgesta.de/tripleb/">
+	<meta name="Author" lang="en" content="tripleb.netzgesta.de - Christian Effenberger">	<meta name="Publisher" lang="en" content="www.netzgesta.de">	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">	<meta name="Generator" lang="en" content="Christian Effenberger">
+	<meta name="Description" lang="en" content="tripleb.js 1.24 allows you to simulate CSS 3 support for border-radius, box-shadow and background-gradient on your webpages through unobtrusive javascript">
+	<meta name="Keywords" lang="en" content="tripleb.js, simulation, background-gradient, box-shadow, border-radius, unobtrusive javascript, IE, Chrome, Mozilla, Firefox, Opera, Safari">
+	<meta http-equiv="imagetoolbar" content="no">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+<script type="text/javascript" src="tripleb.js"></script>
+<style type="text/css">
+a { color: blue; font-style:italic; text-decoration:none; }
+tt {color: green;}
+b {color: #993333;}
+body { background: url(images/backgrnd.jpg); color: black; font-family: Georgia; line-height: 1.5; margin: 0.5em 1em;}
+h2 { line-height: 1; }
+.logo {display: block; position: relative; padding: 0; margin: 0;}
+#logo {float: left; margin: 0 1em 1em 0; display: block; position: relative; border: solid 8px #ffa500; background-color: #ffcc00;}
+#guru { float: none; padding: 4px; width: 99%; height: auto; text-align: center; background-color: black; }
+#guru div { float: none; border: solid 3px red; padding: 4px; font-family: monospace; font-size: 1.25em; width: auto; height: auto; color: red; text-align: center; text-decoration: blink; }
+.bookmarks { white-space: nowrap; width: 98%; margin: 0; padding-top: 10px; border-top: 1px dotted gray;}
+.demo { 
+	color: #404040;
+	font: normal 0.9em/1.3em  "Trebuchet MS", Tahoma, Arial, Helvetica, sans-serif;
+	text-align: left;
+	text-shadow: gray 1px 1px 2px;
+}
+#demo em {
+	font-family: "Times New Roman", Georgia, Times, serif;
+}
+#demo b {
+	color: black;
+	font-weight: bold;
+}
+#demo h1.head1, #demo h2.head2, #demo p {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+#demo hr {
+	color: #888888; 
+	border: 1px solid #ffffff;
+	border-top: 1px solid #888888;
+	border-left: 1px solid #888888;
+}
+#demo a {
+	outline: none;
+	color: #ff8000;
+	font-weight: bold;
+	text-decoration: none;
+	text-shadow: gray 1px 1px 1px;
+}
+#demo a:hover {
+	text-shadow: black 0px 0px 3px;
+}
+#demo #outer {
+	background: #808080 url(images/backgrnd2.jpg);
+	padding: 0;
+	margin: 1em auto;
+	position: relative;
+	display: block;
+	width: 94%;
+	border: 2px solid #666666;
+	border-top: 2px solid #888888;
+	border-left: 2px solid #888888;
+	/* only ...
+	   if you want the style to be visible on natively supporting
+	   browser platforms also when javascript is out of action
+	//
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	-khtml-border-radius: 20px;
+	border-radius: 20px;
+	-moz-box-shadow: rgb(0,0,0) 0px 0px 12px;
+	-webkit-box-shadow: rgb(0,0,0) 0px 0px 12px;
+	box-shadow: rgb(0,0,0) 0px 0px 12px;
+	*/
+}
+#demo .content { 
+	display: block;
+	position: relative;
+	padding: 0; 
+	margin: 0;
+}
+#demo #inner {
+	background: #cccccc url(images/backgrnd.jpg);
+	padding: 0;
+	position: relative;
+	display: block;
+	margin: 0em 0.5em 0.5em 0.5em;
+	border: 2px solid #888888;
+	border-top: 2px solid #666666;
+	border-left: 2px solid #666666;
+	/* only ...
+	   if you want the style to be visible on natively supporting
+	   browser platforms also when javascript is out of action
+	//
+	-moz-border-radius: 12px;
+	-webkit-border-radius: 12px;
+	-khtml-border-radius: 12px;
+	border-radius: 12px;
+	*/
+}
+#demo div.outer {
+	background-color: transparent;
+	margin: 1% 1% 1% 0;
+	padding: 0;
+	position: relative;
+	display: block;
+	width: 99%;
+	border: 1px solid #808080;
+	/* only ...
+	   if you want the style to be visible on natively supporting
+	   browser platforms also when javascript is out of action
+	//
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-khtml-border-radius: 8px;
+	border-radius: 8px;
+	-moz-box-shadow: rgb(255,255,255) 0px 0px 16px;
+	-webkit-box-shadow: rgb(255,255,255) 0px 0px 16px;
+	box-shadow: rgb(255,255,255) 0px 0px 16px;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,160,0,0.5)), to(rgba(255,255,255,0.5)));
+	background-image: -moz-linear-gradient(top, rgba(255,160,0,.5), rgba(255,255,255,0.5)); 
+	*/
+}
+#demo #circle {
+	background-color: #ffffff;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	display: block;
+	width: 64px;
+	height: 64px;
+	top: 1em;
+	right: 1em;
+	border: 8px solid #ff0000;
+	/* only ...
+	   if you want the style to be visible on natively supporting
+	   browser platforms also when javascript is out of action
+	//
+	-moz-border-radius: 40px;
+	-webkit-border-radius: 40px;
+	-khtml-border-radius: 40px;
+	border-radius: 40px;
+	-moz-box-shadow: rgb(0,0,0) 0px 0px 4px;
+	-webkit-box-shadow: rgb(0,0,0) 0px 0px 4px;
+	box-shadow: rgb(0,0,0) 0px 0px 4px;
+	*/
+}
+#demo .circle { 
+	margin: auto auto;
+	text-align: center;
+	/* vertical-align: middle; */
+	line-height: 64px;
+	font-size: 64px;
+	text-shadow: gray 4px 4px 4px;
+}
+#demo h1.head1 {
+	color: orange;
+	display: block;
+	font: 2em/1.5em Impact, Verdana, Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	margin: 0 0 0 20px;
+	padding: 0;
+	text-shadow: #404040 1px 1px 1px, #ffffff -1px -1px 0px;
+}
+#demo h1.head1 span {
+	color: white;
+	line-height: 1em;
+	font-size: 60%;
+	font-family: "Trebuchet MS", Tahoma, Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	text-shadow: #404040 1px 1px 0px;
+}
+#demo big.head2 {
+	color: white;
+	display: block;
+	font: 1.3em/1.5em Impact, Verdana, Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	margin: -.5em 0 0 0;
+	padding: 0;
+	text-shadow: #666666 1px 1px 0px;
+}
+.bradius_10  {
+	/* only ...
+	   if you want the style to be visible on natively supporting
+	   browser platforms also when javascript is out of action
+	//
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	border-radius: 10px;
+	*/
+}
+.bshadow_000000_100_0_0_10  {
+	/* only ...
+	   if you want the style to be visible on natively supporting
+	   browser platforms also when javascript is out of action
+	//
+	-moz-box-shadow: rgb(0,0,0) 0px 0px 10px;
+	-webkit-box-shadow: rgb(0,0,0) 0px 0px 10px;
+	box-shadow: rgb(0,0,0) 0px 0px 10px;
+	*/
+}
+.bgradient_0_ffa500_50_ffffff_100 {
+	/* only ...
+	   if you want the style to be visible on natively supporting
+	   browser platforms also when javascript is out of action 
+	//
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,160,0,.5)), to(white)); 
+	background-image: -moz-linear-gradient(top, rgba(255,160,0,.5), white); 
+	*/
+}
+</style>
+<script type="text/javascript">
+<!--
+// tuned observer interval (default is 1000 ms)
+cvi_3b.interval=100;
+// -->	
+</script>
+</head>
+<body><noscript><div id="guru" title="By this you can recognize the Amiga fan!"><div><b>Guru Meditation</b> - With deactivated JavaScript: Divs stay unmodified!</div></div></noscript>
+
+<table>
+<tr><td valign="top" style="padding-top: 0.5em">
+<div id="logo" class="tripleb bradius_10 bshadow_000000_100_0_0_10 bgradient_0_ffa500_50_ffffff_100"><div class="logo"><img src="images/tripleb.png" border="0" alt="tripleb" /></div></div>
+</td>
+<td style="padding: 0 0 0 15px; margin: 0; line-height: 1.5; font-style: italic;">
+<p><strong>tripleb.js 1.24</strong> allows you to simulate CSS 3 support for border-radius, box-shadow and background-gradient on your webpages. It uses unobtrusive javascript to keep your code clean.</p>
+<p>It works in most major browsers - Mozilla Firefox 1.5+, Opera 9+, Safari 3+ and IE 7+. On older browsers, it'll degrade and your visitors won't notice a thing.</p>
+</td></tr>
+</table>
+
+<h2>Demonstration</h2>
+
+<div id="demo" class="demo">
+<div id="outer" class="tripleb bradius_20 bshadow_000000_100_0_0_12"><div class="content">
+	<h1 class="head1">TripleB &nbsp; <span class="thiny">...provides CSS 3 capabilities for div elements!</span></h1>
+	<div id="inner" class="tripleb bradius_12"><div class="content" style="padding: 1em;">
+		<big class="head2">For test purposes</big><ul>
+		<li><strong>resize</strong> the browser window and <strong>zoom</strong> in and out</li><li><strong>change</strong> blind text
+		<button type="button" onclick="document.getElementById('dummy').innerHTML='Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.';">reset innerHTML</button>
+		<button type="button" onclick="document.getElementById('dummy').innerHTML='Lorem ipsum dolor sit amet...';">change innerHTML</button>
+		</li></ul>
+		<div id="circle" class="tripleb bradius_40 bshadow_000000_100_0_0_4"><div class="content circle">!</div></div>
+		<p id="dummy" style="padding: 0.5em;">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.</p>
+		<div class="outer tripleb bradius_8 bshadow_ffffff_100_0_0_16 bgradient_0_ffa500_50_ffffff_50"><div class="content" style="padding:1em;">
+			<big class="head2">Copyright</big>
+			<p><big><b>tripleb.js</b> <b>1.2</b> <em>(12-Feb-2010)</em> (c) by Christian Effenberger. All Rights Reserved.</big><hr/>
+			tripleb.js is distributed under the <b>Netzgestade Non-commercial Software License Agreement</b>. 
+			License permits free of charge use on non-commercial and private web sites only under special conditions <em>(as described in the license)</em>.
+			This license equals neither "<span style="text-decoration: line-through;">open source</span>" nor "<span style="text-decoration: line-through;">public domain</span>".
+			There are also <b>Commercial Software Licenses</b> available.
+			<hr/><small>YOU AGREE TO ALL CONDITIONS OF THIS LICENCE AGREEMENT CONCERNING THE USE OF THE SOFTWARE BY ACCEPTING THIS LICENCE.
+			IF YOU DO NOT AGREE TO ALL CONDITIONS OF THIS AGREEMENT, YOU SHALL NOT INSTALL THE SOFTWARE, OR USE IT IN OTHER WAYS.</small>
+			</p>				
+		</div></div>
+	</div></div>
+</div></div>
+</div>
+
+<h2>About TripleB</h2>
+
+<p><b>TripleB</b> is my first attempt to get the 3 major beautifying features of CSS 3,
+namely "<tt>border-radius</tt>", "<tt>box-shadow</tt>" and "<tt>background-image: gradient</tt>", 
+to run on not natively supporting browser platforms.</p>
+
+<p>Because of compatibility reasons and to get the first release done, I've built in several...<br/>
+<strong>Restrictions</strong>:</p>
+<ul>
+<li>"<tt>border-type</tt>" is always "<tt>solid</tt>"</li>
+<li>"<tt>border-radius</tt>" always all four corners</li>
+<li>"<tt>box-shadow</tt>" blur radius max is "<tt>32px</tt>"</li>
+<li>"<tt>box-shadow</tt>" color is always "<tt>black</tt>" <em>(IE only)</em></li>
+<li>"<tt>gradient</tt>" direction is horizontal or vertical only</li>
+<li>"<tt>gradient</tt>" size is always "<tt>100%</tt>"</li>
+<li>"<tt>gradient</tt>" colors are reduced to "<tt>from</tt>" and "<tt>to</tt>" color</li>
+<li>Real background images with no repeating are always centered</li>
+<li>Real background images with repeating starts always at 0,0</li>
+<li>Real background images with repeat-x or repeat-y are currently not supported <em>(IE only)</em></li>
+<li>Elements must be displayed on startup to be identified by the initialization function.</li>
+<li>Elements border, shadow and background styles can't be modified after the initialization.</li>
+</ul>
+
+<p><strong>Features</strong>:</p>
+<ul>
+<li>Because <b>tripleb.js</b> uses microformat class names to set individual parameters, it's possible to
+see the styles on supporting browser platforms also when javascript is out of action.</li>
+<li>Elements dimensions will resize automatically on events like "<tt>onresize</tt>", "<tt>onzoom</tt>" and "<tt>onchange</tt>".</li>
+<li>The custom events "<tt>onzoom</tt>" and "<tt>onchange</tt>" are done by the use of an observer <em>(for canvas only)</em>.</li>
+<li>The observers interval is configurable from 50 to 5000 ms <em>(default 1000 ms)</em>.</li>
+<li>If the element was modified by <b>tripleb.js</b> or not, can be queried by "<tt>if(object.modified) {... }</tt>".</li>
+<li>The repainting of an element can be enforced without time delay by "<tt>cvi_3b.paint(object);</tt>".</li>
+<li>The elements content can always be changed by e.g. "<tt>object.lastChild.innerHTML</tt>".</li>
+</ul>
+
+<p><strong>Disadvantages</strong>:</p>
+<ul>
+<li>A visual problem is the displaying of similar looking shadows. I've done my best, but I'm really dissatisfied with the result.</li>
+<li>IE's vml do not support clipping. Result is, that shadows shines through if background-color is set to transparent and the gradient uses opacities lower than 100%.</li>
+<li>IE 5-6 and Safari 1-2 are currently not supported.</li>
+<li>Opera is very slow, especially on huge elements.</li>
+<li>Because of Opera, it's important to set border and background-colors as 6-hex-digit <em>(e.g. #ffa508)</em>.</li>
+<li>Because of Opera, it's also necessary to set border-width in pixel only.</li>
+<li><p>The concept behind the simulation makes it necessary to split the block-level element
+into an outer div and an inner block-level element. So that the outer element is always a div 
+and represents the background "<b>style</b>" while the inner element is of the type block-level and represents 
+the "<b>content</b>". If the outer div should have settings for "<tt>padding</tt>" and/or "<tt>overflow</tt>", 
+they must be set to the inner element to work properly.</p>
+
+<big>Example:</big>
+<pre>
+&lt;head&gt;
+&lt;style type="text/css"&gt;
+	.<tt>outer</tt> {
+		margin: 0 1em 1em 0;
+		padding: 0; 
+		float: left;
+		display: block; 
+		position: relative; 
+		border: solid 2px #ffa500; 
+		background-color: #ffcc00;
+	}
+	.<tt>inner</tt> {
+		display: block; 
+		position: relative; 
+		padding: 1em; 
+		margin: 0;
+	}
+	/* if you want the style to be visible on natively supporting  
+	   browser platforms also when javascript is out of action */
+	.bradius_10 {
+		-moz-border-radius: 10px;
+		-webkit-border-radius: 10px;
+		-khtml-border-radius: 10px;
+		border-radius: 10px;
+	}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;div class="<tt>outer</tt> tripleb bradius_10"&gt;&lt;p class="<tt>inner</tt>"&gt;
+		Lorem ipsum dolor sit amet, consectetuer adipiscing elit, 
+		sed diam nonummy nibh euismod tincidunt ut laoreet dolore 
+		magna aliquam erat volutpat. 
+	&lt;/p&gt;&lt;/div&gt;
+&lt;/body&gt;
+</pre></li>
+</ul>
+
+<p><br/><b>TripleB</b> always uses the inbuilt browser capabilities first. As a last solution, 
+if the combination of features don't match the browser capabilities, it creates an additional element.
+This element is positioned in the outer div as the first child, before the inner element.
+The element consists of the type canvas or div and is always named like the outer div, followed by an underscore
+and the suffix "canvas". The outer div can also be queried <em>(for tripleb.js DOM modification)</em> by "<tt>if(object.modified) {... }</tt>".
+The inner element can always be accessed by "<tt>object.lastChild</tt>". If the outer div is modified and the additional element
+consists of the type canvas, then tripleb.js has added an observer for a custom "onzoom" event.
+Assuming that the inner element has been changed by "<tt>object.lastChild.innerHTML</tt>" and the elements dimensions have also been changed,
+the repainting of the canvas element starts after the defined interval <em>(default 1000 ms)</em> modifiable by the tripleb property "<tt>cvi_3b.interval=200;</tt>".
+You can also enforce the repainting of the canvas without time delay by "<tt>cvi_3b.paint(object);</tt>".
+</p>
+
+<h2>Setting Up</h2>
+
+<p><code>&lt;script type="text/javascript" src="<tt>tripleb.js</tt>"&gt;&lt;/script&gt;</code></p>
+
+<h2>Using It</h2>
+
+<p>To get it run just add the class="<tt>tripleb</tt>" to the outer div.</p>
+
+<h2>Classes</h2>
+
+<ul>
+<li>Initialisation class "<tt>tripleb</tt>"</li><br />
+<li><small><em>vary the border-radius by adding bradius followed by an underscore and the desired <b>radius</b> in pixel:</em></small><br>
+Border radius class "<tt>bradius_16</tt>"</li><br />
+<li><small><em>vary the box-shadow by adding bshadow followed by an underscore and the desired <b>color</b> as 6-hex-digit or 3-hex-digit, 
+followed by an underscore and the desired <b>opacity</b> in %, followed by an underscore and the desired <b>x-position</b> in pixel, 
+followed by an underscore and the desired <b>y-position</b> in pixel, followed by an underscore and the desired <b>blur-radius</b> in pixel:</em></small><br>
+Box shadow class "<tt>bshadow_000000_100_0_0_10</tt>" - max blur-radius is 32px, max-min x/y offset +-64px</li><br />
+<li><small><em>vary the background-gradient by adding bgradient followed by an underscore and the desired <b>angle</b> as °, 
+followed by an underscore and the desired <b>from-color</b> as 6-hex-digit or 3-hex-digit, followed by an underscore and the desired <b>from-opacity</b> in %, 
+followed by an underscore and the desired <b>to-color</b> as 6-hex-digit or 3-hex-digit, followed by an underscore and the desired <b>to-opacity</b> in %:</em></small><br>
+Background gradient class "<tt>bgradient_0_ffffff_100_ffa500_50</tt>" - angle is currently limited to 0==vertical, 90==horizontal</li>
+</ul>
+
+<h2>Syntax</h2>
+
+<dl>
+	<dt><strong>Set</strong> defaults using Javascript</dt>
+	<dd>
+		<code>
+		cvi_3b.interval = 1000;	<tt>//INT 50-5000 (ms)</tt><br>
+		</code>
+  		<p></p>
+	</dd>
+	<dt><strong>Get</strong> some informations</dt>
+	<dd>
+		<code><tt>FLOAT</tt> = cvi_3b.version;</code><br />
+		<code><tt>STRING</tt> = cvi_3b.released;</code>
+  		<p></p>
+	</dd>
+	<dt><strong>Initialize</strong> simulation using Javascript</dt>
+  	<dd>
+  		<code>cvi_3b.init();</code>
+  		<p><small><b>This function has been executed automatically on page load!</b></small><br/></p>
+  	</dd>
+	<dt><strong>Repaint</strong> element using Javascript</dt>
+  	<dd>
+  		<code>cvi_3b.paint(<tt>element</tt>);</code><br>
+		<dl><dt>Example:</dt>
+		<dd>
+			<code>var ele=document.getElementById(<b>"outer"</b>);<br/>
+			if(ele&&ele.modified) {cvi_3b.paint(ele);}</code>
+  		</dd></dl>
+		<p></p>
+  	</dd>
+</dl>
+
+<h2>Why use Javascript TripleB?</h2>
+
+<ul>
+<li>Fast, small and quite easy to implement with a little knowledge of html and css.</li>
+<li>Don't need to spend time in an image editor creating images to simulate round corners, shadows and gradients.</li>
+<li>It's dead easy to change the attributes of the elements.</li>
+<li>Free of charge use on non-commercial and private web sites.</li>
+</ul>
+
+<p>In older browsers, the script degrades and your visitors won't notice a thing.</p>
+
+<h2>History</h2>
+
+Version 1.24<ul><li>Added support for Internet Explorer 9</li></ul>
+Version 1.2<ul><li>Bug fixing</li></ul>
+Version 1.1<ul><li>Bug fixing</li></ul>
+Version 1.0<ul><li>Initial Release</li></ul>
+
+<h2>License</h2>
+
+<p>Tripleb.js is distributed under this <a href="LICENSE.txt">LICENSE</a>. License permits free of charge use on non-commercial and private web sites only under special conditions <em>(as described in the license)</em>. This license equals neither "<span style="text-decoration: line-through;">open source</span>" nor "<span style="text-decoration: line-through;">public domain</span>". There are also <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#099;&#118;&#105;&#064;&#110;&#101;&#116;&#122;&#103;&#101;&#115;&#116;&#097;&#046;&#100;&#101;">Commercial Software Licenses</a> available.</p>
+
+<h6>YOU AGREE TO ALL CONDITIONS OF THIS LICENCE AGREEMENT CONCERNING THE USE OF THE SOFTWARE BY ACCEPTING THIS LICENCE.
+<br>IF YOU DO NOT AGREE TO ALL CONDITIONS OF THIS AGREEMENT, YOU SHALL NOT INSTALL THE SOFTWARE, OR USE IT IN OTHER WAYS.</h6>
+
+<p><strong>Images used are copyrighted and are used for demonstration only.</strong></p>
+
+<p><a href="http://cvi.netzgesta.de/">cvi.netzgesta.de</a>&nbsp;&nbsp;also visit&nbsp;&nbsp;<a href="http://lab.netzgesta.de/">CVI-lab</a>, <a href="http://dev.netzgesta.de/">CVI-dev</a>, <a href="http://s5.netzgesta.de/">S5 Reloaded</a> and <a href="http://ajaxfilmdb.sourceforge.net/">AJAX-FilmDB</a></p>
+
+</body>
+</html>

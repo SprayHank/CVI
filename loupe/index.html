@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Loupe.js (photorealistic loupe effect for images)</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-language" content="en">	<link rel="bookmark" type="text/html" title="Loupe.js" href="http://www.netzgesta.de/corner/">
+	<meta name="Author" lang="en" content="corner.netzgesta.de - Christian Effenberger">	<meta name="Publisher" lang="en" content="www.netzgesta.de">	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">	<meta name="Generator" lang="en" content="Christian Effenberger">
+	<meta name="Description" lang="en" content="Loupe.js 2.0 allows you to add loupes to images on your webpages through unobtrusive javascript">
+	<meta name="Keywords" lang="en" content="Loupe.js,images,canvas,javascript,zoom,loupe,magnifier,glas,lens,Internet Explorer,Mozilla,Firefox,Opera,Safari">
+	<meta http-equiv="imagetoolbar" content="no">
+<style type="text/css">
+a { color: blue; font-style:italic; text-decoration:none; }
+tt {color: green;}
+b {color: darkred;}
+body { background: url(backgrnd.jpg) silver; color: black; font-family: Georgia,serif; line-height: 1.5; margin: 0.5em 1em;}
+h2 { font-family: Verdana,Arial,Helvetica,sans-serif; }
+.tab { border: 1px solid gray; background: white; padding: 0.25em; } 
+#guru { padding: 4px; width: 99%; height: auto; text-align: center; background-color: black; }
+#guru div { border: solid 3px red; padding: 4px; font-family: monospace; font-size: 1.25em; width: auto; height: auto; color: red; text-align: center; text-decoration: blink; }
+#header { margin-bottom: 0; font-weight: normal; font-style: italic; color: gray; }
+.bookmarks { white-space: nowrap; width: 98%; margin: 0; padding-top: 10px; border-top: 1px dotted gray;}
+</style>
+</head>
+<body><noscript><div id="guru" title="By this you can recognize the Amiga fan!"><div><strong>Guru Meditation</strong> - With deactivated JavaScript: Images stay unmodified!</div></div></noscript>
+<table>
+<tr><td valign="top"><a href="loupe.zip" title="download loupe.js"><img src="logo.jpg" border="0" width="352" height="160" alt="loupe.js" style="float:left; padding-right: 15px;"></a></td>
+<td style="line-height: 1.5; font-style: italic;">
+<p><strong>Loupe.js</strong> allows you to add photorealistic loupes (magnifier) to images on your webpages. The design is changeable by use of an image editing program. It uses unobtrusive javascript to keep your code clean.</p>
+<p>It works in all the major browsers - Mozilla Firefox 1.5+, Opera 9+, Chrome, IE 6+ and Safari. On older browsers, it'll degrade and your visitors won't notice a thing.</p>
+</td></tr>
+</table>
+
+<h2>Setting Up</h2>
+
+<p>Download "loupe.js" and include it into your webpages HEAD section.</p>
+
+<code>
+&lt;script type="text/javascript" src="<tt>loupe.js</tt>"&gt;&lt;/script&gt;
+</code>
+
+<h2>Using It</h2>
+
+<p>To add a loupe just set the event onload="<tt>loupe.add(this);</tt>" to an div surrounded image.</p>
+<code>
+&lt;div&gt;<br>
+&lt;img id="..." onLoad="<tt>loupe.add(this);</tt>" src="..." width="356" height="205" alt="..."&gt;<br>
+&lt;/div&gt;
+</code>
+
+<h2>Usage</h2>
+
+<dl>
+	<dt>Set defaults</dt>
+  	<dd>
+		<code>loupe.<b>defaultResopath</b>&nbsp; = <tt>'images/loupe/'</tt>; //STRING path to image resources (loupe.png|lense.png|icon.png)</code><br />
+		<code>loupe.<b>defaultVisible</b> &nbsp; = <tt>false</tt>; //BOOLEAN visiblity on startup</code><br />
+		<code>loupe.<b>defaultRadius</b> &nbsp;&nbsp; = <tt>100</tt>; //INT/FLOAT 0-100 lense radius (%) of loupe min(height/width)</code><br />
+		<code>loupe.<b>defaultXpos</b> &nbsp;&nbsp; &nbsp; = <tt>8</tt>; //INT/FLOAT 0-n (px) horizontal offset of the lense</code><br />
+		<code>loupe.<b>defaultYpos</b> &nbsp;&nbsp; &nbsp; = <tt>6</tt>; //INT/FLOAT 0-n (px) vertical offset of the lense</code><br />
+		<code>loupe.<b>defaultXview</b> &nbsp; &nbsp; = <tt>0</tt>; //INT/FLOAT 0-n (px) horizontal start position</code><br />
+		<code>loupe.<b>defaultYview</b> &nbsp; &nbsp; = <tt>0</tt>; //INT/FLOAT 0-n (px) vertical start position</code><br />
+		<code>loupe.<b>defaultCrosshair</b> = <tt>false</tt>; //BOOLEAN show crosshair</code><br />
+		<code>loupe.<b>defaultOpacity</b> &nbsp; = <tt>25</tt>; //INT/FLOAT 0-100 (%) crosshair opacity</code><br />
+		<code>loupe.<b>defaultColor</b> &nbsp; &nbsp; = <tt>'#0000ff'</tt>; //STRING crosshair color</code><br />
+		<code>loupe.<b>defaultName</b> &nbsp;&nbsp; &nbsp; = <tt>''</tt>; //STRING (canvas name|id)</code><br />
+  		<p></p>
+	</dd>
+	<dt>Add functionality to image</dt>
+  	<dd>
+  		<code><?=$theme ?>.add(<tt>image</tt>[, <tt>options</tt>]);</code><br />
+		<dl><dt><code><tt>image</tt>&nbsp; == div surrounded image</code></dt></dl>
+		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; &nbsp; e.g. {<b>visible</b>: <tt>true</tt>, <b>opacity</b>: <tt>25</tt>, ...}</code></dt>
+		<dd>
+			<code><b>resopath</b>&nbsp; == STRING Default: <tt>'images/loupe/'</tt></code><br />
+			<code><b>visible</b> &nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>radius</b> &nbsp;&nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>100</tt></code><br />
+			<code><b>xpos</b> &nbsp;&nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>n</tt> Default: <tt>8</tt></code><br />
+			<code><b>ypos</b> &nbsp;&nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>n</tt> Default: <tt>6</tt></code><br />
+			<code><b>xview</b> &nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>0</tt></code><br />
+			<code><b>yview</b> &nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>0</tt></code><br />
+			<code><b>crosshair</b> == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>opacity</b> &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>25</tt></code><br />
+			<code><b>color</b> &nbsp; &nbsp; == STRING Default: <tt>'#0000ff'</tt></code><br />
+			<code><b>name</b> &nbsp;&nbsp; &nbsp; == STRING Default: <tt>''</tt></code><br />
+  		<p></p>
+  		</dd></dl>
+  		<p></p>
+  	</dd>
+	<dt>Toggle visibility</dt>
+	<dd>
+		<code><?=$theme ?>.toggle(<tt>canvas.id</tt>);</code><br />
+  		<p></p>
+	</dd>
+	<dt>Remove functionality from image</dt>
+	<dd>
+		<code><?=$theme ?>.remove(<tt>canvas</tt>);</code><br />
+  		<p></p>
+	</dd>
+	<dt>Examples</dt>
+	<dd>
+  		<code>&lt;img onload="<?=$theme ?>.add(<tt>this</tt>);" ...&gt;</code><br />
+  		<code><?=$theme ?>.add(<tt>document.getElementById('img')</tt>);</code><br />
+		<code>if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}}</code><br />
+  		<code><?=$theme ?>.add(<tt>$('img')</tt>, {<b>name</b>:<tt>'magnifier'</tt>, <b>resopath</b>:<tt>'loupes/'</tt>});</code><br />
+		<code>&lt;button type="button" onclick="<?=$theme ?>.toggle(<tt>'magnifier'</tt>);"&gt; toggle &lt;/button&gt;</code><br />
+  		<code>alert('loupe: '+<?=$theme ?>.version+' ('+<?=$theme ?>.released+')');</code><br/>
+  		<code><?=$theme ?>.remove(<tt>$('magnifier')</tt>);</code><br />
+  		<p></p>
+	</dd>
+</dl>
+
+<h2>Demonstration</h2>
+
+<p>Shows what "loupe.js" does.</p>
+<div style="margin-left: 2em; width: 100%">
+<a class="tab" target="examples" href="caribbean.html">Zoom Effect <b>(Caribbean)</b></a>
+<a class="tab" target="examples" href="mona_lisa.html">Frame Effect <b>(Mona Lisa)</b></a>
+<a class="tab" target="examples" href="homer.html">Xray Effect <b>(Homer)</b></a>
+<a class="tab" target="examples" href="poster.html">Print Effect <b>(G5)</b></a>
+
+</div>
+<iframe style="border: 1px solid gray; margin-left: 2em;" src="caribbean.html" width="724" height="640" name="examples">
+<p>Your Browser is unable to show embedded frames:</p>
+<ul>
+  	<li><a href="caribbean.html">Zoom Effect</a> (Caribbean)</li>
+  	<li><a href="mona_lisa.html">Frame Effect</a> (Mona Lisa)</li>
+  	<li><a href="homer.html">Xray Effect</a> (Homer)</li>
+  	<li><a href="poster.html">Print Effect</a> (G5)</li>
+</ul>
+</iframe>
+
+<h2>Why use Javascript Image Loupe?</h2>
+
+<ul>
+<li>Fast and easy to implement. Just add onload="<tt>loupe.add(this);</tt>" to the image.</li>
+<li>Makes large images completely visibly through small page-areas.</li>
+<li>Works and looks really well. Doesn't require additional resources.</li>
+<li>It's possible to change the design of the loupe by use of a image editing program.</li>
+<li>Free of charge use on non-commercial and private web sites.</li>
+</ul>
+
+<p>In older browsers, the script degrades and your visitors won't notice a thing.</p>
+
+
+<h2>History</h2>
+
+Version 2.0<ul>
+<li>Reworked version supports multiple instances</li>
+<li>Added support for different loupe designs and sizes</li>
+<li>Added support for ontouch/ongesture events</li>
+<li>Added support for Internet Explorer 9</li>
+</ul>
+
+Version 1.34<ul><li>Added support for images with transparency</li></ul>
+
+Version 1.32<ul><li>IE8 modifications</li></ul>
+
+Version 1.3<ul><li>Added support for viewpoint start and crosshair</li></ul>
+
+Version 1.2<ul><li>Added support for Internet Explorer 6/7</li></ul>
+
+Version 1.1<ul><li>Works even with disabled cache</li></ul>
+
+Version 1.0<ul><li>Initial Release</li></ul>
+
+
+<h2>License</h2>
+
+<p>Loupe.js is distributed under this <a href="LICENSE.txt">LICENSE</a>. License permits free of charge use on non-commercial and private web sites only under special conditions <em>(as described in the license)</em>. This license equals neither "<span style="text-decoration: line-through;">open source</span>" nor "<span style="text-decoration: line-through;">public domain</span>". There are also <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#099;&#118;&#105;&#064;&#110;&#101;&#116;&#122;&#103;&#101;&#115;&#116;&#097;&#046;&#100;&#101;">Commercial Software Licenses</a> available.</p>
+
+<h6>YOU AGREE TO ALL CONDITIONS OF THIS LICENCE AGREEMENT CONCERNING THE USE OF THE SOFTWARE BY ACCEPTING THIS LICENCE.
+<br>IF YOU DO NOT AGREE TO ALL CONDITIONS OF THIS AGREEMENT, YOU SHALL NOT INSTALL THE SOFTWARE, OR USE IT IN OTHER WAYS.</h6>
+
+<p><strong>Images used are copyrighted and are used for demonstration only.</strong></p>
+
+<p><a href="http://cvi.netzgesta.de/">cvi.netzgesta.de</a>&nbsp;&nbsp;also visit&nbsp;&nbsp;<a href="http://lab.netzgesta.de/">CVI-lab</a>, <a href="http://s5.netzgesta.de/">S5 Reloaded</a> and <a href="http://ajaxfilmdb.sourceforge.net/">AJAX-FilmDB</a></p>
+
+</body>
+</html>
