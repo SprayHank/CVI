@@ -6,7 +6,10 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="Content-language" content="en">
 	<link rel="bookmark" type="text/html" title="TransM.js" href="http://www.netzgesta.de/transm/">
-	<meta name="Author" lang="en" content="transm.netzgesta.de - Christian Effenberger">	<meta name="Publisher" lang="en" content="www.netzgesta.de">	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">	<meta name="Generator" lang="en" content="Christian Effenberger">
+	<meta name="Author" lang="en" content="transm.netzgesta.de - Christian Effenberger">
+	<meta name="Publisher" lang="en" content="www.netzgesta.de">
+	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">
+	<meta name="Generator" lang="en" content="Christian Effenberger">
 	<meta name="Description" lang="en" content="transm.js 1.3 allows you to add image transitions to your webpages through unobtrusive javascript">
 	<meta name="Keywords" lang="en" content="transm.js, corners, overlay, images, transitions, tweenings, unobtrusive javascript, IE, Mozilla, Firefox, Opera, Safari, Chrome">
 	<meta http-equiv="imagetoolbar" content="no">
@@ -172,8 +175,8 @@
 	</style>
 	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<script type="text/javascript" src="cvi_stackblur.js"></script>
-	<script type="text/javascript" src="cvi_tween_lib.js"></script>
-	<script type="text/javascript" src="cvi_trans_lib.js"></script>
+	<script type="text/javascript" src="../javascripts/lib/cvi_tween_lib.js"></script>
+	<script type="text/javascript" src="../javascripts/lib/cvi_trans_lib.js"></script>
 	<script type="text/javascript" src="transm.js"></script>
 <script type="text/javascript">
 <!--
@@ -230,24 +233,29 @@ function setTransValue(obj) {var ele=$("edit"),img=$('t_img');
 	}
 	if(img) {img.title=val;} if(val=="random") {val="fade";}
 	if(img) {img.src="images/transitions/"+val+".gif";}
-	return false;}
+	return false;
+}
 function setTweenValue(obj) {var ele=$("edit"),img=$('g_img');
 	var val=obj.options[obj.selectedIndex].value;
 	if(ele) {ele.data[0].tweening=ele.data[1].tweening=!hasCanvas?"linear":val;}
 	if(img) {img.title=val;} if(val=="default"||!hasCanvas) {val="linear"; obj.selectedIndex=1;}
 	if(img) {img.src="images/tweening/"+val+".gif";}
-	return false;}
+	return false;
+}
 function setAlphaValue(obj) {var ele=$("edit"),img=$('a_img');
 	var val=obj.options[obj.selectedIndex].value;
 	if(img) {img.title=val; img.src="images/alpha/"+val+".png";}
 	if(ele) {ele.data[0].alphaimg=ele.data[1].alphaimg="images/alpha/"+val+".png";}
-	return false;}
+	return false;
+}
 function setFpsValue(obj) {var ele=$("edit");
 	if(obj.checked) {if(ele) {ele.data[0].fps=ele.data[1].fps=obj.value;}}
-	return false;}
+	return false;
+}
 function setDurValue(obj) {var ele=$("edit");
 	if(obj.checked) {if(ele) {ele.data[0].duration=ele.data[1].duration=obj.value;}}
-	return false;}
+	return false;
+}
 function setOpt1Value(obj) {var ele=$("edit");
 	var tr=document.parameter.transition.options[document.parameter.transition.selectedIndex].value;
 	if(tr!="random"&&cvi_tfx[tr].max) {
@@ -257,7 +265,8 @@ function setOpt1Value(obj) {var ele=$("edit");
 		if(ele) {ele.data[0].option1=ele.data[1].option1=0;}
 		obj.value=0;
 	}
-	return false;}
+	return false;
+}
 function setOpt2Value(obj) {var ele=$("edit");
 	var tr=document.parameter.transition.options[document.parameter.transition.selectedIndex].value;
 	if(tr!="random"&&cvi_tfx[tr].max) {
@@ -267,7 +276,8 @@ function setOpt2Value(obj) {var ele=$("edit");
 		if(ele) {ele.data[0].option2=ele.data[1].option2=0;}
 		obj.value=0;
 	}
-	return false;}
+	return false;
+}
 if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}} var hasCanvas=false;
 window.onload=function () {hasCanvas=transm.canvas(); 
 	transm.add($("transmit"), {width:256,height:256,clearbg:true,name:'edit',data: [{source:'images/A.gif',alphaimg:'images/alpha/check.png',callafter:'showInfo'},{source:'images/B.gif',alphaimg:'images/alpha/check.png',callafter:'showInfo'}]});
@@ -293,7 +303,8 @@ It works in all the major browsers - Mozilla Firefox 1.5+, Opera 9+, Safari 2+, 
 <div id="returns"><img id="t_img" title="fade" src="images/transitions/fade.gif" width="80" height="80" border="0" alt="" /><img id="g_img" title="linear" src="images/tweening/linear.gif" width="80" height="80" alt="" /><img id="a_img" title="check" src="images/alpha/check.png" width="80" height="80" border="0" alt="" /></div>
 <form name="parameter">
 <b>Transition</b>: <select style="width:160px;" name="transition" id="transition" size="1" onchange="setTransValue(this)">
-<option value="random" checked="checked">random</option><script type="text/javascript">
+<option value="random" checked="checked">random</option>
+<script type="text/javascript">
 <!--
 for(var i in cvi_tfx) {
 	document.writeln('<option value="'+i+'">'+i+'<\/option>');

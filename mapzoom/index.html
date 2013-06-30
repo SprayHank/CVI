@@ -6,14 +6,17 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="Content-language" content="en">
 	<link rel="bookmark" type="text/html" title="Mapzoom.js" href="http://www.netzgesta.de/mapzoom/">
-	<meta name="Author" lang="en" content="mapzoom.netzgesta.de - Christian Effenberger">	<meta name="Publisher" lang="en" content="www.netzgesta.de">	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">	<meta name="Generator" lang="en" content="Christian Effenberger">
+	<meta name="Author" lang="en" content="mapzoom.netzgesta.de - Christian Effenberger">
+	<meta name="Publisher" lang="en" content="www.netzgesta.de">
+	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">
+	<meta name="Generator" lang="en" content="Christian Effenberger">
 	<meta name="Description" lang="en" content="mapzoom.js 1.4 allows you to add zoom and pan functionality to oversized images and maps on your webpages through unobtrusive javascript">
 	<meta name="Keywords" lang="en" content="mapzoom.js, javascript zoom, image zoom, picture zoom, map zoom, image pan, map pan, magnifier, zoomifier, Internet Explorer, Mozilla, Firefox, Chrome, Opera, Safari">
 	<meta http-equiv="imagetoolbar" content="no">
 	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<script type="text/javascript" src="afrodat.js"></script>
 	<script type="text/javascript" src="mapzoom.js"></script>
-	<script type="text/javascript" src="cvi_tip_lib.js"></script>
+	<script type="text/javascript" src="../javascripts/lib/cvi_tip_lib.js"></script>
 	<meta http-equiv="Content-Style-Type" content="text/css">
 	<style type="text/css">
 		a { color: blue; font-style:italic; text-decoration:none; }
@@ -573,7 +576,8 @@ Border opacity class "<tt>pbopacity</tt>" - min=1 max=100 default=66</li></ul>
 			<code><b>zoom</b> &nbsp; &nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>0</tt></code><br />
 			<code><b>xpos</b> &nbsp; &nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>50</tt></code><br />
 			<code><b>ypos</b> &nbsp; &nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>50</tt></code><br />
-			<code><b>opacity</b> &nbsp;&nbsp; == INT <tt>0</tt> - <tt>100</tt> Default: <tt>90</tt></code><br />			<code><b>millisec</b> &nbsp; == INT <tt>5</tt> - <tt>100</tt> Default: <tt>40</tt></code><br />
+			<code><b>opacity</b> &nbsp;&nbsp; == INT <tt>0</tt> - <tt>100</tt> Default: <tt>90</tt></code><br />
+			<code><b>millisec</b> &nbsp; == INT <tt>5</tt> - <tt>100</tt> Default: <tt>40</tt></code><br />
 			<code><b>intitle</b> &nbsp;&nbsp; == STRING Default: <tt>'click or press shift key to zoom in'</tt></code><br />
 			<code><b>outtitle</b> &nbsp; == STRING Default: <tt>'click or press alt key to zoom out'</tt></code><br />
 			<code><b>infoblock</b>&nbsp; == STRING Default: <tt>'&lt;dl&gt;...&lt;\/dl&gt;'</tt></code><br />
@@ -669,8 +673,10 @@ Border opacity class "<tt>pbopacity</tt>" - min=1 max=100 default=66</li></ul>
 		<code>mapzoom.moveto(<tt>image</tt>, <b>x</b>, <b>y</b>);</code>
 		<dl><dt><code><b>x</b>,<b>y</b> default: <tt>0</tt>,<tt>0</tt></code></dt><dd>
 			<code>if <b>x</b> or <b>y</b> == INT e.g. <tt>189</tt><br />
-then <tt>it's interpreted as</tt> pixel <tt>from within natural image dimension</tt></code><br />			<code>if <b>x</b> or <b>y</b> == STR e.g. <tt>'50%'</tt> Pattern: <b>(</b>INT<b>|</b>FLOAT<b>)%</b><br /> 
-then <tt>it's interpreted as</tt> percentage</code><br />			<code>if <b>x</b> or <b>y</b> == STR e.g. <tt>'-23.057'</tt> Pattern: <b>(</b>+<b>|</b>-<b>)(</b>INT<b>|</b>FLOAT<b>)</b><br /> 
+then <tt>it's interpreted as</tt> pixel <tt>from within natural image dimension</tt></code><br />
+			<code>if <b>x</b> or <b>y</b> == STR e.g. <tt>'50%'</tt> Pattern: <b>(</b>INT<b>|</b>FLOAT<b>)%</b><br /> 
+then <tt>it's interpreted as</tt> percentage</code><br />
+			<code>if <b>x</b> or <b>y</b> == STR e.g. <tt>'-23.057'</tt> Pattern: <b>(</b>+<b>|</b>-<b>)(</b>INT<b>|</b>FLOAT<b>)</b><br /> 
 then <tt>it's interpreted as</tt> longitude <tt>or</tt> latitude</code><br />
   		</dd></dl>
 		
@@ -721,7 +727,8 @@ then <tt>it's interpreted as</tt> longitude <tt>or</tt> latitude</code><br />
 			<code><b>pos</b> &nbsp;&nbsp; == optional icon position <tt>0</tt> - <tt>9</tt> Default: <tt>0</tt> <small>(<tt>1</tt>=left-top, <tt>2</tt>=center-top, <tt>3</tt>=right-top, <tt>4</tt>=center-left, <tt>0</tt>/<tt>5</tt>=center-center, <tt>6</tt>=center-right, <tt>7</tt>=left-bottom, <tt>8</tt>=center-bottom, <tt>9</tt>=right-bottom)</small></code><br />
 			<code><b>id</b> &nbsp;&nbsp;&nbsp; == optional icon id Default: <tt>''</tt></code><br />
 			<code><b>title</b>&nbsp; == optional icon tooltip text Default: <tt>''</tt></code><br />
-			<code><b>href</b> &nbsp; == optional icon link URL Default: <tt>''</tt></code><br />			<code><b>target</b> == optional icon link target Default: <tt>''</tt></code>
+			<code><b>href</b> &nbsp; == optional icon link URL Default: <tt>''</tt></code><br />
+			<code><b>target</b> == optional icon link target Default: <tt>''</tt></code>
   		</dd></dl>
   		<p></p>
   	</dd>
@@ -731,7 +738,8 @@ then <tt>it's interpreted as</tt> longitude <tt>or</tt> latitude</code><br />
 		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; &nbsp; e.g. {<b>href</b>: <tt>'http://www.google.com/'</tt>, ...}</code></dt>
 		<dd>
 			<code><b>title</b>&nbsp; == icon tooltip text Default: <tt>''</tt></code><br />
-			<code><b>href</b> &nbsp; == icon link URL Default: <tt>''</tt></code><br />			<code><b>target</b> == icon link target Default: <tt>''</tt></code>
+			<code><b>href</b> &nbsp; == icon link URL Default: <tt>''</tt></code><br />
+			<code><b>target</b> == icon link target Default: <tt>''</tt></code>
   		</dd></dl>
   		<p></p>
 	</dd>
@@ -770,7 +778,8 @@ then <tt>it's interpreted as</tt> longitude <tt>or</tt> latitude</code><br />
 			<code><b>rev</b> &nbsp;&nbsp; &nbsp; == array of area-id's to subtract from this (must be polyline) Default: <tt>[]</tt></code><br />
 			<code><b>tooltip</b>&nbsp; == optional area html tooltip Default: <tt>''</tt></code><br />
 			<code><b>alttitle</b> == optional area alt and title text Default: <tt>''</tt></code><br />
-			<code><b>href</b> &nbsp; &nbsp; == optional area link URL Default: <tt>''</tt></code><br />			<code><b>target</b> &nbsp; == optional area link target Default: <tt>''</tt></code><br />
+			<code><b>href</b> &nbsp; &nbsp; == optional area link URL Default: <tt>''</tt></code><br />
+			<code><b>target</b> &nbsp; == optional area link target Default: <tt>''</tt></code><br />
 			<code><b>classes</b>&nbsp; == optional area classes(vbdash10, vbwidth100, vbcapround, vbcapflat, vbopacity00, vbcolor000000, vaopacity00, vacolor000000, paopacity00, pbopacity00, pacolor000000, pbcolor000000, noborder, specified, forcegroup) Default: <tt>''</tt></code><br />
 			<code><small><tt>vbdash</tt> + <tt>0</tt>==solid, <tt>1</tt>==shortdot, <tt>2</tt>==dot, <tt>3</tt>==shortdash, <tt>4</tt>==dash, <tt>5</tt>==longdash ,<tt>6</tt>==shortdashdot ,<tt>7</tt>==dashdot ,<tt>8</tt>==longdashdot ,<tt>9</tt>==shortdashdotdot, <tt>10</tt>==longdashdotdot</small></code><br />
 			<code><tt>vbdash</tt>0-10 with <tt>vbcapround</tt> and <tt>vbcapflat</tt>:<br/><img src="images/vbcapround.png" width="340" height="200" alt="dashes" border="0"/><img src="images/vbcapflat.png" width="340" height="200" alt="dashes" border="0"/></code><br />
@@ -787,7 +796,8 @@ then <tt>it's interpreted as</tt> longitude <tt>or</tt> latitude</code><br />
 			<code><b>rev</b> &nbsp;&nbsp; &nbsp; == array of area-id's to subtract from this (must be polyline) Default: <tt>[]</tt></code><br />
 			<code><b>tooltip</b>&nbsp; == optional area html tooltip Default: <tt>''</tt></code><br />
 			<code><b>alttitle</b> == optional area alt and title text Default: <tt>''</tt></code><br />
-			<code><b>href</b> &nbsp; &nbsp; == optional area link URL Default: <tt>''</tt></code><br />			<code><b>target</b> &nbsp; == optional area link target Default: <tt>''</tt></code><br />
+			<code><b>href</b> &nbsp; &nbsp; == optional area link URL Default: <tt>''</tt></code><br />
+			<code><b>target</b> &nbsp; == optional area link target Default: <tt>''</tt></code><br />
 			<code><b>classes</b>&nbsp; == optional area classes (vbdash10, vbwidth100, vbcapround, vbcapflat, vbopacity00, vbcolor000000, vaopacity00, vacolor000000, paopacity00, pbopacity00, pacolor000000, pbcolor000000, noborder, specified, forcegroup) Default: <tt>''</tt></code>
   		</dd></dl>
   		<p></p>

@@ -145,14 +145,21 @@
 	</style>
 <![endif]-->	
 	<meta http-equiv="Content-Script-Type" content="text/javascript" />
-	<script type="text/javascript" src="cvi_tween_lib.js"></script>
-	<script type="text/javascript" src="cvi_trans_lib.js"></script>
+	<script type="text/javascript" src="../javascripts/lib/cvi_tween_lib.js"></script>
+	<script type="text/javascript" src="../javascripts/lib/cvi_trans_lib.js"></script>
 	<script type="text/javascript" src="transm.js"></script>
 <script type="text/javascript">
 <!--
 var pics = new Array();
 pics = [
-	{source:'http://www.netzgesta.de/transm/images/countries/germany.jpg', option2:2, target:'_blank', title:'Official tourist Infos', href:"http://www.germany-tourism.de"},	{source:'http://www.netzgesta.de/transm/images/countries/egypt.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.egypt.travel"},	{source:'http://www.netzgesta.de/transm/images/countries/thailand.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.tourismthailand.org"},	{source:'http://www.netzgesta.de/transm/images/countries/italy.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.italiantourism.com"},	{source:'http://www.netzgesta.de/transm/images/countries/france.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.franceguide.com"},	{source:'http://www.netzgesta.de/transm/images/countries/switzerland.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.switzerland.com"},	{source:'http://www.netzgesta.de/transm/images/countries/greece.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.gnto.gr"},	{source:'http://www.netzgesta.de/transm/images/countries/newyork.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.nycgo.com"}
+	{source:'http://www.netzgesta.de/transm/images/countries/germany.jpg', option2:2, target:'_blank', title:'Official tourist Infos', href:"http://www.germany-tourism.de"},
+	{source:'http://www.netzgesta.de/transm/images/countries/egypt.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.egypt.travel"},
+	{source:'http://www.netzgesta.de/transm/images/countries/thailand.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.tourismthailand.org"},
+	{source:'http://www.netzgesta.de/transm/images/countries/italy.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.italiantourism.com"},
+	{source:'http://www.netzgesta.de/transm/images/countries/france.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.franceguide.com"},
+	{source:'http://www.netzgesta.de/transm/images/countries/switzerland.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.switzerland.com"},
+	{source:'http://www.netzgesta.de/transm/images/countries/greece.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.gnto.gr"},
+	{source:'http://www.netzgesta.de/transm/images/countries/newyork.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.nycgo.com"}
 ];
 
 var opts = new Object();
