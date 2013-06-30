@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-	"http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <title>Missing people</title>
@@ -53,13 +52,38 @@ var ltxt="If you have any information, please ";
 var rtxt=" If this case has been closed, please inform the webmaster [at] netzgesta.de";
 var photos = new Array();
 photos = [
-	{source:'missing/Alan_Lewis.jpg', comment:ltxt+'call <b>077-60-20-10-03</b>.'+rtxt},	{source:'missing/Amber_Hoope.jpg', comment:ltxt+'call <b>208-522-1983</b>.'+rtxt},	{source:'missing/Andrew_Brunelli.jpg', comment:ltxt+'call <b>928-638-7805</b>.'+rtxt},	{source:'missing/Benedetta_Bentley.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/Bonnie_Thayer.jpg', comment:ltxt+'call <b>203-393-4200</b>.'+rtxt},	{source:'missing/Brandy_Hanna.jpg', comment:ltxt+'call <b>843-745-1015</b>.'+rtxt},	{source:'missing/Brian_O_Tuama.jpg', comment:ltxt+'call <b>021-452-2000</b>.'+rtxt},
-	{source:'missing/Bethanie_Dougherty.jpg', comment:ltxt+'call <b>607-778-1911</b>.'+rtxt},	{source:'missing/Charlie_Gragg.jpg', comment:ltxt+'call <b>918-485-3124</b>.'+rtxt},	{source:'missing/Chris_Gaines.jpg', comment:ltxt+'visit <b>crisgainesinitiative.org</b>.'+rtxt},
+	{source:'missing/Alan_Lewis.jpg', comment:ltxt+'call <b>077-60-20-10-03</b>.'+rtxt},
+	{source:'missing/Amber_Hoope.jpg', comment:ltxt+'call <b>208-522-1983</b>.'+rtxt},
+	{source:'missing/Andrew_Brunelli.jpg', comment:ltxt+'call <b>928-638-7805</b>.'+rtxt},
+	{source:'missing/Benedetta_Bentley.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},
+	{source:'missing/Bonnie_Thayer.jpg', comment:ltxt+'call <b>203-393-4200</b>.'+rtxt},
+	{source:'missing/Brandy_Hanna.jpg', comment:ltxt+'call <b>843-745-1015</b>.'+rtxt},
+	{source:'missing/Brian_O_Tuama.jpg', comment:ltxt+'call <b>021-452-2000</b>.'+rtxt},
+	{source:'missing/Bethanie_Dougherty.jpg', comment:ltxt+'call <b>607-778-1911</b>.'+rtxt},
+	{source:'missing/Charlie_Gragg.jpg', comment:ltxt+'call <b>918-485-3124</b>.'+rtxt},
+	{source:'missing/Chris_Gaines.jpg', comment:ltxt+'visit <b>crisgainesinitiative.org</b>.'+rtxt},
 	{source:'missing/Christine_Marie_Sheddy.jpg', comment:ltxt+'call <b>80-811-8396</b>.'+rtxt},
-	{source:'missing/Cindie_Kogle.jpg', comment:ltxt+'call <b>541-682-8544</b>.'+rtxt},	{source:'missing/Crystal_Wilson.jpg', comment:ltxt+'call <b>614-654-4670</b>.'+rtxt},	{source:'missing/Eric_Peterson.jpg', comment:ltxt+'call <b>952-985-2800</b>.'+rtxt},	{source:'missing/Gina_Allison_Lourde.jpg', comment:ltxt+'visit <b>www.rawstudios.com/darkcountry</b>.'+rtxt},	{source:'missing/Heather_Riggio.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/James_Lewis.jpg', comment:ltxt+'call <b>202-727-9099</b>.'+rtxt},	{source:'missing/Jennifer_Kesse.jpg', comment:ltxt+'call <b>321-235-5300</b>.'+rtxt},	{source:'missing/Joseph_Pike.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/Lindsey_Brouillette.jpg', comment:ltxt+'call <b>337-394-3071</b>.'+rtxt},	{source:'missing/Lynne_Petrie.jpg', comment:ltxt+'call <b>845-600-5700</b>.'+rtxt},
+	{source:'missing/Cindie_Kogle.jpg', comment:ltxt+'call <b>541-682-8544</b>.'+rtxt},
+	{source:'missing/Crystal_Wilson.jpg', comment:ltxt+'call <b>614-654-4670</b>.'+rtxt},
+	{source:'missing/Eric_Peterson.jpg', comment:ltxt+'call <b>952-985-2800</b>.'+rtxt},
+	{source:'missing/Gina_Allison_Lourde.jpg', comment:ltxt+'visit <b>www.rawstudios.com/darkcountry</b>.'+rtxt},
+	{source:'missing/Heather_Riggio.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},
+	{source:'missing/James_Lewis.jpg', comment:ltxt+'call <b>202-727-9099</b>.'+rtxt},
+	{source:'missing/Jennifer_Kesse.jpg', comment:ltxt+'call <b>321-235-5300</b>.'+rtxt},
+	{source:'missing/Joseph_Pike.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},
+	{source:'missing/Lindsey_Brouillette.jpg', comment:ltxt+'call <b>337-394-3071</b>.'+rtxt},
+	{source:'missing/Lynne_Petrie.jpg', comment:ltxt+'call <b>845-600-5700</b>.'+rtxt},
 	{source:'missing/Michelle_Orphalee_McMullen.jpg', comment:ltxt+'call <b>717-943-6100</b>.'+rtxt},
 	{source:'missing/Moysis_Pericleous.jpg', comment:ltxt+'call <b>041-828-4414</b>.'+rtxt},
-	{source:'missing/Nailah_Franklin.jpg', comment:ltxt+'call <b>312-746-9259</b>.'+rtxt},	{source:'missing/Pamela_Biggers.jpg', comment:ltxt+'call <b>850-747-4700</b>.'+rtxt},	{source:'missing/Pamela_Bradshaw.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/Patrick_DiFrancesco.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},	{source:'missing/Rachel_Conger.jpg', comment:ltxt+'call <b>731-642-1672</b>.'+rtxt},	{source:'missing/Si_Young_Yoon.jpg', comment:ltxt+'call <b>323-890-5500</b>.'+rtxt},	{source:'missing/Susan_Powell.jpg', comment:ltxt+'call <b>801-840-4000</b>.'+rtxt},	{source:'missing/Suzanne_Lyall.jpg', comment:ltxt+'call <b>518-783-3211</b>.'+rtxt},	{source:'missing/Yongsheng_Li.jpg', comment:ltxt+'call <b>706-542-2200</b>.'+rtxt}
+	{source:'missing/Nailah_Franklin.jpg', comment:ltxt+'call <b>312-746-9259</b>.'+rtxt},
+	{source:'missing/Pamela_Biggers.jpg', comment:ltxt+'call <b>850-747-4700</b>.'+rtxt},
+	{source:'missing/Pamela_Bradshaw.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},
+	{source:'missing/Patrick_DiFrancesco.jpg', comment:ltxt+'call <b>910-343-1131</b>.'+rtxt},
+	{source:'missing/Rachel_Conger.jpg', comment:ltxt+'call <b>731-642-1672</b>.'+rtxt},
+	{source:'missing/Si_Young_Yoon.jpg', comment:ltxt+'call <b>323-890-5500</b>.'+rtxt},
+	{source:'missing/Susan_Powell.jpg', comment:ltxt+'call <b>801-840-4000</b>.'+rtxt},
+	{source:'missing/Suzanne_Lyall.jpg', comment:ltxt+'call <b>518-783-3211</b>.'+rtxt},
+	{source:'missing/Yongsheng_Li.jpg', comment:ltxt+'call <b>706-542-2200</b>.'+rtxt}
 ];
 window.onload = function() {
 	booklet.add(document.getElementById('wrapper'),{

@@ -1,12 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <title>Busy.js (loading indicators)</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="Content-language" content="en">
 	<link rel="bookmark" type="text/html" title="Busy.js" href="http://www.netzgesta.de/busy/">
-	<meta name="Author" lang="en" content="busy.netzgesta.de - Christian Effenberger">	<meta name="Publisher" lang="en" content="www.netzgesta.de">	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">	<meta name="Generator" lang="en" content="Christian Effenberger">
+	<meta name="Author" lang="en" content="busy.netzgesta.de - Christian Effenberger">
+	<meta name="Publisher" lang="en" content="www.netzgesta.de">
+	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">
+	<meta name="Generator" lang="en" content="Christian Effenberger">
 	<meta name="Description" lang="en" content="cvi_busy_lib.js allows you to add/remove loading indicators to html elements on your webpages through unobtrusive javascript">
 	<meta name="Keywords" lang="en" content="cvi_busy_lib.js,library,overlay,spinner,loading indicator,unobtrusive javascript,IE,Mozilla,Firefox,Opera,Safari">
 	<meta http-equiv="expires" content="0">
@@ -76,10 +78,22 @@ h2 { line-height: 1; }
 		<dl><dt><code><tt>parent</tt>&nbsp; == element to add the overlay to or <tt>"viewport"</tt></code></dt></dl>
 		<dl><dt><code><tt>overlay</tt>&nbsp; &nbsp; &nbsp; e.g. {<b>color</b>: <tt>'black'</tt>, <b>opacity</b>: <tt>0.5</tt>, ...}</code></dt>
 		<dd>
-			<code><b>color</b> &nbsp; == STRING <tt>'black'</tt> or <tt>'#000000'</tt> or <tt>'rgb(0,0,0)'</tt> Default: <tt>'white'</tt></code><br/>			<code><b>opacity</b> == FLOAT <tt>0.0</tt> - <tt>1.0</tt> Default: <tt>0</tt></code><br/>			<code><b>text</b> &nbsp;&nbsp;  == STRING e.g. <tt>'loading'</tt> Default: <tt>''</tt></code><br/>			<code><b>style</b> &nbsp;  == STRING e.g. <tt>'color: black;'</tt> or <tt>'my_text_class'</tt> Default: <tt>''</tt></code>  		</dd></dl>
+			<code><b>color</b> &nbsp; == STRING <tt>'black'</tt> or <tt>'#000000'</tt> or <tt>'rgb(0,0,0)'</tt> Default: <tt>'white'</tt></code><br/>
+			<code><b>opacity</b> == FLOAT <tt>0.0</tt> - <tt>1.0</tt> Default: <tt>0</tt></code><br/>
+			<code><b>text</b> &nbsp;&nbsp;  == STRING e.g. <tt>'loading'</tt> Default: <tt>''</tt></code><br/>
+			<code><b>style</b> &nbsp;  == STRING e.g. <tt>'color: black;'</tt> or <tt>'my_text_class'</tt> Default: <tt>''</tt></code>
+  		</dd></dl>
 		<dl><dt><code><tt>busy</tt> &nbsp; &nbsp; &nbsp; &nbsp; e.g. {<b>color</b>: <tt>'#000'</tt>, <b>size</b>: <tt>32</tt>, ...}</code></dt>
 		<dd>
-			<code><b>color</b> &nbsp; == STRING <tt>'#000000'</tt> or <tt>'#000'</tt> Default: <tt>'#000'</tt></code><br/>			<code><b>size</b> &nbsp;&nbsp; == INT <tt>16</tt> - <tt>512</tt> Default: <tt>32</tt></code><br/>			<code><b>type</b> &nbsp;&nbsp; == STRING <tt>'circle|oval|polygon|rectangle|tube'</tt> or <tt>'c|o|p|r|t'</tt> Default: <tt>'tube'</tt></code><br/>			<code><b>iradius</b> == INT <tt>6</tt> - <tt>254</tt> Default: <tt>8</tt></code><br/>			<code><b>weight</b>&nbsp; == INT <tt>1</tt> - <tt>254</tt> Default: <tt>3</tt></code><br/>			<code><b>count</b> &nbsp; == INT <tt>5</tt> - <tt>36</tt> Default: <tt>12</tt></code><br/>			<code><b>speed</b> &nbsp; == INT <tt>30</tt> - <tt>1000</tt> Default: <tt>96</tt></code><br/>			<code><b>minopac</b> == FLOAT <tt>0.0</tt> - <tt>0.5</tt> Default: <tt>0.25</tt></code>  		</dd></dl>
+			<code><b>color</b> &nbsp; == STRING <tt>'#000000'</tt> or <tt>'#000'</tt> Default: <tt>'#000'</tt></code><br/>
+			<code><b>size</b> &nbsp;&nbsp; == INT <tt>16</tt> - <tt>512</tt> Default: <tt>32</tt></code><br/>
+			<code><b>type</b> &nbsp;&nbsp; == STRING <tt>'circle|oval|polygon|rectangle|tube'</tt> or <tt>'c|o|p|r|t'</tt> Default: <tt>'tube'</tt></code><br/>
+			<code><b>iradius</b> == INT <tt>6</tt> - <tt>254</tt> Default: <tt>8</tt></code><br/>
+			<code><b>weight</b>&nbsp; == INT <tt>1</tt> - <tt>254</tt> Default: <tt>3</tt></code><br/>
+			<code><b>count</b> &nbsp; == INT <tt>5</tt> - <tt>36</tt> Default: <tt>12</tt></code><br/>
+			<code><b>speed</b> &nbsp; == INT <tt>30</tt> - <tt>1000</tt> Default: <tt>96</tt></code><br/>
+			<code><b>minopac</b> == FLOAT <tt>0.0</tt> - <tt>0.5</tt> Default: <tt>0.25</tt></code>
+  		</dd></dl>
   		<p></p>
   	</dd>
 	<dt>Edit overlay text</dt>
