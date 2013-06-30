@@ -1,0 +1,932 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>mapzoom.js (javascript zoom and pan functionality for images/vectors and automatic map area highlighting)</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-language" content="en">
+	<link rel="bookmark" type="text/html" title="Mapzoom.js" href="http://www.netzgesta.de/mapzoom/">
+	<meta name="Author" lang="en" content="mapzoom.netzgesta.de - Christian Effenberger">	<meta name="Publisher" lang="en" content="www.netzgesta.de">	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">	<meta name="Generator" lang="en" content="Christian Effenberger">
+	<meta name="Description" lang="en" content="mapzoom.js 1.4 allows you to add zoom and pan functionality to oversized images and maps on your webpages through unobtrusive javascript">
+	<meta name="Keywords" lang="en" content="mapzoom.js, javascript zoom, image zoom, picture zoom, map zoom, image pan, map pan, magnifier, zoomifier, Internet Explorer, Mozilla, Firefox, Chrome, Opera, Safari">
+	<meta http-equiv="imagetoolbar" content="no">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	<script type="text/javascript" src="afrodat.js"></script>
+	<script type="text/javascript" src="mapzoom.js"></script>
+	<script type="text/javascript" src="cvi_tip_lib.js"></script>
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<style type="text/css">
+		a { color: blue; font-style:italic; text-decoration:none; }
+		tt {color: green;}
+		b {color: #993333;}
+		body { background: url(images/backgrnd.jpg) silver; color: black; font-family: Georgia,serif; line-height: 1.5; margin: 2em 2em;}
+		h2 { line-height: 1; }
+		.demo { border: inset 2px silver;}
+		#guru { padding: 4px; width: 99%; height: auto; text-align: center; background-color: black; }
+		#guru div { border: solid 3px red; padding: 4px; font-family: monospace; font-size: 1.25em; width: auto; height: auto; color: red; text-align: center; text-decoration: blink; }
+		#header { margin-bottom: 0; font-weight: normal; font-style: italic; color: gray; }
+		.bookmarks { white-space: nowrap; width: 98%; margin: 0; padding-top: 10px; border-top: 1px dotted gray;}
+		#demo { 
+			margin: 0px; padding: 0px; color: black; 
+			display: block;width: 100%; height: auto;
+			background: #D69A50 url(images/africa_back.jpg) left top repeat-x;
+			font-family: Arial, Helvetica, sans-serif;
+		}	
+		#wrapper {
+			margin: 1em auto; width: 840px; height: 512px;
+			margin-top: 2em; border: 1px solid gray;
+			box-shadow: rgba(0,0,0,.66) 0px 0px 8px;
+			-o-box-shadow: rgba(0,0,0,.66) 0px 0px 8px;
+			-ms-box-shadow: rgba(0,0,0,.66) 0px 0px 8px;
+			-moz-box-shadow: rgba(0,0,0,.66) 0px 0px 8px;
+			-webkit-box-shadow: rgba(0,0,0,.66) 0px 0px 8px;
+			-webkit-user-select: none; -moz-user-select: none;
+		}
+		#wrapper2 {
+			background: transparent url(images/africa_name.png) center center no-repeat;
+			margin: 1em auto; width: 840px; height: auto;
+		}
+		#wrapper2 a {
+			text-shadow: 0px 2px 4px gray;
+		}
+		#wrapper2 img {
+			box-shadow: rgba(0,0,0,.66) 0px 2px 4px;
+			-o-box-shadow: rgba(0,0,0,.66) 0px 2px 4px;
+			-ms-box-shadow: rgba(0,0,0,.66) 0px 2px 4px;
+			-moz-box-shadow: rgba(0,0,0,.66) 0px 2px 4px;
+			-webkit-box-shadow: rgba(0,0,0,.66) 0px 2px 4px;
+		}
+		#wrapper2 li a {color: #906030; text-decoration:none;}
+		#wrapper2 li a:hover, #wrapper2 li a:focus {color: blue; text-decoration:none;}
+		#wrapper2 a {color: black; text-decoration:none;}
+		#wrapper2 a:hover, #wrapper2 a:focus {color: blue;}
+		#wrapper2 table {table-layout:fixed;}
+		#wrapper2 td {vertical-align: top;}
+		#wrapper2 ul {padding-left: 0px; margin-top: 0px; margin-left: 0px;}
+		#wrapper2 li {font-size: 75%; list-style-type: none; padding-right: 1em;}
+		#wrapper2 small {font-size: 75%;}
+		#wrapper2 b {color: orange;}
+		#wrapper2 td span {font-size: 75%; font-family: georgia, serif; font-style: italic; color: gray;}
+		#mapper {
+			-webkit-user-select: none; -moz-user-select: none;
+			background: url(images/africa_bg.jpg) 0px 0px no-repeat;
+			width: 512px; height: 512px; float:left; display:block;
+			position:relative;
+		}
+		#info {
+			overflow-x:hidden; width:328px; height:512px;
+			display:inline-block; border:none;
+		}
+		#menus {
+			text-shadow: 0px 2px 4px black; color: white; 
+			left:0px; top:400px; width:512px; height:auto; 
+			display:block; position:absolute; text-align:center;
+		}
+		.ison {outline:2px solid orange;}
+		#menus button {font-size: 150%; margin:2px; text-shadow: 0px 0px 0px black;}
+		#menus big {font-size: 120%; font-weight: bold; }
+		area {opacity:0;}
+		@media only screen and (max-device-width:480px) {
+			#wrapper {width: 872px; height: 512px; overflow:hidden;}
+			#wrapper2 {width: 872px;}
+			#info {width:360px; height:512px; overflow:hidden;}
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="cvi_tip.css" />
+<!--[if IE 9]>
+	<style type="text/css">
+		#cvi_tooltip {background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgdmVyc2lvbj0iMS4wIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9IndoaXRlMm9yYW5nZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiIHNwcmVhZE1ldGhvZD0icGFkIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZkZjAwIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIHN0eWxlPSJmaWxsOnVybCgjd2hpdGUyb3JhbmdlKTsiIC8+Cjwvc3ZnPg==);}
+	</style>
+<![endif]-->
+<!--[if lt IE 7]>
+	<style type="text/css">
+		#cvi_tooltip {width:expression(this.offsetWidth>200?'200px':'auto');}
+		#info {width:285px;}
+	</style>
+<![endif]-->
+<script type="text/javascript">
+<!--
+var ppi=2048, cbf=null, foa=14;
+if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}}
+if(document.images&&document.createElement&&document.getElementById){ 
+    document.writeln('<style type="text/css">'); 
+    document.writeln('img.mapzoom { visibility: hidden; }');
+    document.writeln('<\/style>'); 
+} 
+function setDimension(v) {ppi=v*1024; foa=v*7; 
+	var plus=$('plus').checked?1:0; cbf=plus?'setIcons':null;
+	$('menus').innerHTML=""; $('menus').style.display="none"; 
+	if(v!=2) {var tmp=new Image();
+		tmp.onload=function() {
+			$('africa').src=''; $('africa').src="images/africa_"+v+"k.jpg";
+			mapzoom.add($('africa'),{callback:cbf,bicubic:true,curpath:'images/cursors/',vacolor:'#0080ff',vbcolor:'#ffffff',vbopac:100,vafading:true,fading:true,showcoords:true,pixelcoords:false,coordbox:[37.5,-20,-34.5,52]}); 
+		}; tmp.src="images/africa_"+v+"k.jpg";
+	}else{
+		mapzoom.add($('africa'),{callback:cbf,bicubic:true,curpath:'images/cursors/',vacolor:'#0080ff',vbcolor:'#ffffff',vbopac:100,vafading:true,fading:true,showcoords:true,pixelcoords:false,coordbox:[37.5,-20,-34.5,52]});
+	}
+}
+function getGeoPosition(map,lc,xw,iw,xh,ih,cb) {
+	function lat2y(lat,h) {return ((lat*-1)+90)*(h/180);};
+	function lng2x(lng,w) {return (lng+180)*(w/360);};
+	if(afrodat) { cb=cb||[90, -180, -90, 180];
+		var cby=parseFloat(Math.min(Math.max(-90,cb[0]),90)),cbx=parseFloat(Math.min(Math.max(-180,cb[1]),180)),
+		cbh=Math.abs(parseFloat(Math.min(Math.max(-90,cb[2]),90)))+Math.abs(parseFloat(Math.min(Math.max(-90,cb[0]),90))),
+		cbw=Math.abs(parseFloat(Math.min(Math.max(-180,cb[3]),180)))+Math.abs(parseFloat(Math.min(Math.max(-180,cb[1]),180))),
+		chf=(180/cbh),cwf=(360/cbw),cyf=1-((90+cby)/180),cxf=(180+cbx)/360,x,y,l,t,k,x1,y1,x2,y2,vw=xw*cwf,vh=xh*chf,vx=vw*cxf,vy=vh*cyf,d=afrodat[map][lc];
+		x1=lng2x(d.bw,vw); y1=lat2y(d.bn,vh); x2=lng2x(d.be,vw); y2=lat2y(d.bs,vh); x=((x2-x1)/2)+x1; y=((y2-y1)/2)+y1; l=x-vx; t=y-vy; return {l:l,t:t};
+	} return false;
+}
+function setIcons() {var id,ps,ad,ln,lm,fg,iw,ih,i=-1,ar=[]; setExploration();
+	for(var id in afrodat['africa']) {if(afrodat['africa'].hasOwnProperty(id)){i++;ar[i]=id;}} i=0; loadIcon(0);
+	function loadIcon(i) {
+		if(i<ar.length) { var tmp=new Image(); id=ar[i];
+			ps=getGeoPosition('africa',id,ppi,512,ppi,512,[37.5,-20,-34.5,52]);
+			ad=afrodat['africa'][id]; ln=ad.sn.replace(/\s/g, "_");
+			lm='images/landmarks/'+ln.toLowerCase()+'.jpg';
+			fg='images/icons/'+id.toLowerCase()+'_flag.png';
+			tmp.onabort=function(){i++;loadIcon(i);};
+			tmp.onerror=function(){i++;loadIcon(i);};
+			tmp.onload=function () {
+				if(tmp.width&&tmp.height&&tmp.width>0&&tmp.height>0) {
+					iw=tmp.width; ih=tmp.height; //http://maps.google.com/?q='+ad.lm+', '+ad.sn+', '+ad.cc, target:'Google_Maps'
+					mapzoom.construct($('africa'),[{x:(ps.l-(1.25*foa)), y:ps.t, w:(4*foa), h:(5*foa), id:ad.lc, pos:7, title:ad.sn, href:'http://en.m.wikipedia.org/wiki/'+ad.lm, target:'info', src:'images/icons/africa_flag.png', src2:fg}]);
+					cvi_tip.add(cvi_tip.$(ad.lc),'<img src="'+lm+'" width="'+iw+'" height="'+ih+'" border="0" alt="" /><br/><span><small>'+ad.lm+'</small></span>');
+					i++; if(document.all&&!window.opera) {tmp.onload=''; tmp=null;}
+				} loadIcon(i);
+			}; tmp.src=lm;
+		}
+	};
+}
+function setExploration() {
+	mapzoom.createarea($('africa'),'xp0',{tooltip:'<b>Saharan Exploration 1850</b><br/><i>from:</i> <u>Tripoli</u><br/><i>to:</i> <u>Murzuk</u>', href:'http://en.m.wikipedia.org/wiki/Murzuk', shape:'line', coords:'236.01006399999983,32.87677262222229,241.19805226666654,82.37800817777787', classes:'pbcolor0000ff pbopacity50 vbcolorff0000 vbopacity75 vbcapround vbwidth50 specified', target:'info'});	
+	mapzoom.createarea($('africa'),'xp1',{tooltip:'<b>Saharan Exploration 1850</b><br/><i>from:</i> <u>Murzug</u><br/><i>to:</i> <u>Ghat</u>', href:'http://en.m.wikipedia.org/wiki/Ghat', shape:'line', coords:'241.19805226666654,82.37800817777787,214.5671928888887,89.14626972444444', classes:'pbcolor0000ff pbopacity50 vbcolorff0000 vbopacity75 vbcapround vbdash3 vbwidth50 specified', target:'info'});	
+	mapzoom.createarea($('africa'),'xp2',{tooltip:'<b>Saharan Exploration 1850</b><br/><i>from:</i> <u>Ghat</u><br/><i>to:</i> <u>Tassili N\'Ajjer</u>', href:'http://en.m.wikipedia.org/wiki/Tassili_n%27Ajjer', shape:'line', coords:'214.5671928888887,89.14626972444444,206.27007374222194,85.32014271999998', classes:'pbcolor0000ff pbopacity50 vbcolorff0000 vbopacity75 vbdash1 vbcapround vbwidth50 specified', target:'info'});	
+	mapzoom.createarea($('africa'),'xp3',{tooltip:'<b>Saharan Exploration 1850</b><br/><i>from:</i> <u>Tassili N\'Ajjer</u><br/><i>to:</i> <u>Aïr, Agadez</u>', href:'http://en.m.wikipedia.org/wiki/Aïr', shape:'line', coords:'206.27007374222194,85.32014271999998,199.07524956444445,145.84202951111115', classes:'pbcolor0000ff pbopacity50 vbcolorff0000 vbopacity75 vbdash1 vbcapround vbwidth50 specified', target:'info'});	
+	mapzoom.createarea($('africa'),'xp4',{tooltip:'<b>Saharan Exploration 1850</b><br/><i>from:</i> <u>Aïr, Agadez</u><br/><i>to:</i> <u>Zinder</u>', href:'http://en.m.wikipedia.org/wiki/Zinder', shape:'line', coords:'199.07524956444445,145.84202951111115,206.14800341333307,168.4711638755556', classes:'pbcolor0000ff pbopacity50 vbcolorff0000 vbopacity75 vbcapround vbdash3 vbwidth50 specified', target:'info'});	
+	mapzoom.createarea($('africa'),'xp5',{tooltip:'<b>Saharan Exploration 1850</b><br/><i>from:</i> <u>Zinder</u><br/><i>to:</i> <u>Kuka, Maradi</u>', href:'http://en.m.wikipedia.org/wiki/Maradi', shape:'line', coords:'206.14800341333307,168.4711638755556,199.02031786666657,171.94448640000007', classes:'pbcolor0000ff pbopacity50 vbcolorff0000 vbopacity75 vbcapround vbwidth50 specified', target:'info'});	
+	mapzoom.createarea($('africa'),'exp1850',{shape:'rect', coords:'512,512,513,513', rel:'xp0,xp1,xp2,xp3,xp4,xp5', classes:'vbcolorff0000 vbopacity100 forcegroup'});	
+}
+//-->
+</script>
+</head>
+<body><noscript><div id="guru" title="By this you can recognize the Amiga fan!"><div><strong>Guru Meditation</strong> - With deactivated JavaScript: Images stay unmodified!</div></div></noscript>
+<table summary="">
+<tr><td valign="top" style="padding-top: 1.3em">
+<img src="images/logo.jpg" width="352" height="176" alt="mazoom.js" />
+</td>
+<td style="padding: 0 0 0 15px; margin: 0; line-height: 1.5; font-style: italic;">
+<p><strong>Mapzoom.js 1.4</strong> allows you to add zoom and pan functionality to oversized images/vectors and automatic area highlighting to image maps on your webpages. It's a conceptual combination of ShiftZoom and Mapper. It also allows you to build interactive applications through the various user commands. It uses unobtrusive javascript to keep your code clean.</p>
+<p>It works in all the major browsers - Mozilla Firefox 3+, Opera 9.5+, Chrome 5+, Safari 3.1+ and IE 6+. Works also on older browsers supporting images/ createElement/ getElementById but without vector support, else it'll degrade and your visitors won't notice a thing.</p>
+</td></tr>
+</table>
+
+<h2>Demonstration</h2>
+
+<div id="demo" class="inlet"><hr style="visibility:hidden;"/>
+<div id="wrapper" unselectable="on"><div id="mapper" unselectable="on"><img id="africa" class="mapzoom" src="images/africa_2k.jpg" width="512" height="512" alt="" border="0" usemap="#africa_map" />
+<script type="text/javascript">
+<!--
+document.writeln('<div id="menus"><big>Select the image dimension!</big><br/><button onclick="setDimension(1);">1k<sup>2</sup> px</button><button style="outline:2px solid orange;" onclick="setDimension(2);">2k<sup>2</sup> px</button><button onclick="setDimension(4);">4k<sup>2</sup> px</button><br/><input id="plus" name="plus" type="checkbox" value="0" /> <i>create also landmark icons / flags!</i></div>'); 
+// -->
+</script>
+</div><iframe id="info" name="info" src="empty.html" border="0"></iframe>
+</div>
+<div id="wrapper2">
+<table border="0" cellspacing="10" cellpadding="0"><tr>
+<td style="width:17%"> 
+<ul><a href="http://en.m.wikipedia.org/wiki/Northern_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'Northern_Africa');" onmouseout="mapzoom.areaout($('africa'),'Northern_Africa');">Northern Africa</a>
+<li><a title="Capital: Algers" href="http://en.m.wikipedia.org/wiki/Algeria" target="info" onmouseover="mapzoom.areaover($('africa'),'DZ');" onmouseout="mapzoom.areaout($('africa'),'DZ');">Algeria</a></li>
+<li><a title="Capital: Cairo" href="http://en.m.wikipedia.org/wiki/Egypt" target="info" onmouseover="mapzoom.areaover($('africa'),'EG');" onmouseout="mapzoom.areaout($('africa'),'EG');">Egypt</a></li>
+<li><a title="Capital: Tripoli" href="http://en.m.wikipedia.org/wiki/Libya" target="info" onmouseover="mapzoom.areaover($('africa'),'LY');" onmouseout="mapzoom.areaout($('africa'),'LY');">Libya</a></li>
+<li><a title="Capital: Rabat" href="http://en.m.wikipedia.org/wiki/Morocco" target="info" onmouseover="mapzoom.areaover($('africa'),'MA');" onmouseout="mapzoom.areaout($('africa'),'MA');">Morocco</a></li>
+<li><a title="Capital: Khartoum" href="http://en.m.wikipedia.org/wiki/Sudan" target="info" onmouseover="mapzoom.areaover($('africa'),'SD');" onmouseout="mapzoom.areaout($('africa'),'SD');">Sudan</a></li>
+<li><a title="Capital: Tunis" href="http://en.m.wikipedia.org/wiki/Tunisia" target="info" onmouseover="mapzoom.areaover($('africa'),'TN');" onmouseout="mapzoom.areaout($('africa'),'TN');">Tunisia</a></li>
+<li><a title="Capital: El Aaiún" href="http://en.m.wikipedia.org/wiki/Western_Sahara" target="info" onmouseover="mapzoom.areaover($('africa'),'EH');" onmouseout="mapzoom.areaout($('africa'),'EH');">Western Sahara</a></li>
+</ul></td>
+<td style="width:17%"><ul><a href="http://en.m.wikipedia.org/wiki/Western_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'Western_Africa');" onmouseout="mapzoom.areaout($('africa'),'Western_Africa');">Western Africa</a>
+<li><a title="Capital: Port-Novo" href="http://en.m.wikipedia.org/wiki/Benin" target="info" onmouseover="mapzoom.areaover($('africa'),'BJ');" onmouseout="mapzoom.areaout($('africa'),'BJ');">Benin</a></li>
+<li><a title="Capital: Ouagadougou" href="http://en.m.wikipedia.org/wiki/Burkina_Faso" target="info" onmouseover="mapzoom.areaover($('africa'),'BF');" onmouseout="mapzoom.areaout($('africa'),'BF');">Burkina Faso</a></li>
+<li><a title="Capital: Banjul" href="http://en.m.wikipedia.org/wiki/Gambia" target="info" onmouseover="mapzoom.areaover($('africa'),'GM');" onmouseout="mapzoom.areaout($('africa'),'GM');">Gambia</a></li>
+<li><a title="Capital: Accra" href="http://en.m.wikipedia.org/wiki/Ghana" target="info" onmouseover="mapzoom.areaover($('africa'),'GH');" onmouseout="mapzoom.areaout($('africa'),'GH');">Ghana</a></li>
+<li><a title="Capital: Conakry" href="http://en.m.wikipedia.org/wiki/Guinea" target="info" onmouseover="mapzoom.areaover($('africa'),'GN');" onmouseout="mapzoom.areaout($('africa'),'GN');">Guinea</a></li>
+<li><a title="Capital: Bissau" href="http://en.m.wikipedia.org/wiki/Guinea-Bissau" target="info" onmouseover="mapzoom.areaover($('africa'),'GW');" onmouseout="mapzoom.areaout($('africa'),'GW');">Guinea-Bissau</a></li>
+<li><a title="Capital: Yamoussoukro" href="http://en.m.wikipedia.org/wiki/Ivory_Coast" target="info" onmouseover="mapzoom.areaover($('africa'),'CI');" onmouseout="mapzoom.areaout($('africa'),'CI');">Ivory Coast</a></li>
+<li><a title="Capital: Monrovia" href="http://en.m.wikipedia.org/wiki/Liberia" target="info" onmouseover="mapzoom.areaover($('africa'),'LR');" onmouseout="mapzoom.areaout($('africa'),'LR');">Liberia</a></li>
+<li><a title="Capital: Bamako" href="http://en.m.wikipedia.org/wiki/Mali" target="info" onmouseover="mapzoom.areaover($('africa'),'ML');" onmouseout="mapzoom.areaout($('africa'),'ML');">Mali</a></li>
+<li><a title="Capital: Nouakchott" href="http://en.m.wikipedia.org/wiki/Mauritania" target="info" onmouseover="mapzoom.areaover($('africa'),'MR');" onmouseout="mapzoom.areaout($('africa'),'MR');">Mauritania</a></li>
+<li><a title="Capital: Niamey" href="http://en.m.wikipedia.org/wiki/Niger" target="info" onmouseover="mapzoom.areaover($('africa'),'NE');" onmouseout="mapzoom.areaout($('africa'),'NE');">Niger</a></li>
+<li><a title="Capital: Abuja" href="http://en.m.wikipedia.org/wiki/Nigeria" target="info" onmouseover="mapzoom.areaover($('africa'),'NG');" onmouseout="mapzoom.areaout($('africa'),'NG');">Nigeria</a></li>
+<li><a title="Capital: Dakar" href="http://en.m.wikipedia.org/wiki/Senegal" target="info" onmouseover="mapzoom.areaover($('africa'),'SN');" onmouseout="mapzoom.areaout($('africa'),'SN');">Senegal</a></li>
+<li><a title="Capital: Freetown" href="http://en.m.wikipedia.org/wiki/Sierra_Leone" target="info" onmouseover="mapzoom.areaover($('africa'),'SL');" onmouseout="mapzoom.areaout($('africa'),'SL');">Sierra Leone</a></li>
+<li><a title="Capital: Lome" href="http://en.m.wikipedia.org/wiki/Togo" target="info" onmouseover="mapzoom.areaover($('africa'),'TG');" onmouseout="mapzoom.areaout($('africa'),'TG');">Togo</a></li>
+</ul></td>
+<td style="width:17%"><ul><a href="http://en.m.wikipedia.org/wiki/Central_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'Central_Africa');" onmouseout="mapzoom.areaout($('africa'),'Central_Africa');">Central Africa</a>
+<li><a title="Capital: Luanda" href="http://en.m.wikipedia.org/wiki/Angola" target="info" onmouseover="mapzoom.areaover($('africa'),'AO');" onmouseout="mapzoom.areaout($('africa'),'AO');">Angola</a></li>
+<li><a title="Capital: Yaounde" href="http://en.m.wikipedia.org/wiki/Cameroon" target="info" onmouseover="mapzoom.areaover($('africa'),'CM');" onmouseout="mapzoom.areaout($('africa'),'CM');">Cameroon</a></li>
+<li><a title="Capital: Bangui" href="http://en.m.wikipedia.org/wiki/Central_African_Republic" target="info" onmouseover="mapzoom.areaover($('africa'),'CF');" onmouseout="mapzoom.areaout($('africa'),'CF');">Central African Republic</a></li>
+<li><a title="Capital: N'Djamena" href="http://en.m.wikipedia.org/wiki/Chad" target="info" onmouseover="mapzoom.areaover($('africa'),'TD');" onmouseout="mapzoom.areaout($('africa'),'TD');">Chad</a></li>
+<li><a title="Capital: Brazzaville" href="http://en.m.wikipedia.org/wiki/Republic_of_the_Congo" target="info" onmouseover="mapzoom.areaover($('africa'),'CG');" onmouseout="mapzoom.areaout($('africa'),'CG');">Republic of the Congo</a></li>
+<li><a title="Capital: Kinshasa" href="http://en.m.wikipedia.org/wiki/Democratic_Republic_of_the_Congo" target="info" onmouseover="mapzoom.areaover($('africa'),'CD');" onmouseout="mapzoom.areaout($('africa'),'CD');">Democratic Republic of the Congo</a></li>
+<li><a title="Capital: Malabo" href="http://en.m.wikipedia.org/wiki/Equatorial_Guinea" target="info" onmouseover="mapzoom.areaover($('africa'),'GQ');" onmouseout="mapzoom.areaout($('africa'),'GQ');">Equatorial Guinea</a></li>
+<li><a title="Capital: Liberville" href="http://en.m.wikipedia.org/wiki/Gabon" target="info" onmouseover="mapzoom.areaover($('africa'),'GA');" onmouseout="mapzoom.areaout($('africa'),'GA');">Gabon</a></li>
+</ul></td>
+<td style="width:17%"><ul><a href="http://en.m.wikipedia.org/wiki/Eastern_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'Eastern_Africa');" onmouseout="mapzoom.areaout($('africa'),'Eastern_Africa');">Eastern Africa</a>
+<li><a title="Capital: Dodoma" href="http://en.m.wikipedia.org/wiki/Tanzania" target="info" onmouseover="mapzoom.areaover($('africa'),'TZ');" onmouseout="mapzoom.areaout($('africa'),'TZ');">Tanzania</a></li>
+<li><a title="Capital: Nairobi" href="http://en.m.wikipedia.org/wiki/Kenya" target="info" onmouseover="mapzoom.areaover($('africa'),'KE');" onmouseout="mapzoom.areaout($('africa'),'KE');">Kenya</a></li>
+<li><a title="Capital: Kampala" href="http://en.m.wikipedia.org/wiki/Uganda" target="info" onmouseover="mapzoom.areaover($('africa'),'UG');" onmouseout="mapzoom.areaout($('africa'),'UG');">Uganda</a></li>
+<li><a title="Capital: Kigali" href="http://en.m.wikipedia.org/wiki/Rwanda" target="info" onmouseover="mapzoom.areaover($('africa'),'RW');" onmouseout="mapzoom.areaout($('africa'),'RW');">Rwanda</a></li>
+<li><a title="Capital: Bujumbura" href="http://en.m.wikipedia.org/wiki/Burundi" target="info" onmouseover="mapzoom.areaover($('africa'),'BI');" onmouseout="mapzoom.areaout($('africa'),'BI');">Burundi</a></li>
+<li><a title="Capital: Djibouti" href="http://en.m.wikipedia.org/wiki/Djibouti" target="info" onmouseover="mapzoom.areaover($('africa'),'DJ');" onmouseout="mapzoom.areaout($('africa'),'DJ');">Djibouti</a></li>
+<li><a title="Capital: Asmara" href="http://en.m.wikipedia.org/wiki/Eritrea" target="info" onmouseover="mapzoom.areaover($('africa'),'ER');" onmouseout="mapzoom.areaout($('africa'),'ER');">Eritrea</a></li>
+<li><a title="Capital: Addis Ababa" href="http://en.m.wikipedia.org/wiki/Ethiopia" target="info" onmouseover="mapzoom.areaover($('africa'),'ET');" onmouseout="mapzoom.areaout($('africa'),'ET');">Ethiopia</a></li>
+<li><a title="Capital: Mogadishu" href="http://en.m.wikipedia.org/wiki/Somalia" target="info" onmouseover="mapzoom.areaover($('africa'),'SO');" onmouseout="mapzoom.areaout($('africa'),'SO');">Somalia</a></li>
+<li><a title="Capital: Maputo" href="http://en.m.wikipedia.org/wiki/Mozambique" target="info" onmouseover="mapzoom.areaover($('africa'),'MZ');" onmouseout="mapzoom.areaout($('africa'),'MZ');">Mozambique</a></li>
+<li><a title="Capital: Antananarivo" href="http://en.m.wikipedia.org/wiki/Madagascar" target="info" onmouseover="mapzoom.areaover($('africa'),'MG');" onmouseout="mapzoom.areaout($('africa'),'MG');">Madagascar</a></li>
+<li><a title="Capital: Lilongwe" href="http://en.m.wikipedia.org/wiki/Malawi" target="info" onmouseover="mapzoom.areaover($('africa'),'MW');" onmouseout="mapzoom.areaout($('africa'),'MW');">Malawi</a></li>
+<li><a title="Capital: Lusaka" href="http://en.m.wikipedia.org/wiki/Zambia" target="info" onmouseover="mapzoom.areaover($('africa'),'ZM');" onmouseout="mapzoom.areaout($('africa'),'ZM');">Zambia</a></li>
+<li><a title="Capital: Harare" href="http://en.m.wikipedia.org/wiki/Zimbabwe" target="info" onmouseover="mapzoom.areaover($('africa'),'ZW');" onmouseout="mapzoom.areaout($('africa'),'ZW');">Zimbabwe</a></li>
+</ul></td>
+<td style="width:17%"><ul><a href="http://en.m.wikipedia.org/wiki/Southern_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'Southern_Africa');" onmouseout="mapzoom.areaout($('africa'),'Southern_Africa');">Southern Africa</a>
+<li><a title="Capital: Gaborone" href="http://en.m.wikipedia.org/wiki/Botswana" target="info" onmouseover="mapzoom.areaover($('africa'),'BW');" onmouseout="mapzoom.areaout($('africa'),'BW');">Botswana</a></li>
+<li><a title="Capital: Maseru" href="http://en.m.wikipedia.org/wiki/Lesotho" target="info" onmouseover="mapzoom.areaover($('africa'),'LS');" onmouseout="mapzoom.areaout($('africa'),'LS');">Lesotho</a></li>
+<li><a title="Capital: Windhoek" href="http://en.m.wikipedia.org/wiki/Namibia" target="info" onmouseover="mapzoom.areaover($('africa'),'NA');" onmouseout="mapzoom.areaout($('africa'),'NA');">Namibia</a></li>
+<li><a title="Capital: Tshwane/Pretoria" href="http://en.m.wikipedia.org/wiki/South_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'ZA');" onmouseout="mapzoom.areaout($('africa'),'ZA');">South Africa</a></li>
+<li><a title="Capital: Mbabane" href="http://en.m.wikipedia.org/wiki/Swaziland" target="info" onmouseover="mapzoom.areaover($('africa'),'SZ');" onmouseout="mapzoom.areaout($('africa'),'SZ');">Swaziland</a></li>
+</ul>
+</ul>
+<ul><a href="#" onclick="setExploration();return false;" onmouseover="mapzoom.areaover($('africa'),'exp1850');" onmouseout="mapzoom.areaout($('africa'),'exp1850');">Saharan Exploration 1850</a>
+<li><a href="http://en.m.wikipedia.org/wiki/Heinrich_Barth" target="info">Heinrich Barth</a></li>
+<li><a href="http://en.m.wikipedia.org/wiki/James_Richardson_(explorer_of_the_Sahara)" target="info">James Richardson</a></li>
+<li><a href="http://en.m.wikipedia.org/wiki/Adolf_Overweg" target="info">Adolf Overweg</a></li>
+</ul>
+</td>
+<td style="width:15%;"><ul><a href="http://en.m.wikipedia.org/wiki/European_colonization_of_Africa" target="info">Colonies in <i>1914</i></a>
+<li><img src="images/flags/france.jpg" height="12" alt="france" border="0" />&nbsp;<a href="http://en.m.wikipedia.org/wiki/French_West_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'French_Africa');" onmouseout="mapzoom.areaout($('africa'),'French_Africa');">France</a></li>
+<li><img src="images/flags/britain.jpg" height="12" alt="britain" border="0" />&nbsp;<a href="http://en.m.wikipedia.org/wiki/British_West_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'British_Africa');" onmouseout="mapzoom.areaout($('africa'),'British_Africa');">Britain</a></li>
+<li><img src="images/flags/germany.jpg" height="12" alt="germany" border="0" />&nbsp;<a href="http://en.m.wikipedia.org/wiki/German_East_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'German_Africa');" onmouseout="mapzoom.areaout($('africa'),'German_Africa');">Germany</a></li>
+<li><img src="images/flags/portugal.jpg" height="12" alt="portugal" border="0" />&nbsp;<a href="http://en.m.wikipedia.org/wiki/Portuguese_Empire" target="info" onmouseover="mapzoom.areaover($('africa'),'Portuguese_Africa');" onmouseout="mapzoom.areaout($('africa'),'Portuguese_Africa');">Portugal</a></li>
+<li><img src="images/flags/italy.jpg" height="12" alt="italy" border="0" />&nbsp;<a href="http://en.m.wikipedia.org/wiki/Italian_East_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'Italian_Africa');" onmouseout="mapzoom.areaout($('africa'),'Italian_Africa');">Italy</a></li>
+<li><img src="images/flags/spain.jpg" height="12" alt="spain" border="0" />&nbsp;<a href="http://en.m.wikipedia.org/wiki/Spanish_West_Africa" target="info" onmouseover="mapzoom.areaover($('africa'),'Spanish_Africa');" onmouseout="mapzoom.areaout($('africa'),'Spanish_Africa');">Spain</a></li>
+<li><img src="images/flags/belgium.jpg" height="12" alt="belgium" border="0" />&nbsp;<a href="http://en.m.wikipedia.org/wiki/Belgian_Congo" target="info"onmouseover="mapzoom.areaover($('africa'),'Belgian_Africa');" onmouseout="mapzoom.areaout($('africa'),'Belgian_Africa');">Belgium</a></li>
+</ul></td>
+</tr>
+</table>
+</div>
+<map name="africa_map">
+	<area shape="poly" id="EG" tooltip="<b>Egypt</b><br/><small><i>(Cairo)</i></small>" title="Egypt" alt="Egypt" href="http://en.m.wikipedia.org/wiki/Egypt" target="info" coords="317.017,110.73775,345.19475,109.9115,373.376,109.085,374.28375,109.96625,375.19275,110.84875,377.04925,110.619,378.9115,110.3905,379.10025,108.84575,379.2955,107.301,387.79025,109.53975,389.85825,108.98075,390.29425,107.0835,390.7305,105.18625,391.6375,105.4785,392.54,105.77125,393.679,104.601,395.41675,103.25,394.203,100.44125,394.4215,96.6795,395.406,96.71475,396.3955,96.75,394,94.65075,392.09925,93.24025,383.5,77.5,382.75,73.75,380.75,71.25,380.91975,69.40975,376.5,64.5,374.1135,61.7345,374.05175,60.7395,373.98975,59.74425,372.995,59.03425,372.08325,57.407,372.345,55.82975,373.75,54.5,375,58.25,378.08875,61.58025,378.22625,63.31425,378.416,64.171,381.7055,67.63375,384.59325,70.02975,385.80775,69.692,386.721,68.36675,386.75,65.75,388.75,60.5,389.5,58.25,390.5,57.25,385.25,44.75,382.5,46,374,46.5,369,43.75,364.75,43,360.5,43.25,356.25,44.5,352.75,46.75,349.25,48.25,346.5,47,337.5,45.5,336.6715,44.549,326.75,42.25,323.5,43.5,321.5,43,320.4295,41.84475,319.41825,43.79525,319.56675,45.327,312.25,49,312.344,51.17825,311.29725,56.1115,314.017,60.5415,315.51475,85.63925,317.017,110.73775" />
+	<area shape="poly" id="ET" tooltip="<b>Ethiopia</b><br/><small><i>(Addis Ababa)</i></small>" title="Ethiopia" alt="Ethiopia" href="http://en.m.wikipedia.org/wiki/Ethiopia" target="info" coords="485.06775,207.01325,474.7775,218.55075,464.48375,230.08825,460.462,230.01775,456.43925,229.94725,453.4435,231.54,449.586,234.31625,446.3595,236.239,442.36975,237.955,439.794,238.151,437.589,237.74875,433.31525,236.25125,428.766,237.37525,426.914,239.76925,424.09825,241.2205,418.59925,240.379,413.0945,239.53725,409.119,236.56725,404.451,233.999,401.3935,233.79,398.3365,233.58075,398.3425,231.14175,398.34775,228.70275,395.94175,227.8385,393.536,226.974,391.79625,223.07375,390.05725,219.17325,387.5645,217.2135,385.07225,215.2525,384.507,213.20725,382.317,211.28175,379.7835,211.32725,377.25375,210.42525,377.99325,209.54875,378.73625,208.6715,378.69125,207.54325,378.65,206.414,380.84,206.45425,383.0305,206.49475,384.48225,205.67325,385.7435,204.1615,385.6825,197.834,385.621,191.50775,386.6615,189.89775,387.708,188.28775,388.80575,188.328,389.89825,188.36875,390.39675,185.667,390.8995,182.96575,394.21825,177.91925,398.8195,173.4065,399.39325,168.725,399.96775,164.043,401.71175,163.9955,403.45175,163.948,403.69175,163.39125,403.9335,162.83425,404.77925,162.84675,405.6255,162.85875,406.349,164.043,407.0775,165.22725,408.1245,162.506,409.165,159.7855,411.37675,160.80825,413.1515,162.612,414.91125,162.27225,416.6695,161.93175,416.967,161.38025,417.2645,160.8285,417.5825,160.7605,417.89625,160.6925,418.32125,161.42775,418.747,162.164,420.6405,161.39,423.0415,161.95775,423.9595,162.108,425.4935,161.524,427.40575,162.93425,429.75575,163.72575,436.36275,169.6925,442.493,176.193,442.0775,177.43275,441.733,180.507,440.8965,181.97575,440.0605,183.44475,440.0195,186.1865,442.90225,186.62425,444.02575,186.20125,445.15025,185.778,446.27825,186.2315,447.407,186.6855,449.0015,192.74025,457.014,200.508,467.5655,203.81825,478.11775,207.12975,481.59025,207.0715,485.06775,207.01325" />
+	<area shape="poly" id="DZ" tooltip="<b>Algeria</b><br/><small><i>(Algers)</i></small>" title="Algeria" alt="Algeria" href="http://en.m.wikipedia.org/wiki/Algeria" target="info" coords="92.60075,57.43675,96.02475,55.7615,99.44575,54.086,100.15425,54.333,100.859,54.57975,102.03125,53.5795,103.203,52.57925,105.1705,52.75825,107.1405,52.937,107.248,52.0425,107.35325,51.148,115.507,50.15325,118.6305,47.25325,122.042,45.87175,125.453,44.49175,126.71175,44.5295,127.9715,44.56725,127.3125,43.7095,126.65325,42.85275,126.82725,42.1755,127,41.49775,126.971,40.37625,126.9455,39.25525,130.926,38.822,132.92425,36.5895,138.441,36.665,143.96075,36.7405,144.72525,35.183,145.492,33.6265,143.4865,31.057,143.2805,26.662,143.3705,21.8895,143.30175,18.8965,142.18,17.57925,138,13.5,141.25,12.5,143.75,13.25,145,11,150.75,8.25,163.5,6.75,164.5,5.75,165.75,6.5,171.25,5.25,177.25,5.25,181.25,7,187.25,5.25,189,3.75,194,5.25,195.5,4,200.75,5.25,201.52525,3.93,204.9425,5.43825,205.146,7.41125,204.82725,15.469,204.648,21.043,203.01675,20.97675,201.3545,22.589,199.5415,24.4415,199.832,26.637,200.801,30.003,202.06275,31.993,202.26075,34.0085,204.302,37.2295,207.6235,39.23775,209.5295,40.006,210.897,49.26125,211.67875,52.826,209.827,55.07075,212.41475,59.72525,212.48925,69.5865,212.5635,79.449,210.994,79.86675,209.588,80.89,210.37325,83.4075,212.53575,86.0905,213.8435,88.52475,213.93275,91.0645,214.721,92.909,215.95425,93.488,220.9195,93.70225,225.7445,100.72425,204.74875,114.27775,183.75375,127.831,173.12225,130.91025,166.903,131.89325,166.11225,129.53225,166.4895,126.657,164.9945,124.57075,162.08875,123.9715,160.40325,123.21775,159.3615,122.419,157.02075,121.416,156.00675,119.8035,153.33275,117.77,152.49125,115.86275,121.80825,92.886,91.12575,69.909,91.86425,63.67275,92.60075,57.43675" />
+	<area shape="poly" id="BJ" tooltip="<b>Benin</b><br/><small><i>(Port-Novo)</i></small>" title="Benin" alt="Benin" href="http://en.m.wikipedia.org/wiki/Benin" target="info" coords="160.25,221,156.75,221.5,153.69675,222.53975,152.00875,209.53575,150.32075,196.53175,148.7485,194.20375,146.3535,192.4555,146.761,190.33125,147.16675,188.207,149.28525,186.56925,151.40125,184.932,153.60925,185.01975,155.81775,185.10825,157.441,182.54025,159.065,179.97275,162.71375,180.54725,166.3635,181.12175,166.387,183.966,166.41,186.81125,167.83875,190.30625,166.54375,192.8485,166.1815,196.37325,164.3245,197.797,162.6655,202.322,160.647,205.55725,160.44175,213.61775,160.5,218.25" />
+	<area shape="poly" id="BW" tooltip="<b>Botswana</b><br/><small><i>(Gaborone)</i></small>" title="Botswana" alt="Botswana" href="http://en.m.wikipedia.org/wiki/Botswana" target="info" coords="318.50975,391.99625,316.2435,393.24575,313.971,394.50075,309.703,395.9925,307.53225,398.51225,306.902,396.7685,306.27125,395.025,297.78675,395.7555,289.30725,396.48625,288.81975,409.392,288.3385,422.30275,284.865,422.22225,281.3925,422.14125,281.156,431.45925,280.9205,440.77675,284.024,444.23375,286.66525,447.227,287.21,450.60325,285.906,454.9825,290.88275,456.1365,295.766,455.6225,296.627,454.00975,297.77675,452.97675,299.63875,451.57075,300.76725,449.525,302.886,447.7915,304.99925,446.05775,308.5335,446.94475,311.637,448.764,316.90925,448.32125,320.29475,447.1565,320.71625,445.206,321.136,443.256,333.53925,433.521,345.94275,423.77925,342.20925,422.0305,339.4805,421.6475,336.87375,419.04725,336.06325,412.70775,333.88925,411.81075,332.298,410.33925,330.48725,408.777,328.5535,407.981,325.025,403.6975,322.757,399.86775,322.27975,398.885,321.331,397.81675,319.8905,395.01475,318.50975,391.99625" />
+	<area shape="poly" id="BI" tooltip="<b>Burundi</b><br/><small><i>(Bujumbura)</i></small>" title="Burundi" alt="Burundi" href="http://en.m.wikipedia.org/wiki/Burundi" target="info" coords="349.9705,285.59625,350.4885,285.11775,351.0065,284.63925,351.6365,284.669,352.26225,284.69925,352.58025,285.566,352.89425,286.428,354.65375,286.09075,356.4175,285.74775,356.5105,284.669,356.60175,283.58625,358.8085,283.45975,361.25,283.75,360.9365,286.347,362.6445,288.43875,358.52575,295.564,354.905,297.69575,352.417,298.371,351.9505,299.74725,351.86225,295.403,352.08275,291.4625,351.61175,287.637,349.9705,285.59625" />
+	<area shape="poly" id="BF" tooltip="<b>Burkina Faso</b><br/><small><i>(Ouagadougou)</i></small>" title="Burkina Faso" alt="Burkina Faso" href="http://en.m.wikipedia.org/wiki/Burkina_Faso" target="info" coords="121.94925,198.76475,120.38225,197.5805,119,195.75525,114.599,194.97975,109.3665,197.232,105.483,194.4105,104.0595,191.84025,104.62675,188.2925,105.40675,184.64475,107.47925,181.737,111.049,179.14125,112.86475,175.4015,114.67775,171.66275,119.125,170.47875,123.0645,169.42025,126.3325,167.836,128.8075,165.58525,136.204,161.421,142.7915,160.04225,142.834,161.74375,143.45725,163.3275,144.3555,164.8695,144.1605,166.8045,147.7515,171.5495,151.3445,176.2945,152.712,176.74,154.081,177.1865,155.528,176.26325,157.3945,179.59425,158.2105,179.7665,159.0265,179.9375,157.45425,182.54025,155.8815,185.1435,153.6555,185.027,151.42925,184.9115,149.28525,186.55425,147.14275,188.1965,143.91975,187.8215,140.69275,187.44575,137.0785,187.79675,135.06525,188.515,127.90475,188.31525,120.74625,188.11675,121.34875,193.44025,121.94925,198.76475" />
+	<area shape="poly" id="CD" tooltip="<b>Democratic Republic of the Congo</b><br/><small><i>(Kinshasa)</i></small>" title="Democratic Republic of the Congo" alt="Democratic Republic of the Congo" href="http://en.m.wikipedia.org/wiki/Democratic_Republic_of_the_Congo" target="info" coords="274.9595,241.31125,272.9285,246.31025,270.6665,251.5465,268.9785,261.025,268.04025,271.925,262.1175,276.38425,258.17375,281.62,257.09875,286.685,256.022,291.7445,250.21525,297.499,243.80725,300.911,241.0015,297.6045,237.9965,300.20025,236.75175,299.84725,234.89725,298.809,232.776,300.84925,231.92425,303.51075,231.2865,306.2865,229.60375,307.169,230.5,307.75,230.75,309.25,234.65025,308.2375,237.71875,307.58275,247.4505,307.7545,257.18375,307.92525,258.086,308.44475,258.989,308.96325,265.05475,322.368,270.17875,324.278,275.494,323.0635,279.07425,323.36575,280.0275,319.703,280.987,316.034,283.58775,316.17475,286.184,316.321,286.51725,315.65075,286.85,314.985,288.29175,315.20725,289.733,315.429,289.75425,316.91125,289.77375,318.387,292.90825,318.161,296.042,317.93875,296.36625,326.0515,296.68925,334.165,298.47425,337.81875,300.2645,341.4725,298.90525,343.28675,297.54,345.1005,298.7815,346.12875,300.023,347.1615,300.68425,345.8565,301.347,344.5515,305.45475,344.48075,309.56475,344.41025,311.05225,343.9215,312.54475,343.428,313.8325,343.4075,315.12425,343.382,315.59075,345.18625,316.05875,346.99025,318.44825,346.20925,320.84375,345.433,321.38825,346.85425,322.20825,347.89225,325.342,350.13,329.26225,351.324,331.7955,350.4675,334.156,349.8375,337.69425,352.89625,341.62975,353.88925,344.77825,358.35925,350.71425,360.09225,351.8325,360.8585,352.94975,361.62425,352.873,357.699,352.796,353.77825,347.857,353.65225,344.35875,350.69925,345.53325,346.2395,347.48675,342.03625,347.2825,337.3905,346.38375,332.73425,346.84125,330.63325,348.31775,327.912,354.75625,326.36425,361.198,324.81225,357.5215,317.25825,353.83225,311.256,352.099,301.29875,352.25225,290.55525,350.97475,286.604,348.17925,284.46275,350.09775,281.757,352.022,279.0505,353.5755,277.37225,355.135,275.69425,355.37675,269.8135,355.61725,263.9325,357.8025,260.677,359.98775,257.42225,363.5015,254.31475,367.016,251.20825,364.8925,249.85525,362.77375,248.50275,362.78925,244.79325,362.7985,241.08475,358.40875,237.42875,354.01675,233.77275,353.084,234.2715,352.324,235.05725,349.749,235.08775,347.236,234.53825,344.50725,235.61925,342.1375,234.34725,342.10675,233.69675,341.78775,233.1575,340.1105,231.26325,338.433,229.771,336.607,229.8595,334.78075,229.94725,334.1865,230.6205,333.59075,231.293,332.91875,230.74625,332.24775,230.199,331.82625,230.8415,331.4065,231.48425,330.53425,230.36075,329.66225,229.237,325.7115,229.5745,321.767,229.91175,321.77225,230.5345,321.77225,231.15725,320.01775,231.47425,318.25825,231.79175,317.97625,231.12875,317.7,230.4665,313.22625,232.02575,308.75425,233.586,305.9175,232.5,303.85975,232.709,303.07025,234.39175,302.27975,236.075,294.06825,235.63175,290.51325,234.171,287.989,234.785,286.14275,233.213,284.1675,230.35325,281.67975,229.33725,278.33,232.087,276.08825,234.8305,275.80075,238.348,274.9595,241.31125" />
+	<area shape="poly" id="DJ" tooltip="<b>Djibouti</b><br/><small><i>(Djibouti)</i></small>" title="Djibouti" alt="Djibouti" href="http://en.m.wikipedia.org/wiki/Djibouti" target="info" coords="446.571,173.17525,444.47225,174.71475,442.36975,176.25425,441.857,179.0355,441.44525,180.99525,439.57825,184.76775,440.08625,186.20125,442.4715,186.725,445.129,185.74775,446.22625,186.209,447.5,186.5,451,186,449.52175,184.57425,447.26475,183.788,445.00275,183.894,448.25,181.75,450.33325,180.75,448.75,176.75,446.571,173.17525" />
+	<area shape="poly" id="CI" tooltip="<b>Ivory Coast</b><br/><small><i>(Yamoussoukro)</i></small>" title="Ivory Coast" alt="Ivory Coast" href="http://en.m.wikipedia.org/wiki/Ivory_Coast" target="info" coords="86.9545,234.1215,88.3195,234.25,89,235.25,91.75,235,94.75,233,102.5,230.5,110.25,229.25,114.1165,229.08625,118,229.25,118.5745,227.24675,119.13925,224.97925,117.805,220.201,119.9185,214.83475,120.51525,210.86875,122.99275,207.623,122.49825,203.161,122.00375,198.69825,120.631,197.98025,119.6845,196.45125,115.599,194.89625,109.323,197.27275,106.23225,195.15075,104.078,191.805,100.20775,191.36925,97.10425,192.8785,97.27125,191.351,97.44025,189.8245,95.9965,189.0635,93.46225,189.699,93.2775,190.22775,93.857,191.40175,92.808,191.66425,91.76225,191.83025,90.8875,192.6765,89.79675,193.201,87.23225,190.80775,84.39075,192.3185,83.39525,193.808,82.752,195.82175,83.75,197.5,84.7135,198.56775,84.63675,199.5835,84.55975,200.59825,85.3375,201.30725,84.75,202.75,84.8705,204.19175,85.56475,205.93475,83.73125,205.577,81.8975,205.21925,81.7405,206.20475,81.61825,207.22975,82.48225,207.59325,83.34375,207.956,82.6695,209.71725,81.99475,211.4785,81.19175,211.63975,79.92525,211.63975,79.9385,212.74125,79.9505,213.84175,80.5,216.5,79.0425,219.34975,80.333,220.146,81.621,220.94275,83.04175,221.0955,84.81375,223.6585,86.09375,224.7015,87.32975,227.2465,86.709,228.909,87.17,229.304,87.06225,231.71275,86.9545,234.1215" />
+	<area shape="poly" id="ER" tooltip="<b>Eritrea</b><br/><small><i>(Asmara)</i></small>" title="Eritrea" alt="Eritrea" href="http://en.m.wikipedia.org/wiki/Eritrea" target="info" coords="409.242,159.80025,411.21175,160.76775,413.1765,162.58725,414.916,162.24475,416.66025,161.902,416.998,161.365,417.3365,160.8285,417.62375,160.753,417.91125,160.677,418.30175,161.38325,418.6855,162.0885,421.15825,161.37775,423.14925,162.002,424.33825,162.0635,425.56525,161.5295,427.611,163.06325,429.74,163.75575,436.475,169.801,442.493,176.193,444.56525,174.77475,446.6375,173.35675,445.25,173.5,443.25,172.5,442.5,169.25,440.5,168.75,439.25,167.5,438.25,167.5,434.75,162.5,431.75,161.75,431.2065,160.99025,429.69425,159.319,428.5,158.5,427.196,157.69875,426.75,157.5,426.29,157.34375,425,156.5,424.55225,157.281,425,159,424.25,159.5,423.5,156.25,422.5,156,422.41675,154.58325,421,153.5,419.25,144.5,416,138,413,136.75,412.02275,135.75275,411.41275,137.63475,410.545,139.1035,408.139,140.331,405.73325,141.558,404.29775,142.91375,402.48125,143.2665,400.43975,154.2265,399.81475,164.0035,401.6665,164.001,403.517,163.9985,403.69675,163.411,403.8765,162.8235,404.73375,162.8695,405.5895,162.91475,406.29825,164.01025,407.001,165.10675,408.1245,162.45375,409.242,159.80025" />
+	<area shape="poly" id="GA" tooltip="<b>Gabon</b><br/><small><i>(Liberville)</i></small>" title="Gabon" alt="Gabon" href="http://en.m.wikipedia.org/wiki/Gabon" target="info" coords="221.2915,292.486,214.8195,286.03025,209.2265,279.74425,209,277.75,205.32825,271.79925,205,270.25,207.25,270,209,268.75,209.5,266,209.25,263.75,210,263.75,210.75,263.75,210.25,263,210,261.75,211,261,211.75,259.25,210.755,258.8075,216.7745,258.50325,220.84525,259.0045,220.8735,255.19975,220.89875,251.39475,228.35775,251.39475,235.818,251.39475,235.2415,252.1955,234.66175,252.99725,234.59525,255.47925,234.529,257.9615,236.26475,257.6585,237.64425,255.80425,241.6145,257.0005,243.00475,261.37725,241.75,264.75,240.90725,267.248,241.694,269.289,242.39975,271.81425,241.82275,276.9845,241.2435,282.15425,240.04325,283.0065,238.842,283.858,236.55725,282.0535,232.99225,281.822,231.61975,280.49175,229.67325,281.5445,226.56225,283.42975,223.45075,285.30875,223.7205,287.834,223.99,290.36325,221.687,291.789,221.2915,292.486" />
+	<area shape="poly" id="GM" tooltip="<b>Gambia</b><br/><small><i>(Banjul)</i></small>" title="Gambia" alt="Gambia" href="http://en.m.wikipedia.org/wiki/Gambia" target="info" coords="24.49225,165.8425,28.41075,165.8425,32.33025,165.8425,35.40825,164.51425,39.3455,166.3515,41.61,166.5175,43.87125,166.684,44.3695,167.314,44.8695,167.94425,43.2305,168.50325,41.59175,169.06225,38.38325,168.0855,35.4645,166.61375,33.32825,167.4905,30.76325,167.66125,30.33525,168.362,29.90625,169.06225,26.5035,169.20175,25.75,169.25,25,167.75,24.49225,165.8425" />
+	<area shape="poly" id="GH" tooltip="<b>Ghana</b><br/><small><i>(Accra)</i></small>" title="Ghana" alt="Ghana" href="http://en.m.wikipedia.org/wiki/Ghana" target="info" coords="149,225,145.2215,225.513,141,227.5,136.5,229.25,129.7065,232.56075,127,231,118,229.5,118.56375,227.23175,119.1285,224.964,117.7945,220.1895,119.90775,214.82,120.50575,210.85375,122.9835,207.60825,121.8825,197.847,120.77975,188.08625,127.9355,188.30225,135.09175,188.519,138.025,187.5825,141.06975,187.3905,140.72575,190.61575,143.26825,193.6645,145.14275,206.6815,145.884,219.53625,147.19975,221.73375,148.51575,223.9305" />
+	<area shape="poly" id="GN" tooltip="<b>Guinea</b><br/><small><i>(Conakry)</i></small>" title="Guinea" alt="Guinea" href="http://en.m.wikipedia.org/wiki/Guinea" target="info" coords="33.95075,186.13075,33.892,186.977,34.76675,187.26,35.8035,186.423,36.3725,187.768,37.00875,187.8345,37.6415,187.8995,38.90775,190.25,40.59275,192.00375,42.545,193.48,43.95575,195.15825,46.343,196.4835,47.43125,198.447,50.16975,198.4265,52.8965,195.09775,54.33575,193.523,59.6785,193.79025,64.462,199.4115,64.21325,205.88475,67.1935,204.8115,71.2685,204.8115,73.234,208.44425,72.70025,212.92025,75.17725,214.19725,78.253,212.17325,78.54275,211.36775,79.638,211.675,80.65875,211.745,81.91325,211.68,82.65675,209.801,83.398,207.92075,82.48725,207.56025,81.577,207.2,81.74875,206.21275,81.92275,205.2245,83.785,205.59525,85.64425,205.966,84.63925,203.796,84.88,201.94975,85.19875,201.10225,84.585,200.402,84.6235,199.54025,84.66225,198.67875,82.6895,196.0985,84.36,192.3445,83.25425,191.3565,82.149,190.369,82.021,188.1965,81.895,186.025,80.9845,186.6855,80.07125,187.34525,79.72975,186.844,79.38925,186.3425,80.60425,185.24925,81.82325,184.1555,80.17925,182.92775,78.53525,181.70175,78.568,178.8995,77.75075,175.775,76.59325,175.528,75.43425,175.28125,75.16525,176.5505,74.10875,177.322,73.05625,177.54125,72.51,178.96,70.459,178.12525,68.40675,177.29175,66.7785,178.4505,65.1495,179.60975,64.898,178.2945,63.83875,177.181,62.9385,177.77275,62.0405,178.365,60.72725,178.28475,60.479,177.15625,60.92525,176.71475,61.23775,176.143,53.57225,175.28125,46.229,172.94275,45.50325,172.93775,44.77775,172.93225,44.46125,176.796,44.14625,180.65825,42.169,180.70825,40.18825,180.75875,35.79775,183.792,33.95075,186.13075" />
+	<area shape="poly" id="GW" tooltip="<b>Guinea-Bissau</b><br/><small><i>(Bissau)</i></small>" title="Guinea-Bissau" alt="Guinea-Bissau" href="http://en.m.wikipedia.org/wiki/Guinea-Bissau" target="info" coords="24.911,174.5,24.911,175.25,25,176.25,25.02025,176.48,25.97975,178.68275,27.4115,178.88675,28.25,180.25,27.75,182,31.5,183,32.547,183.3405,33.791,184.684,36.734,182.883,40.042,180.75875,42.077,180.70825,44.113,180.65825,44.4545,176.808,44.795,172.9585,39.545,172.9405,34.295,172.92325,31.03725,174.0315,27.64125,174.01625,26,174.3655,24.911,174.5" />
+	<area shape="poly" id="CM" tooltip="<b>Cameroon</b><br/><small><i>(Yaounde)</i></small>" title="Cameroon" alt="Cameroon" href="http://en.m.wikipedia.org/wiki/Cameroon" target="info" coords="255.71875,255.1345,252.734,253.56675,250.17125,253.1735,247.76275,252.327,245.352,251.48,240.53,251.438,235.7055,251.39475,228.13175,251.39475,220.561,251.39475,217.3515,250.644,212.19325,250.69975,212.717,246.8145,213.5,244,213.5,242.5,211.5,240.5,211.034,238.875,211.5445,238.26275,211.20675,237.764,210.86775,237.2655,210,238.25,208.75,238,206.75,236,206.726,233.92425,205,233.5,204.17675,230.5,205.342,224.281,208.709,220.14075,208.793,219.189,208.8805,218.23625,212.41475,218.0725,215.95175,217.90825,218.401,220.252,222.23575,220.927,226.58325,210.99975,231.6355,204.872,234.66175,195.05775,238.984,187.1085,241.754,185.88375,243.25,184.75,243.5,182.25,243.7305,180.05875,243.144,179.3705,242.1485,178.667,241.541,176.39475,240.93275,174.12225,241.4255,173.729,241.9175,173.336,243.78475,174.8905,245.652,176.44475,246.729,180.19425,247.222,184.08475,246.6545,188.42125,249.31925,193.1755,249.75,195,250.01475,196.723,246.24925,196.3555,242.4875,195.98775,241.7485,200.251,247.20325,204.21225,248.9525,209.37425,250.70175,214.537,247.44275,219.86375,244.18225,225.1905,244.63675,229.08125,245.09025,232.971,249.65075,240.432,255.4855,247.17725,255.60075,251.156,255.71875,255.1345" />
+	<area shape="poly" id="KE" tooltip="<b>Kenya</b><br/><small><i>(Nairobi)</i></small>" title="Kenya" alt="Kenya" href="http://en.m.wikipedia.org/wiki/Kenya" target="info" coords="438.483,275.96375,435.75,279.25,431,283.75,427.71825,284.533,426.25,289.33325,425.25,292,421.67375,298.17725,416.76375,294.94175,411.84925,291.707,411.07525,288.89475,410.30125,286.08325,397.32175,279.227,382.35275,269.99,387.277,262.5875,392.2065,255.18925,392.31425,251.0425,392.417,246.89425,390.72475,245.52425,389.03125,244.15325,387.94975,239.761,385.16875,236.89625,386.90775,235.4,388.6525,233.90325,393.526,233.68675,398.39825,233.47,401.4245,233.727,404.456,233.984,407.5135,235.48575,413.13025,239.578,418.64975,240.3915,424.17,241.20525,426.6835,239.94,428.796,237.315,432.9725,236.25675,437.743,237.904,439.86125,238.134,442.48275,237.87425,439.32725,242.34125,436.1105,246.406,436.20375,259.85575,434.30275,270.9295,436.3895,273.44425,438.483,275.96375" />
+	<area shape="poly" id="LY" tooltip="<b>Libya</b><br/><small><i>(Tripoli)</i></small>" title="Libya" alt="Libya" href="http://en.m.wikipedia.org/wiki/Libya" target="info" coords="226.08225,31.939,224,31.5,220.5,37.25,217.75,41,215.77475,43.87125,214.75,51,211.67075,52.73575,209.81925,55.06825,212.34825,59.83125,212.42275,69.65175,212.4975,79.4735,210.96625,79.87175,209.60125,80.88,210.3455,83.37475,212.46825,86.04025,213.77725,88.55225,213.8665,91.17025,214.749,92.9945,216.0845,93.55425,220.9505,93.788,225.67425,100.83,233.91075,101.0795,242.146,101.33,244.8415,103.12125,246.09875,104.615,250.8145,103.2975,255.529,101.97925,283.29575,115.4695,311.06225,128.9595,311.01025,126.76825,310.96375,124.57575,316.689,124.661,317.813,124.37375,315.915,92.50325,314.017,60.632,311.29725,56.1115,312.26775,51.34425,312.19125,49.324,319.4535,45.408,319.80375,42.873,320.66975,41.90075,320,40,311.581,39.431,306.75,37.5,306.5,35.25,297.75,33.25,291.25,34.75,287.37725,37.02275,284.4075,40.22225,284.315,42.39725,286.25,46,282.75,51,279.25,52.25,276.17375,51.45475,272,48.5,265.75,46.25,262.25,45.5,256.5,45,253.5,43.25,252.25,40.75,251.75,37.75,250.75,36.75,246.16625,36.05,244.25,35,240.7495,34.0925,239.25,34.25,237.5,33.25,235,34.25,230,33.75" />
+	<area shape="poly" id="LR" tooltip="<b>Liberia</b><br/><small><i>(Monrovia)</i></small>" title="Liberia" alt="Liberia" href="http://en.m.wikipedia.org/wiki/Liberia" target="info" coords="86.919,234.10625,83.8595,233.04825,79.96625,230.99,73.75,225.25,70.75,222.75,69.191,222.31725,59.25,214.64425,61.389,212.847,64.798,210.04225,64.7385,209.042,64.68,208.042,66.34925,206.45425,68.0215,204.867,69.6405,204.53475,71.372,204.791,73.4005,209.6115,72.68775,212.915,75.0645,214.1265,78.24275,212.184,78.6455,211.3325,79.9355,211.7505,79.9355,212.7585,79.9355,213.76625,80.5,215,80.5,217,80,218.25,78.87375,219.26875,80.28125,220.11625,81.69025,220.9625,82.9435,220.99275,84.86275,223.7395,86.8445,225.54825,87.2115,229.067,87.06525,231.58725,86.919,234.10625" />
+	<area shape="poly" id="MG" tooltip="<b>Madagascar</b><br/><small><i>(Antananarivo)</i></small>" title="Madagascar" alt="Madagascar" href="http://en.m.wikipedia.org/wiki/Madagascar" target="info" coords="476.75,442,483,422,490.67575,400.5345,493.57575,391.21475,493,387.75,495,386.25,496.05175,382.07475,495.75,380.5,494,376,495.31825,374.428,496.69175,375.0165,497.25,378.25,498.5,378.75,500.25,373.75,498.5,370,497.75,363,495.75,356.25,494.25,355.5,493,353,491.75,350.5,490.75,350.75,489,353.25,487.75,353.5,489.25,357,488.5,359.5,488.25,360.75,486.0385,360.242,485.25,362.75,484,362.75,482.25,362,482.46375,363.7375,483,365,482.5,366.5,481.05675,366.20575,480.2965,367.11625,480.5,367.5,480.5,368,480.75,368.5,480.5,369,479.9975,369.678,478.75,372,478.75,369.75,478,370.5,477.75,371.5,477,371.75,476.7185,372.90525,476.75,374.5,475.25,376.75,475.268,374.75125,475.389,373.99775,474.25,373.25,473,374.5,470.8325,375.66575,471,376.5,471.35275,377.19475,471.25,378,470.654,378.579,470.0955,377.3815,469.25,376.75,467.75,377,466.01575,377.02625,465.34375,378.33125,463.5565,379.1645,463.36925,378.356,463,378.25,460.25,380.25,457.25,380.25,457.25,383.5,454.304,388.501,454.097,389.9195,454.75,396,455.75,396.75,456.25,401.25,457.5,401.5,457.75,407,455.75,409.5,452.25,416.25,451.25,416.75,449.25,420,448.75,422.75,449.75,426.5,452,430.5,451.75,432.5,452.16275,438.171,453.75,439.5,454.5,442.25,457,444.25,459,444.75,460.842,444.879,462.5,446.58325,465.75,446.33325,470.25,443.5,473.25,443.75" />
+	<area shape="poly" id="ML" tooltip="<b>Mali</b><br/><small><i>(Bamako)</i></small>" title="Mali" alt="Mali" href="http://en.m.wikipedia.org/wiki/Mali" target="info" coords="113.0495,86.2215,107.607,86.365,102.16675,86.50875,102.42325,117.354,102.6795,148.2005,104.11375,148.69925,105.5505,149.19775,104.54475,152.21425,103.53975,155.22925,87.50375,154.3375,71.4665,153.44575,69.62275,154.71875,67.77575,155.99075,66.76525,155.6225,65.75775,155.25525,65.06,153.2195,64.362,151.18275,63.44625,150.94125,62.528,150.6995,58.9245,157.205,57.0215,158.883,56.983,160.04725,56.9725,161.161,57.786,164.424,57.07075,166.72475,59.75,169.5,61.518,171.4515,61.4555,174.93375,60.75375,176.9395,60.738,178.2445,62.4045,178.078,63.141,177.637,63.87725,177.19575,64.8155,178.209,65.2755,179.50425,66.8985,178.4125,68.5225,177.322,70.50425,178.1335,72.48975,178.94525,72.782,177.94675,73.92825,177.22675,74.95175,176.788,75.547,175.301,76.63425,175.561,77.724,175.8205,78.54775,178.83425,78.648,181.74625,80.256,182.9385,81.8615,184.13025,80.636,185.23125,79.4065,186.332,79.74825,186.83575,80.08725,187.33975,80.98175,186.756,81.8775,186.17125,82.0105,188.2825,82.14075,190.394,83.27175,191.415,84.40275,192.435,86.09375,191.14225,87.93025,190.958,89.2225,192.40475,90.4715,192.949,91.68225,192.02475,93.321,191.6185,93.44375,190.59375,93.793,189.5975,95.10875,189.25,96.80925,189.1195,97.20875,191.40175,97.37925,192.7675,101.3905,191.286,104.1215,191.88525,105.011,185.73775,111.093,179.106,112.88075,175.40675,114.66825,171.7085,121.94425,169.801,128.93125,165.53,136.8765,161.11025,142.91925,160.007,145.6995,160.012,148.48,160.017,150.044,158.7065,151.606,157.39675,159.085,157.487,166.564,157.578,167.25925,156.55725,169.2185,155.331,170.18325,153.6575,171.98025,152.897,172.27525,142.00625,172.56775,131.11625,169.75925,131.51475,166.95075,131.913,165.94575,130.056,166.62,126.89875,164.512,124.2735,162.1675,123.95575,160.5525,123.21775,159.42925,122.4085,157.543,121.82225,155.971,119.7435,155.2715,119.045,154.38925,118.529,152.87275,117.38025,152.4605,115.9085,137.51725,104.6805,113.0495,86.2215" />
+	<area shape="poly" id="MW" tooltip="<b>Malawi</b><br/><small><i>(Lilongwe)</i></small>" title="Malawi" alt="Malawi" href="http://en.m.wikipedia.org/wiki/Malawi" target="info" coords="383.759,336.07525,385.88175,342.96425,388.00525,349.84775,387.37975,355.965,386.75475,362.078,390.6625,365.661,395.3305,371.92975,395.9315,373.6585,396.0855,375.936,395.30975,379.16625,394.5405,382.40125,392.618,383.228,390.694,384.04925,390.842,386.8765,390.991,389.70325,389.97025,389.7185,388.94925,389.7385,389.30925,387.64225,388.53975,387.4155,385.5135,384.3415,384.19,380.84925,386.08275,376.1075,386.0765,371.95,384.19,371.60725,382.297,371.2645,379.4245,371.2345,378.532,369.9595,376.711,367.44475,375.64325,367.475,374.51475,365.95325,373.386,364.42625,375.36175,360.828,377.33675,357.23025,378.88025,357.064,380.42375,356.89225,379.373,355.552,378.32175,354.2065,379.23975,349.52525,380.15725,344.84375,381.0345,344.21375,381.9115,343.578,379.38775,338.67025,376.8595,333.76725,379.42875,335.16825,383.759,336.07525" />
+	<area shape="poly" id="MA" tooltip="<b>Morocco</b><br/><small><i>(Rabat)</i></small>" title="Morocco" alt="Morocco" href="http://en.m.wikipedia.org/wiki/Morocco" target="info" coords="91.7475,65.78175,92.2965,61.64,92.84675,57.498,96.151,55.82175,99.45375,54.1465,100.2005,54.355,100.9465,54.565,102.11875,53.62225,103.29125,52.68,105.24075,52.8185,107.18925,52.95675,107.29425,52.04525,107.402,51.1325,115.5375,50.13525,118.641,47.2375,122.05275,45.877,125.46075,44.51625,126.7405,44.51625,128.021,44.51625,127.38275,43.677,126.7405,42.83825,126.9535,42.06425,127.16725,41.29125,127.0595,40.286,126.9535,39.2805,130.937,38.84475,132.933,36.6145,138.47025,36.69,144.0075,36.766,144.75325,35.09025,145.5,33.41475,143.4945,30.84425,143.2895,26.4555,143.379,21.68325,143.30975,18.69025,138,13.5,135.25,14.5,135,16,130.08325,17.81425,125.75,18.25,123.25,17.25,122.34925,16.33325,120.77125,17.25,118.27125,16.75,113.52125,17.5,108.52125,16.25,106.02125,12.75,102.02125,13.25,100.02125,17.5,96.27125,24.5,93.773,27.06825,84.02125,31,78.52125,36,78.27125,38.625,74.52125,44.125,74.27125,49,75.77125,51,75.5625,54.1625,69.02125,61.25,66.15,62.111,64.468,63.864,77.0195,64.68125,91.7475,65.78175" />
+	<area shape="poly" id="MR" tooltip="<b>Mauritania</b><br/><small><i>(Nouakchott)</i></small>" title="Mauritania" alt="Mauritania" href="http://en.m.wikipedia.org/wiki/Mauritania" target="info" coords="55.5705,110.3335,55.911,100.577,65.61125,94.88075,66.891,85.56075,68.16875,76.2405,79.041,77.18325,89.91325,78.125,90.503,73.9375,91.2155,70,102.17175,78.2665,113.004,86.28425,107.5465,86.41225,102.08775,86.54125,102.36525,117.4115,102.642,148.28275,104.02425,148.7635,105.404,149.24475,104.4735,152.24575,103.542,155.2465,87.4555,154.37525,71.37175,153.503,69.53875,154.7775,67.70475,156.053,66.7145,155.7335,65.724,155.41325,65.024,153.31925,64.32725,151.225,63.35175,150.9885,62.38,150.752,60.3225,154.94725,58.75,157.5,57.25,158.5,55.927,157.80925,54.42925,156.2645,52.91125,154.68975,51.56225,152.80225,50.06175,149.48425,48.25575,147.83375,44.2905,146.2065,42.693,144.2105,40.5255,143.80025,36.37825,143.9285,31.38725,144.3135,29,144.5,30.5,140.81075,30.25,134.5,27.25,129,28.5,126.5,29.5,123.25,27.25,119.25,26.5,120.5,24.25,116.5,23.25,118.75,24,112.75,25.625,108.875,28.5,111,28,110.75,30.22475,109.18525,31.0325,108.39125,43.739,109.17475,56.4455,109.9585" />
+	<area shape="poly" id="MZ" tooltip="<b>Mozambique</b><br/><small><i>(Maputo)</i></small>" title="Mozambique" alt="Mozambique" href="http://en.m.wikipedia.org/wiki/Mozambique" target="info" coords="354.078,374.36875,354.83325,376.30375,355.5865,378.24425,355.52575,379.2165,355.46825,380.184,358.08,380.37575,360.69025,380.572,366.81,382.9105,372.92525,385.2485,373.3705,394.55625,371.3915,402.56375,371.19075,403.99475,371.13,405.3655,371.62675,408.22775,371.243,411.2765,367.86675,418.125,365.897,421.5015,362.85075,424.404,361.27,428.41525,361.88025,443.256,370.8205,449.905,371.2355,456.26575,375.5695,455.5,376.18425,453.4035,376.25,451.75,376.289,450.55675,375.5,451,374.25,450.25,374.5,448,375.4225,445.9985,382.844,443.1165,385.5,441.75,390.25,440.5,392.75,437.75,394.75,434.25,393.65775,432.2,395.1965,426.5005,394.75,422,393.25,422.75,392.5,418,391.17275,415.21475,391.75,413.25,389,410.75,388.75,409.5,390,406,393.25,403.5,396.5,400,399.0095,399.5,400.67675,397.696,400.31225,397.14175,401.25,397,401.02625,396.386,402.108,396.1935,402.42675,395.27725,402.75,394.36525,404.25,393.75,406.25,391,413,387.75,417,386.25,419.25,385.75,420.9455,384.25,422,384,422.75,383.5,424.25,382.5,426,380.75,426.62175,379.02275,427.198,377.71375,427.77475,377.067,429,375.75,430.09975,375.17475,430.5,374.25,430.75625,373.321,431.7555,371.84475,432.00725,370.862,432.2635,369.87425,432.10575,369.22925,431.94625,368.58425,431.33075,367.66725,430.7155,366.75,429.69925,361.702,429.90975,358.0885,429.41175,356.92475,429.99175,355.97725,429.87375,351.986,429.5,348.75,429.3635,347.37225,429.75,344.75,430.5,343,430.52675,340.9275,422.309,345.2455,414.9925,348.24025,412.38125,348.67325,409.8165,350.51275,407.78525,350.291,405.54875,350.2655,402.841,350.7445,400.13275,351.22825,398.49625,349.80225,395.8845,350.18525,391.9355,350.059,387.98575,349.92825,387.37,355.99525,386.75475,362.0575,392.09375,367.24325,395.79325,373.1595,395.71575,377.49825,394.5825,382.351,392.62275,383.18775,390.6625,384.019,390.766,386.721,390.86875,389.42125,389.90325,389.5675,388.94,389.7085,389.40075,388.126,388.24225,387.28475,385.53275,384.402,384.25075,380.8695,385.9535,376.692,386.1075,371.97525,384.2095,371.6325,382.3115,371.28975,380.11175,371.441,378.731,370.45825,377.193,367.722,375.5515,367.5305,364.81475,370.953,354.078,374.36875" />
+	<area shape="poly" id="NA" tooltip="<b>Namibia</b><br/><small><i>(Windhoek)</i></small>" title="Namibia" alt="Namibia" href="http://en.m.wikipedia.org/wiki/Namibia" target="info" coords="226.5,389,227.517,393.83325,228.5,396.25,231.83325,400.25,237.25,409.5,238.2505,412.9175,242.25,419.25,245.75,423.5,246.5,427.25,245.5,428.25,246.056,437.068,246.75,439.5,248.746,442.66575,248.4715,447.52025,249.27425,450.79075,250.5,453.25,251.75,459,254.5,463.5,259.5,468,262.98025,467.1475,265.65425,471.6525,270.32225,471.325,274.99025,471.613,277.299,469.7175,280.23375,468.06925,280.833,445.09025,281.43325,422.106,284.896,422.21675,288.3585,422.328,288.85125,409.38675,289.349,396.446,297.7965,395.71425,306.25075,394.97975,306.8975,396.713,307.54875,398.45175,309.75875,396.08325,312.91925,394.6115,315.709,393.66425,318.474,391.92575,317.66875,390.76675,316.85875,389.60775,311.41625,390.49475,305.97325,391.3865,299.9005,392.7765,293.82625,394.16825,283.99375,392.87825,274.1595,391.58825,272.51275,390.2275,270.86675,388.86675,255.38025,389.04325,239.897,389.21975,235.296,385.9895,228.76575,388.08075,226.549,387.72375,226.5,389" />
+	<area shape="poly" id="NE" tooltip="<b>Niger</b><br/><small><i>(Niamey)</i></small>" title="Niger" alt="Niger" href="http://en.m.wikipedia.org/wiki/Niger" target="info" coords="172.55575,131.18175,172.25025,142.07925,171.94275,152.97725,170.35725,153.4755,169.22375,155.3155,167.56625,156.2345,166.54825,157.6185,159.05175,157.54825,151.55425,157.47775,150.03125,158.735,148.50775,159.9925,145.67425,160.007,142.83675,160.0225,142.82975,161.91675,143.6685,163.46875,144.32775,164.89025,144.1815,166.73425,147.766,171.43625,151.3545,176.13775,152.65475,176.6145,153.95575,177.09,155.959,176.3445,157.3665,179.66575,161.80825,180.2825,166.2515,180.9,166.9205,178.62675,168.3315,176.87325,170.35475,174.2865,171.216,171.28475,173.615,169.83125,182.353,169.14325,186.36675,171.295,190.4885,174.71175,191.53425,174.755,192.58175,174.797,193.84825,173.42975,196.0385,172.40875,198.91625,172.7615,203.22775,175.8155,206.17725,176.07525,209.12425,176.33375,211.9535,174.33875,214.78475,172.34325,219.73425,172.21975,224.68525,172.09625,226.8185,173.1845,229.486,173.4365,232.82075,170.8915,238.75,168.5,237.25,166.5,236.92925,163.5295,238.2065,162.5365,238.9245,160.113,244.90525,153.5945,250.88375,147.07625,251.99475,136.68,253.10325,126.28425,253.94625,124.19325,254.78975,122.1015,250.5355,119.66975,248.2815,114.78925,248.183,110.36025,248.2015,104.2875,247.137,104.4665,246.06975,104.6455,244.29525,102.6775,242.27375,101.3495,233.8895,101.04925,225.5055,100.75025,204.2635,114.50725,183.02275,128.2645,177.79,129.7235,172.55575,131.18175" />
+	<area shape="poly" id="NG" tooltip="<b>Nigeria</b><br/><small><i>(Abuja)</i></small>" title="Nigeria" alt="Nigeria" href="http://en.m.wikipedia.org/wiki/Nigeria" target="info" coords="204.75,234,203.75,233.75,203.25,232.75,202.44875,232.94425,196.25,234.25,191,235.25,186.75,235.75,184.75,234.5,179.9705,227.41075,176.5,222.47775,173.5,220.5,170.25,220.25,160.25,221,160.4805,213.7235,160.70375,205.69825,162.74525,202.13525,164.25,197.872,166.36875,195.8595,166.528,192.843,167.88525,189.65875,166.346,186.4025,166.4335,183.792,166.523,181.18225,166.823,178.91425,168.57225,176.7375,169.83675,175.47725,171.099,171.2495,174.212,169.73325,182.2585,169.25425,186.7695,171.484,190.6345,174.8675,191.5425,174.8255,192.453,174.78225,193.92775,173.346,196.121,172.4635,197.94475,172.4245,203.1815,175.7395,206.188,176.014,209.196,176.28925,211.9895,174.311,214.78475,172.33325,219.79175,172.2375,224.8,172.14125,226.91325,173.25075,229.35325,173.48225,234.168,170.55725,238.4995,168.584,239.75,170.75,241.90275,173.2605,241.42825,173.63325,240.951,174.00575,241.5535,176.38475,242.1565,178.76375,243.1565,179.2925,243.75975,180.059,242.97425,184.99175,239.0225,187.199,234.72025,194.85425,231.6965,204.786,226.60075,210.83325,222.297,220.922,218.72675,220.41275,216.0795,217.7775,212.476,218.00725,208.8755,218.23625,208.7835,219.18125,208.688,220.1255,205.3955,224.055,204.16075,230.576" />
+	<area shape="poly" id="CG" tooltip="<b>Republic of the Congo</b><br/><small><i>(Brazzaville)</i></small>" title="Republic of the Congo" alt="Republic of the Congo" href="http://en.m.wikipedia.org/wiki/Republic_of_the_Congo" target="info" coords="227.8625,301.5505,225.75,297.25,221.25,292.486,221.7045,291.789,224.0645,290.36875,223.7815,287.81425,223.49725,285.2645,226.437,283.5155,229.37575,281.766,230.85525,280.49175,232.93525,281.8775,236.701,282.1395,238.871,283.81775,240.115,282.98575,241.3565,282.15425,241.86425,277.07525,242.3745,271.9955,240.93275,267.16275,243.10825,261.22175,241.90525,257.25,237.62675,255.83925,236.51875,257.48725,234.526,258.04675,234.57925,255.61,234.631,253.1735,235.2265,252.28425,235.818,251.39475,240.623,251.44975,245.42625,251.5055,247.747,252.317,250.066,253.128,252.94125,253.69025,255.7295,255.10325,255.606,251.19525,255.4855,247.28725,260.38675,242.53575,264.809,240.68125,267.10175,241.70925,269.38925,242.73675,272.21075,241.9585,275.03675,241.18025,272.8925,246.3155,270.73325,251.40025,268.8865,261.368,268.0295,271.8795,262.1775,276.26375,258.1965,281.59525,257.0735,286.685,255.9475,291.77475,249.1295,298.34075,243.90025,300.86,241.0015,297.6045,238.047,300.155,237,299.88175,234.884,298.57775,232.65775,297.5545,231.30925,299.44325,229.58525,300.49675,227.8625,301.5505" />
+	<area shape="poly" id="RW" tooltip="<b>Rwanda</b><br/><small><i>(Kigali)</i></small>" title="Rwanda" alt="Rwanda" href="http://en.m.wikipedia.org/wiki/Rwanda" target="info" coords="360.03375,274.0365,358.459,275.27575,356.8895,276.51075,356.357,276.51075,355.82325,276.51075,355.5045,276.07725,355.187,275.64375,351.4375,279.9575,348.17925,284.5135,349.21625,284.9315,350.00025,285.657,350.519,285.1785,351.0425,284.69925,351.6365,284.74475,352.2325,284.79,352.53025,285.57625,352.83275,286.36775,354.64325,286.00975,356.44825,285.657,356.52525,284.589,356.60175,283.5255,358.854,283.3995,361.75,283.5,362.25,282.25,363.33825,280.61725,361.68625,277.32725,360.03375,274.0365" />
+	<area shape="poly" id="ZM" tooltip="<b>Zambia</b><br/><small><i>(Lusaka)</i></small>" title="Zambia" alt="Zambia" href="http://en.m.wikipedia.org/wiki/Zambia" target="info" coords="361.23925,324.8225,354.74,326.39475,348.241,327.972,347.1585,329.953,346.46575,332.089,346.60475,333.092,346.90825,334.70425,347.482,339.2,347.26625,342.7165,345.076,347.68575,344.328,350.694,346.441,352.75525,348.703,353.9645,351.21675,354.17125,352.75575,353.57175,352.8585,357.598,352.96025,361.6295,351.8375,360.8935,350.86275,360.1225,346.74325,359.7095,341.6655,353.874,337.77125,352.9165,334.165,349.8175,332.09275,350.3515,329.61,351.36425,324.6715,349.80225,322.358,348.05875,321.3615,346.85425,320.865,345.443,318.44825,346.22925,316.027,347.0205,315.59075,345.18125,315.155,343.34175,314.1555,343.37725,313.1545,343.4075,312.2935,350.291,311.436,357.17975,312.232,357.961,313.022,358.747,305.63975,358.5605,298.25875,358.375,297.904,371.2755,297.55,384.1805,301.65875,387.748,305.7685,391.316,311.3385,390.45425,316.90925,389.5975,317.72575,390.797,318.54125,392.00125,318.89525,392.81175,319.24825,393.624,323.6095,393.6695,327.96875,393.7145,328.56475,394.2285,329.15875,394.74275,329.96925,394.531,330.78575,394.31925,337.5825,388.01525,344.096,384.7295,344.18425,382.724,344.27075,380.71825,349.63625,378.4205,355.63325,378.27925,354.83825,376.294,354.0375,374.30825,364.867,370.97225,375.69525,367.64125,374.54025,365.9835,373.386,364.3255,375.33625,360.75275,377.2845,357.17975,378.79375,357.0035,380.306,356.832,379.32625,355.52175,378.35225,354.21675,379.23975,349.505,380.12625,344.7975,381.01475,344.188,381.902,343.578,380.12625,340.17675,378.35225,336.77575,377.541,335.2035,376.73575,333.626,372.587,332.26025,368.43175,330.8895,365.5235,327.84125,364.07075,327.92125,362.655,326.374,361.23925,324.8225" />
+	<area shape="poly" id="SN" tooltip="<b>Senegal</b><br/><small><i>(Dakar)</i></small>" title="Senegal" alt="Senegal" href="http://en.m.wikipedia.org/wiki/Senegal" target="info" coords="29,144.5,28,147,27,151.25,26.75,154.5,23,160.5,20.25,161.75,22.5,162.25,24.523,165.984,28.44175,165.8175,32.36075,165.8175,35.43925,164.492,39.37625,166.33175,41.641,166.495,43.903,166.6585,44.40025,167.289,44.89725,167.91825,43.2615,168.4785,41.6225,169.03725,38.414,168.062,35.495,166.593,33.35925,167.465,30.794,167.6365,30.366,168.3375,29.93675,169.03725,27.75,169.25,27,170.75,25.75,171,25.161,174.25,25.7915,174.40075,27.65475,173.94075,31.0755,174.049,34.3535,172.8175,40.26275,172.888,46.172,172.9585,53.46875,175.3115,61.28425,176.037,61.51525,171.9295,57.1905,166.8005,57.709,164.27025,56.96725,161.18075,56.95225,159.9415,56.96975,158.64625,56.034,157.8425,54.8155,156.621,52.84375,154.38325,51.6535,152.8715,49.76825,148.92525,48.25575,147.83375,44.30825,146.1515,42.65625,144.12275,38.78325,143.6945,36.28975,143.9675,32.2815,144.29,30.25,144.5" />
+	<area shape="poly" id="SL" tooltip="<b>Sierra Leone</b><br/><small><i>(Freetown)</i></small>" title="Sierra Leone" alt="Sierra Leone" href="http://en.m.wikipedia.org/wiki/Sierra_Leone" target="info" coords="58,214.25,56,213.7855,54.5,211.75,52.5,208.25,50.5,207.75,49.58075,205.72125,51,205.25,49.5,201.25,47.46725,198.63275,50.975,197.89725,52.94,195.05725,55.3225,193.32075,59.7145,193.725,63.99275,198.32875,64.26675,205.915,66.329,205.124,68.50675,204.4435,66.573,206.2195,64.639,207.99625,64.70275,209.00675,64.765,210.0175,61.36625,212.85125,59.25,214.5" />
+	<area shape="poly" id="ZW" tooltip="<b>Zimbabwe</b><br/><small><i>(Harare)</i></small>" title="Zimbabwe" alt="Zimbabwe" href="http://en.m.wikipedia.org/wiki/Zimbabwe" target="info" coords="319.21275,393.63925,320.29475,395.791,321.37275,397.94275,322.449,399.1925,322.94275,400.82525,325.71775,404.6045,328.661,408.04225,330.719,408.913,332.339,410.314,333.87275,411.83075,336.09375,412.748,336.684,418.55325,339.4125,421.67275,342.97375,422.20175,346.0105,423.90025,350.86275,424.8425,352.82775,425.85025,357.69475,425.9915,361.229,428.3195,362.99475,424.283,366.015,421.421,368.59075,416.805,371.1045,411.60425,371.6575,408.45475,371.04175,405.24975,371.21225,403.88925,371.3755,402.52425,373.51525,393.0495,372.997,385.24375,366.80475,382.8955,360.6135,380.552,358.01275,380.3655,355.41275,380.184,355.499,379.31775,355.5865,378.4555,349.52325,378.39525,344.30125,380.72325,344.224,382.719,344.14825,384.7135,334.673,390.15175,330.69775,394.35475,329.94425,394.5865,329.1905,394.81325,328.57475,394.279,327.9585,393.744,323.588,393.6895,319.21275,393.63925" />
+	<area shape="poly" id="SO" tooltip="<b>Somalia</b><br/><small><i>(Mogadishu)</i></small>" title="Somalia" alt="Somalia" href="http://en.m.wikipedia.org/wiki/Somalia" target="info" coords="450.75,186.038,448.30525,186.3485,447.299,186.73,449.197,193.022,457.0455,200.503,467.668,203.852,478.29725,207.2,481.71775,207.059,485.1395,206.91775,474.82375,218.518,464.509,230.11925,460.33775,230.03575,456.1685,229.95275,452.31525,232.22275,449.02725,234.82025,445.62725,236.52625,442.1235,238.0305,439.40925,242.29925,436.162,246.24925,436.19275,259.7095,434.24,270.79375,436.328,273.37375,438.422,275.959,442.25,270.5,444.6415,267.5,452.5,260,459.25,253.75,461.25,252.5,462.60625,252.34175,466.25,250.25,469.694,247.8125,471.75,245.5,473.5,243.90925,478.7085,238.448,482.48775,233.779,486.25,228.25,490,222.25,490.5,219.75,495.5,211,495.228,209.72625,497.5,208.25,499.25,205.25,500.5,202.25,502.5,199.75,503,192.5,507.16675,192.41675,504.75,191,504.684,188.09275,505,186.75,504.5,186.5,504.5,184.75,505.75,182.5,502.36275,180.91725,500.75,181.75,499.25,184,491.5,186,486.5,186,483.5,187.25,478.25,187,473.8465,189.80175,470.75,190.25,466.5,189.25,459.83725,192.4185,456.91675,192.262,451.75,188" />
+	<area shape="poly" id="SD" tooltip="<b>Sudan</b><br/><small><i>(Khartoum)</i></small>" title="Sudan" alt="Sudan" href="http://en.m.wikipedia.org/wiki/Sudan" target="info" coords="317.099,110.72775,317.4385,117.67375,317.777,124.6215,314.20175,124.742,310.959,124.5305,311.016,126.74225,311.07175,128.95525,311.4005,142.08475,311.72825,155.2145,307.9015,155.41875,304.08,155.6225,304.12725,157.021,304.16825,158.41925,301.98325,161.1405,299.797,163.86275,299.9365,165.79775,300.07475,167.73275,299.3465,168.06475,298.61275,168.3975,298.21275,171.64775,297.145,173.588,297.18075,175.15225,297.21175,176.7175,298.80275,176.38975,300.39175,176.06225,301.40775,181.32025,304.194,185.944,304.38375,187.1205,304.578,188.298,303.8705,188.3935,303.15675,188.48925,306.85,192.86825,309.91875,197.5545,309.8665,204.2895,313.5955,205.61225,315.07875,207.3865,318.99175,207.8855,320.1925,208.96125,321.3925,210.03725,324.01475,214.45175,329.375,218.11975,330.84125,220.952,332.3085,223.784,336.06325,225.60575,338.21275,229.64025,340.16275,231.2985,341.77325,233.163,342.07525,233.96625,342.38375,234.679,345.25525,235.68475,347.2305,234.44775,348.79975,234.90875,351.81075,235.1985,352.94975,234.49325,354.078,233.7065,358.34625,237.37525,362.61925,241.0445,363.38325,240.49975,364.1425,239.9555,372.9345,240.63575,381.72675,239.693,385.225,236.75525,388.72425,233.8175,393.5615,233.64375,398.39825,233.47,398.4505,231.00075,398.49625,228.5315,396.0085,227.6845,393.51975,226.83825,391.80125,223.0945,390.078,219.34975,387.5805,217.27875,385.08125,215.208,384.507,213.22725,382.41,211.25175,379.96325,211.3325,377.34175,210.42025,377.98225,209.614,378.62875,208.8075,378.6195,207.649,378.60275,206.4895,380.8855,206.45425,383.174,206.419,384.5235,205.64575,385.7125,204.25175,385.63575,197.85975,385.5535,191.4675,386.62575,189.90025,387.69875,188.33325,388.78625,188.3455,389.87225,188.35825,390.406,185.65,390.9405,182.941,394.2235,177.94,398.676,173.598,399.32125,168.48125,399.96775,163.36275,400.5625,153.08825,402.52225,143.25675,404.17375,143.02725,405.67225,141.62375,408.05775,140.4315,410.44225,139.2405,411.453,137.79875,411.97075,135.7075,410.83225,134.57375,410,133.75,408.5,133.25,407,129.5,406.25,118.75,407.25,117,404.75,113.5,404.25,110,400.75,107.5,399.5,105.5,397.25,105.25,395.41675,103.25,392.54,105.77125,390.719,105.292,390.2635,107.19175,389.811,109.09175,387.75,109.62325,379.2595,107.356,379.08075,108.89575,378.895,110.435,377.069,110.637,375.243,110.8385,374.377,109.949,373.51025,109.0595,345.30725,109.89425,317.099,110.72775" />
+	<area shape="poly" id="ZA" tooltip="<b>South Africa</b><br/><small><i>(Tshwane/Pretoria)</i></small>" rev="LS" title="South Africa" alt="South Africa" href="http://en.m.wikipedia.org/wiki/South_Africa" target="info" coords="262.25,471.5,266.25,481.5,272.25,490.25,273,495.75,270.5,496.75,269.75,497.75,270.5,499.5,273.75,503.75,273.75,505,274,506.5,276.25,506.5,277,508.25,280.25,509.25,284.5,511.5,288.98075,509.0515,298,508.5,300.5,506.5,309,506.75,309.75,505.75,316.5,507,319.25,507.5,320,506,325,506.25,325,504.75,326.75,504,330.5,504.5,337.25,501.5,347.75,493.75,351.75,489.75,356.5,485.75,363.25,475.75,367.5,470,369,470,372.9845,465.809,375.5585,455.49475,373.25,455.75,371.2105,456.19925,368.9625,457.2425,366.3365,458.734,363.68925,458.08875,363.02275,454.26425,364.9665,450.414,367.36225,448.37825,368,447.75,370.78475,449.67825,362,443.5,361.281,428.34975,357.76125,426.02175,352.8225,425.84525,349.432,424.41425,346.03625,423.83475,333.61125,433.51525,321.1875,443.1965,320.73175,445.2215,320.2745,447.24225,316.037,448.46175,311.80025,448.8045,308.46675,446.9145,304.85575,446.11325,302.7835,447.89725,300.71025,449.68225,299.67975,451.591,298.2685,452.6395,296.632,453.99975,295.81725,455.63175,290.3585,456.066,285.9885,455.02775,287.0655,451.6615,286.773,447.19175,283.886,444.01675,280.9925,440.842,280.618,454.47375,280.24275,468.10975,277.62175,469.531,275.001,471.63225,270.73325,471.30975,265.6235,471.708,263.06225,467.2775,260.25,468.5" />
+	<area shape="poly" id="SZ" tooltip="<b>Swaziland</b><br/><small><i>(Mbabane)</i></small>" title="Swaziland" alt="Swaziland" href="http://en.m.wikipedia.org/wiki/Swaziland" target="info" coords="370.8205,449.905,370.984,452.99425,371.14875,456.0775,368.60375,457.45875,366.2695,458.84475,364.1415,458.4115,363.1155,456.97025,363.008,454.06775,364.16725,451.42675,365.91075,449.38075,367.794,448.20675,368.7635,448.63025,369.75,449,370.5,449.5,370.8205,449.905" />
+	<area shape="poly" id="TZ" tooltip="<b>Tanzania</b><br/><small><i>(Dodoma)</i></small>" title="Tanzania" alt="Tanzania" href="http://en.m.wikipedia.org/wiki/Tanzania" target="info" coords="382.35275,269.94975,381.061,271.84925,379.76225,273.744,369.94,273.90575,360.1115,274.0715,361.72225,277.32175,363.333,280.57275,360.6545,285.6925,362.686,288.49875,359.331,294.5715,354.304,297.7105,352.889,297.98325,352.1495,299.062,352.591,305.57225,354.3655,312.55675,356.85875,316.40725,359.3115,319.899,360.54675,322.4435,361.32225,324.99375,362.686,326.5055,364.05125,328.0125,365.9235,328.2345,368.29825,330.90475,372.386,332.23,376.47425,333.5555,379.757,335.2385,383.76425,336.08575,385.9085,343.035,388.05225,349.98375,392.0575,350.08425,396.069,350.18525,398.1465,349.69625,400.224,351.172,404.657,350.43725,409.797,350.397,411.97075,348.78425,415.146,348.27525,422.3195,345.20525,430.40375,340.95725,428.55725,338.957,427.15625,337.674,425,336,424.25,334,423.75,332,423,329.25,421.75,327.25,421,325,421.75,323.5,422,320.5,420.79275,318.9555,422.25,315.5,420.068,312.398,418.25,311.25,417.8115,307.44925,419.902,301.93225,421.1805,298.003,411.84925,291.707,411.06025,288.98575,410.25,286.14875,397.296,279.23675,382.35275,269.94975" />
+	<area shape="poly" id="TG" tooltip="<b>Togo</b><br/><small><i>(Lome)</i></small>" title="Togo" alt="Togo" href="http://en.m.wikipedia.org/wiki/Togo" target="info" coords="149.25,225,150.25,224.75,151,223.5,152,222.75,153.5,222.25,151.901,209.5055,150.2135,196.502,148.64375,194.174,146.24825,192.4245,146.6535,190.30075,147.059,188.17675,144.058,187.794,141.057,187.4105,140.71375,190.638,143.255,193.68425,145.12775,206.70125,145.86825,219.5615,147.18425,221.756,148.5,223.95125" />
+	<area shape="poly" id="TN" tooltip="<b>Tunisia</b><br/><small><i>(Tunis)</i></small>" title="Tunisia" alt="Tunisia" href="http://en.m.wikipedia.org/wiki/Tunisia" target="info" coords="213.25,2.25,210.5,2.5,207.25,3.75,205,5,205.10525,7.39575,204.78175,15.45875,204.59725,21.03225,202.97325,20.9645,201.31425,22.5795,199.5,24.42625,199.78825,26.61625,200.76,29.98525,202.02175,31.97725,202.21925,33.9935,204.25925,37.20925,207.5825,39.22,209.491,39.991,210.85575,49.2455,211.64025,52.81075,214.54825,51.244,215.6795,43.85575,219.02375,39.25,223.5,31,222.222,29.9195,222.18575,28.61375,221.75,27,220,26.5,219.25,28,216.645,27.98475,214.864,26.4325,214.75,24,219.5,21,222.25,17.25,221.5,14.5,219.25,13,217.75,11,218.46425,8.7315,220,8.25,222.099,5.46075,221.75,4.25,221.024,3.652,219.40375,4.6275,217,6.75,215.75,4.5,215.75,3" />
+	<area shape="poly" id="TD" tooltip="<b>Chad</b><br/><small><i>(N'Djamena)</i></small>" title="Chad" alt="Chad" href="http://en.m.wikipedia.org/wiki/Chad" target="info" coords="310.9805,128.839,283.18825,115.3915,255.3905,101.94375,251.7075,103.03775,248.0275,104.13075,248.29325,109.851,248.23725,114.32575,250.161,119.18625,254.793,122.14725,253.97025,124.11775,253.14325,126.088,251.95875,136.63725,250.7735,147.18725,244.972,153.4585,239.17275,159.73,238.75275,160.80075,238.6425,161.86675,238.02175,162.78425,237.3015,163.25275,236.7805,164.18,236.79625,165.2025,240.93525,172.384,245.58325,176.2335,246.41375,179.14625,247.15275,182.14425,246.96525,185.773,246.73175,189.1745,248.7145,192.38,250.009,196.723,246.285,196.38825,242.562,196.053,242,200.5,247.222,204.29225,248.974,209.435,250.72825,214.57775,258.5605,213.3985,267.68675,210.7175,271.036,210.3925,274.3855,210.0675,276.658,207.26025,277.34,203.335,281.972,202.836,286.60425,202.33725,287.558,201.216,288.85125,200.422,290.76975,199.64375,291.68275,198.009,293.6935,195.7785,296.2675,194.10775,299.402,189.195,304.6095,188.23675,304.4245,187.11075,304.24,185.9845,301.89575,182.54525,300.4495,176.047,298.82225,176.3495,297.19725,176.65225,297.1615,175.2055,297.1255,173.75875,298.3205,171.3755,298.582,168.45275,299.3355,168.105,300.0945,167.7575,299.91,165.87775,299.721,163.9985,301.96175,161.1885,304.199,158.37975,304.12725,157.0035,304.05525,155.6275,307.91275,155.42875,311.76975,155.22925,311.3745,142.03475,310.9805,128.839" />
+	<area shape="poly" id="UG" tooltip="<b>Uganda</b><br/><small><i>(Kampala)</i></small>" title="Uganda" alt="Uganda" href="http://en.m.wikipedia.org/wiki/Uganda" target="info" coords="362.78925,240.979,363.49125,240.452,364.19375,239.92525,372.8535,240.66075,381.691,239.724,383.4615,238.2855,385.23525,236.84625,387.77975,239.3835,389.0475,244.16875,390.74975,245.5065,392.453,246.84425,392.45775,250.90575,392.45775,254.96775,386.118,264.341,379.7785,273.71375,369.89875,273.89525,360.0185,274.0715,358.50575,275.27575,356.992,276.4805,356.40275,276.495,355.813,276.50525,355.4735,276.0615,355.135,275.61375,355.36075,269.82375,355.5865,264.02775,357.8025,260.727,360.0185,257.427,363.54825,254.312,367.08275,251.198,364.94275,249.8725,362.80875,248.547,362.7985,244.763,362.78925,240.979" />
+	<area shape="poly" id="EH" tooltip="<b>Western Sahara</b><br/><small><i>(El Aaiún)</i></small>" title="Western Sahara" alt="Western Sahara" href="http://en.m.wikipedia.org/wiki/Western_Sahara" target="info" coords="55.5,109.75,55.911,100.577,65.7035,94.9345,66.9805,85.61675,68.2605,76.29925,79.13275,77.242,90.005,78.1835,90.83075,71.8925,91.65625,65.60125,77.11425,64.545,64.44675,63.864,62.5,66,52.5,68.75,50.75,70.25,48.125,76.625,41.75,80.75,39.5,86,39,90.75,32,97.75,30,101.5,28.25,106.75,26.139,108.56675,28.2085,111.04475,29.668,109.7455,31.12475,108.445,43.83125,109.231,56.5365,110.01725" />
+	<area shape="poly" id="CF" tooltip="<b>Central African Republic</b><br/><small><i>(Bangui)</i></small>" title="Central African Republic" alt="Central African Republic" href="http://en.m.wikipedia.org/wiki/Central_African_Republic" target="info" coords="250.77075,214.52225,247.48625,219.816,244.20325,225.1095,244.6435,228.95725,245.08225,232.80525,249.7195,240.55225,255.524,247.2675,259.15875,243.36725,264.785,240.66075,267.1165,241.65675,269.4505,242.6515,272.06725,241.9285,274.68275,241.20525,275.77575,238.46425,275.975,235.1735,278.766,231.72125,281.669,229.4035,284.23925,230.35325,285.865,232.94625,288.33325,234.9465,290.45175,234.21025,295.324,235.773,302.28975,236.10075,302.83375,234.71175,303.84925,232.744,305.9945,232.47725,308.702,233.53,313.17575,231.9935,317.648,230.4565,317.94025,231.1065,318.23275,231.7565,320.02375,231.47425,321.814,231.1925,321.78325,230.537,321.7475,229.882,325.70175,229.5595,329.65125,229.237,330.53425,230.3455,331.4115,231.45375,331.81675,230.8545,332.22625,230.255,332.904,230.73875,333.5755,231.2225,334.14575,230.5805,334.714,229.93775,336.55675,229.86725,338.39725,229.79675,337.202,226.6265,332.38025,224.02125,330.94475,221.14125,329.5135,218.261,324.3985,214.72625,321.16775,209.96175,320.065,208.913,318.961,207.86575,316.2475,207.92325,313.38025,205.42675,309.5695,203.894,309.93825,197.71125,306.82,192.76,303.27475,188.5345,298.06425,189.8195,296.3395,194.1035,293.79025,195.69275,291.85675,197.792,290.81075,199.568,288.60425,200.43225,287.59925,201.238,286.48075,202.387,281.91075,202.85575,277.34,203.32475,277.41725,205.80175,275.66275,208.42475,274.95025,209.241,274.27275,210.088,270.979,210.3875,267.68675,210.68725,258.4275,213.37825,250.77075,214.52225" />
+	<area shape="poly" id="LS" tooltip="<b>Lesotho</b><br/><small><i>(Maseru)</i></small>" title="Lesotho" alt="Lesotho" href="http://en.m.wikipedia.org/wiki/Lesotho" target="info" coords="347.675,479.2135,346.696,479.3595,345.6135,479.662,344.94075,479.96425,344.351,480.39275,344.0535,480.89675,343.89525,481.46125,343.37725,482.056,342.69475,482.41875,341.95625,482.459,341.20225,482.41875,340.119,482.23225,339.31375,481.52075,338.257,480.31725,337.25225,479.048,336.67775,478.1605,336.22625,477.24325,336.10275,476.4115,336.11275,475.56,336.35925,474.56225,337.08225,473.872,337.20025,473.81575,337.313,473.76125,338.1295,472.95575,338.8005,472.0175,339.81225,471.15575,340.86375,470.32925,341.58625,469.8355,342.35025,469.42725,343.42325,468.99875,344.5255,468.6965,345.42375,468.4645,346.24375,468.24825,346.383,468.21775,346.5265,468.19275,346.6705,468.16225,346.814,468.1375,347.87575,468.243,348.702,468.80725,349.51225,469.775,350.30725,470.7225,350.54725,471.46825,350.763,472.29475,351.26125,473.15625,351.681,474.038,351.681,475.05625,351.281,476.0085,350.66025,476.8905,349.90725,477.64125,349.2345,478.231,348.5325,478.76525,348.116,478.99675,347.675,479.2135" />
+	<area shape="poly" id="GQ" tooltip="<b>Equatorial Guinea</b><br/><small><i>(Malabo)</i></small>" title="Equatorial Guinea" alt="Equatorial Guinea" href="http://en.m.wikipedia.org/wiki/Equatorial_Guinea" target="info" coords="220.8175,258.979,216.9715,258.448,211.1775,258.7225,210.01875,257.977,209.75,256.5,211.5,254,212.33775,250.67425,217.5135,250.61675,220.7375,251.36475,220.7765,255.17125,220.8175,258.979" />
+	<area shape="poly" id="AO" tooltip="<b>Angola</b><br/><small><i>(Luanda)</i></small>" rel="AO1" title="Angola" alt="Angola" href="http://en.m.wikipedia.org/wiki/Angola" target="info" coords="226.75,386.75,226.5365,387.6725,228.76275,388.0305,232.62025,385.70225,240.05275,389.23475,255.45975,389.02825,270.86675,388.8215,272.51775,390.23175,274.16475,391.64875,283.87525,392.884,293.58625,394.11775,299.72525,392.75725,305.871,391.3965,301.71625,387.75825,297.56675,384.11975,297.8845,371.224,298.20175,358.33375,305.61475,358.55025,313.022,358.767,312.21675,357.92075,311.4105,357.079,312.2825,350.26075,313.1545,343.44775,312.8425,343.44775,312.5285,343.4635,307.0295,344.4455,301.336,344.521,300.67,345.806,300.003,347.087,298.7865,346.078,297.57075,345.076,298.92475,343.3065,300.27925,341.53225,298.453,337.89425,296.627,334.25625,296.34475,326.092,296.06375,317.923,292.89875,318.14,289.733,318.362,289.733,316.8905,289.73775,315.4135,288.33325,315.2125,286.92675,315.01125,286.55775,315.66575,286.18925,316.321,283.603,316.1955,281.0175,316.064,280.03825,319.763,279.0535,323.45675,275.144,322.98325,270.277,324.2885,265.16775,322.504,258.99925,308.96325,258.08875,308.42975,257.18125,307.8955,247.44775,307.73975,237.7135,307.58825,234.67125,308.2375,230.28325,309.658,238,325.25,237.76925,327.254,235.5,330,236.25,331.5,238,336.75,240.25,340.5,241.25,343,241,349,238.75,354.5,236.08275,355.3,235.25,356.25,235.25,357.5,233,359.75,232,360.75,232,363.75,231.25,364,230.75,369,228.75,373.5,228.733,375.77525,226.75,377.75,227.25,380,227.25,383.75,226.75,385,227,386" />
+	<area shape="poly" id="AO1" tooltip="<b>Angola</b><br/><small><i>(Luanda)</i></small>" rel="AO" title="Angola" alt="Angola" href="http://en.m.wikipedia.org/wiki/Angola" target="info" coords="227.836,301.5595,229.555,300.54225,231.27325,299.519,233.2215,297.35825,234.98925,298.728,232.9345,300.77925,231.90975,303.50525,231.325,306.23175,229.6755,306.9775,228.95275,305.682,228.75975,304.27675,228.6295,302.86525,227.836,301.5595" />
+	<area shape="rect" id="Northern_Africa" rel="DZ,EG,LY,MA,SD,TN,EH" class="vacolorcc37cc vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="Western_Africa" rel="BJ,BF,GM,GH,GN,GW,CI,LR,ML,MR,NE,NG,SN,SL,TG" class="vacolorcffd0e vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="Central_Africa" rel="AO,AO1,CM,CF,TD,CG,CD,GQ,GA" class="vacolore27575 vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="Eastern_Africa" rel="TZ,KE,UG,RW,BI,DJ,ER,ET,SO,MZ,MG,MW,ZM,ZW" class="vacolorc1bbce vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="Southern_Africa" rel="BW,LS,NA,ZA,SZ" class="vacolore50101 vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="French_Africa" rel="DJ,DZ,TN,MA,BJ,BF,GA,GN,GW,CF,CI,CG,ML,MR,MG,NE,SN,TG,TD" class="vbcolor000000 vacolor0080ff vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="British_Africa" rel="GM,SL,NG,GH,EG,SD,UG,ZA,LS,SZ,ZM,ZW,KE,BW,MW" class="vbcolor000000 vacoloree0000 vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="German_Africa" rel="TG,CM,NA,TZ,BI,RW" class="vbcolor000000 vacolor000000 vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="Portuguese_Africa" rel="AO,AO1,GW,MZ" class="vbcolor000000 vacolor008800 vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="Italian_Africa" rel="LY,ER,SO" class="vbcolor000000 vacolor00ff00 vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="Spanish_Africa" rel="EH,GQ" class="vbcolor000000 vacoloreeee00 vaopacity50 forcegroup" coords="512,512,513,513" />
+	<area shape="rect" id="Belgian_Africa" rel="CD" class="vbcolor000000 vacolorffeeaa vaopacity50 forcegroup" coords="512,512,513,513" />
+</map>
+<div align="center"><small><em>Images used are copyrighted by Creative Commons or other free / fair use licenses and were used for demonstration only.</em></small></div>
+</div>
+
+<h2>Setting Up</h2>
+
+<p>Download <b>mapzoom.js</b> and include it into your webpages HEAD section.</p>
+<p><code>
+&lt;script type="text/javascript" src="<tt>mapzoom.js</tt>"&gt;&lt;/script&gt;<br />
+<br />// only if the cursor images for IE are not in the current path
+<br />&lt;scriptscript type="text/javascript"&gt;
+<br />&nbsp;&nbsp;<tt>mapzoom.defaultCurpath</tt>='images/cursors/';
+<br />&lt;/script&gt;
+</code></p>
+
+
+<h2>Using It</h2>
+
+<p>To add mapzoom just set the event onload="<tt>mapzoom.add(this);</tt>" to a div surrounded image.</p>
+<p>To get individual area highlightings, add one or more classes to the image map area.</p>
+<p><code>
+&lt;map&gt;<br>
+...<br>
+&lt;area shape="poly" class="<tt>noborder vacolor00ff00</tt>" href="#" coords="..."&gt;<br>
+...<br>
+&lt;/map&gt;
+</code></p>
+<p>To get multiple area selections, add one or more id's to the areas rel attribute.</p>
+<p><code>
+&lt;map&gt;<br>
+...<br>
+&lt;area shape="poly" id="<tt>blue</tt>" rel="<tt>green,red</tt>" href="#" coords="..."&gt;<br>
+&lt;area shape="poly" id="<tt>green</tt>" rel="<tt>red,blue</tt>" href="#" coords="..."&gt;<br>
+&lt;area shape="poly" id="<tt>red</tt>" rel="<tt>green,blue</tt>" href="#" coords="..."&gt;<br>
+...<br>
+&lt;/map&gt;
+</code></p>
+<p>To force a group of areas using the attributes of the initial area.</p>
+<p><code>
+&lt;map&gt;<br>
+...<br>
+&lt;area shape="rect" id="<tt>black</tt>" class="<tt>forcegroup vacolor000000</tt>" rel="<tt>green,red,blue</tt>" href="#" coords="..."&gt;<br>
+...<br>
+&lt;/map&gt;
+</code></p>
+<p>To subtract one or more areas from another one, add the id's to the areas rev attribute.</p>
+<p><code>
+&lt;map&gt;<br>
+...<br>
+&lt;area shape="poly" id="<tt>red</tt>" rev="<tt>green,blue</tt>" href="#" coords="..."&gt;<br>
+&lt;area shape="poly" id="<tt>blue</tt>" href="#" coords="..."&gt;<br>
+&lt;area shape="poly" id="<tt>green</tt>" href="#" coords="..."&gt;<br>
+...<br>
+&lt;/map&gt;
+</code></p>
+<p>Add one or more classes to the image map area, to set individual preselection values.</p>
+<p><code>
+&lt;map&gt;<br>
+...<br>
+&lt;area shape="poly" class="<tt>specified pacolor00ff00 pbacolorfffff vaopacity50 vbopacity75</tt>" href="#" coords="..."&gt;<br>
+...<br>
+&lt;/map&gt;
+</code></p>
+
+
+<h2>Classes</h2>
+
+<ul>
+<li><small><em>vary the border visibility by setting <b>noborder</b>:</em></small><br>
+Border visibility class "<tt>noborder</tt>"</li>
+<li><small><em>vary the group appearancy by setting <b>forcegroup</b>:</em></small><br>
+Group appearancy class "<tt>forcegroup</tt>"</li>
+<li><small><em>vary the fill by adding vacolor followed by the desired <b>color</b> as hex:</em></small><br>
+Fill color class "<tt>vacolor</tt>" - min=000000 max=ffffff default=000000</li>
+<li><small><em>vary the fill by adding vaopacity followed by the desired <b>opacity</b> in percent:</em></small><br>
+Fill opacity class "<tt>vaopacity</tt>" - min=1 max=100 default=33</li>
+<li><small><em>vary the border by adding vbcolor followed by the desired <b>color</b> as hex:</em></small><br>
+Border color class "<tt>vbcolor</tt>" - min=000000 max=ffffff default=0000ff</li>
+<li><small><em>vary the border by adding vbopacity followed by the desired <b>opacity</b> in percent:</em></small><br>
+Border opacity class "<tt>vbopacity</tt>" - min=1 max=100 default=66</li>
+<li><small><em>vary the preselection by setting <b>specified</b>:</em></small><br>
+Preselection class "<tt>specified</tt>"<ul>
+<li><small><em>vary the fill by adding pacolor followed by the desired <b>color</b> as hex:</em></small><br>
+Fill color class "<tt>pacolor</tt>" - min=000000 max=ffffff default=000000</li>
+<li><small><em>vary the fill by adding paopacity followed by the desired <b>opacity</b> in percent:</em></small><br>
+Fill opacity class "<tt>paopacity</tt>" - min=1 max=100 default=33</li>
+<li><small><em>vary the border by adding pbcolor followed by the desired <b>color</b> as hex:</em></small><br>
+Border color class "<tt>pbcolor</tt>" - min=000000 max=ffffff default=0000ff</li>
+<li><small><em>vary the border by adding pbopacity followed by the desired <b>opacity</b> in percent:</em></small><br>
+Border opacity class "<tt>pbopacity</tt>" - min=1 max=100 default=66</li></ul>
+</li></ul>
+
+
+<h2>Handling</h2>
+
+<p>Mouse- and Keyboard-driven handling:
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><img src="images/keys/shift.gif" border="0" alt="shift"><img src="images/mouse/lmouse.gif" border="0" alt="left mouse"></td>
+    <td>&nbsp;</td><td>zoom <b>in</b></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/mouse/wmouse.gif" border="0" title="mouse wheel down" alt="mouse wheel"></td>
+    <td>&nbsp;</td><td>zoom <b>in</b></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/mouse/wmouse.gif" border="0" title="middle mouse or click mouse wheel" alt="middle mouse"></td>
+    <td bgcolor="#FFCCCC">&nbsp;</td><td bgcolor="#FFCCCC">zoom <b>in</b>*</td><td>&nbsp;</td>
+  </tr><tr>
+    <td><img src="images/keys/alt.gif" border="0" alt="alt"><img src="images/mouse/lmouse.gif" border="0" alt="left mouse"></td>
+    <td>&nbsp;</td><td>zoom <b>out</b></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/mouse/wmouse.gif" border="0" title="mouse wheel up" alt="mouse wheel"></td>
+    <td>&nbsp;</td><td>zoom <b>out</b></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/mouse/rmouse.gif" border="0" title="right mouse" alt="right mouse"></td>
+    <td bgcolor="#FFCCCC">&nbsp;</td><td bgcolor="#FFCCCC">zoom <b>out</b>*</td><td>&nbsp;</td>
+  </tr>
+</table>
+<small><em>* must be set through preferences by Firefox and Opera (gecko/presto)</em></small>
+</p>
+<p>Keyboard-driven handling: <em>(if focused through mouse over image)</em>
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><img src="images/keys/left.gif" border="0" alt="left"></td>
+    <td>&nbsp;</td><td>pan <b>left</b></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/keys/shift.gif" border="0" alt="shift"><img src="images/keys/left.gif" border="0" alt="left"></td>
+    <td>&nbsp;</td><td>pan <b>left</b> <em>(fast)</em></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/keys/alt.gif" border="0" alt="alt"><img src="images/keys/left.gif" border="0" alt="left"></td>
+    <td>&nbsp;</td><td>pan <b>left</b> <em>(slow)</em></td><td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><img src="images/keys/right.gif" border="0" alt="right"></td>
+    <td>&nbsp;</td><td>pan <b>right</b></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/keys/shift.gif" border="0" alt="shift"><img src="images/keys/right.gif" border="0" alt="right"></td>
+    <td>&nbsp;</td><td>pan <b>right</b> <em>(fast)</em></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/keys/alt.gif" border="0" alt="alt"><img src="images/keys/right.gif" border="0" alt="right"></td>
+    <td>&nbsp;</td><td>pan <b>right</b> <em>(slow)</em></td><td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><img src="images/keys/up.gif" border="0" alt="up"></td>
+    <td>&nbsp;</td><td>pan <b>up</b></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/keys/shift.gif" border="0" alt="shift"><img src="images/keys/up.gif" border="0" alt="up"></td>
+    <td>&nbsp;</td><td>pan <b>up</b> <em>(fast)</em></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/keys/alt.gif" border="0" alt="alt"><img src="images/keys/up.gif" border="0" alt="up"></td>
+    <td>&nbsp;</td><td>pan <b>up</b> <em>(slow)</em></td><td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><img src="images/keys/down.gif" border="0" alt="down"></td>
+    <td>&nbsp;</td><td>pan <b>down</b></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/keys/shift.gif" border="0" alt="shift"><img src="images/keys/down.gif" border="0" alt="down"></td>
+    <td>&nbsp;</td><td>pan <b>down</b> <em>(fast)</em></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td><img src="images/keys/alt.gif" border="0" alt="alt"><img src="images/keys/down.gif" border="0" alt="down"></td>
+    <td>&nbsp;</td><td>pan <b>down</b> <em>(slow)</em></td><td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><img src="images/keys/plus.gif" border="0" alt="plus"></td>
+    <td bgcolor="#FFCCCC">&nbsp;</td><td bgcolor="#FFCCCC">zoom <b>in</b>*</td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td align="right"><img src="images/keys/end.gif" border="0" alt="end"></td>
+    <td>&nbsp;</td><td>zoom <b>in</b> <em>(fast)</em></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td align="right"><img src="images/keys/pgdn.gif" border="0" alt="pgdn"></td>
+    <td>&nbsp;</td><td>zoom <b>in</b></td><td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td><img src="images/keys/minus.gif" border="0" alt="minus"></td>
+    <td bgcolor="#FFCCCC">&nbsp;</td><td bgcolor="#FFCCCC">zoom <b>out</b>*</td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td align="right"><img src="images/keys/home.gif" border="0" alt="home"></td>
+    <td>&nbsp;</td><td>zoom <b>out</b> <em>(fast)</em></td><td>&nbsp;&nbsp;&nbsp;</td>
+    <td align="right"><img src="images/keys/pgup.gif" border="0" alt="pgup"></td>
+    <td>&nbsp;</td><td>zoom <b>out</b></td><td>&nbsp;</td>
+  </tr>
+</table>
+<small><em>* not supported by Firefox and Opera (gecko/presto)</em></small>
+</p>
+<p>Stick/Finger-driven handling:  <em>(touch events)</em><ul>
+<li>pan <b>all directions</b> by single tap, hold and drag</li>
+<li>zoom <b>in and out</b> by pinch gesture <em>(currently iOS only)</em></li>
+<li>zoom <b>full in and full out</b> by double tap</li>
+</ul></p>
+
+
+<h2>Usage</h2>
+
+<dl>
+	<dt>Set defaults</dt>
+  	<dd>
+		<code>mapzoom.<b>defaultCallback</b> &nbsp; = <tt>null</tt>; //STR simple callback function</code><br />
+		<code>mapzoom.<b>defaultFading</b> &nbsp; &nbsp; = <tt>true</tt>; //BOOLEAN startup image fading</code><br />
+		<code>mapzoom.<b>defaultButtons</b> &nbsp;&nbsp; = <tt>true</tt>; //BOOLEAN left top buttons</code><br />
+		<code>mapzoom.<b>defaultNozoom</b> &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN disable zooming feature</code><br />
+		<code>mapzoom.<b>defaultBicubic</b> &nbsp;&nbsp; = <tt>false</tt>; //BOOLEAN enable bicubic image interpolation for IE7+</code><br />
+		<code>mapzoom.<b>defaultWheelinvert</b>= <tt>false</tt>; //BOOLEAN makes zoom behaviour identical with Google Maps</code><br />
+		<code>mapzoom.<b>defaultWheelstep</b> &nbsp;= <tt>20</tt>; //INT/FLOAT 0-100 (%) wheel step size percentage</code><br />
+		<code>mapzoom.<b>defaultZoom</b> &nbsp; &nbsp; &nbsp; = <tt>0</tt>; //INT/FLOAT 0-100 (%) zooming percentage</code><br />
+		<code>mapzoom.<b>defaultXpos</b> &nbsp; &nbsp; &nbsp; = <tt>50</tt>; //INT/FLOAT 0-100 (%) horizontal position</code><br />
+		<code>mapzoom.<b>defaultYpos</b> &nbsp; &nbsp; &nbsp; = <tt>50</tt>; //INT/FLOAT 0-100 (%) vertical position</code><br />
+		<code>mapzoom.<b>defaultOpacity</b> &nbsp;&nbsp; = <tt>70</tt>; //INT 0-100 (%) zoom button opacity</code><br />
+		<code>mapzoom.<b>defaultMillisec</b> &nbsp; = <tt>30</tt>; //INT 5-100 zoom interval delay</code><br />
+		<code>mapzoom.<b>defaultIntitle</b> &nbsp;&nbsp; = <tt>'zoom in'</tt>; //STR zoom in button title text</code><br />
+		<code>mapzoom.<b>defaultOuttitle</b> &nbsp; = <tt>'zoom out'</tt>; //STR zoom out button title text</code><br />
+		<code>mapzoom.<b>defaultInfoblock</b>&nbsp; = <tt>'&lt;dl&gt;...&lt;\/dl&gt;'</tt>; //STR Info/Help block content</code><br />
+		<code>mapzoom.<b>defaultCurpath</b> &nbsp;&nbsp; = <tt>''</tt>; //STR cursor path (*.cur) IE only</code><br />
+		<code>mapzoom.<b>defaultLowres</b> &nbsp; &nbsp; = <tt>''</tt>; //STR lowres image (dimension equals elements width and height)</code><br />
+		<code>mapzoom.<b>defaultIcons</b> &nbsp; &nbsp;&nbsp; = <tt>null</tt>; //OBJ icon array (see mapzoom.construct)</code><br />
+		<code>mapzoom.<b>defaultShowcoords</b> = <tt>false</tt>; //BOOLEAN show coordinates</code><br />
+		<code>mapzoom.<b>defaultRelativecoords</b>=<tt>false</tt>; //BOOLEAN relative instead of absolute pixel coordinates</code><br/>
+		<code>mapzoom.<b>defaultPixelcoords</b>= <tt>true</tt>; //BOOLEAN show Pixel coords instead of Lat/Lon</code><br />
+		<code>mapzoom.<b>defaultPercentcoords</b>=<tt>false</tt>; //BOOLEAN show percentage instead of Lat/Lon/Pixel coordinates</code><br/>
+		<code>mapzoom.<b>defaultForcetouchui</b>=<tt>false</tt>; //BOOLEAN forces touch UI over the mouse UI if both available</code><br/>
+		<code>mapzoom.<b>defaultOverview</b> &nbsp; = <tt>true</tt>; //BOOLEAN show overview</code><br />
+		<code>mapzoom.<b>defaultOvsfact</b> &nbsp;&nbsp; = <tt>25</tt>; //INT 10-50 (%) overview size factor</code><br />
+		<code>mapzoom.<b>defaultOvaopac</b> &nbsp;&nbsp; = <tt>75</tt>; //INT 0-100 (%) overview area opacity</code><br />
+		<code>mapzoom.<b>defaultOvacolor</b> &nbsp; = <tt>'red'</tt>;	//STR overview area css color</code><br />
+		<code>mapzoom.<b>defaultOvbcolor</b> &nbsp; = <tt>'white'</tt>; //STR overview border css color</code><br />
+		<code>mapzoom.<b>defaultOvborder</b> &nbsp; = <tt>''</tt>; //INT 0-20 (px) or "" overview border width</code><br />
+		<code>mapzoom.<b>defaultPvaopac</b> &nbsp;&nbsp; = <tt>33</tt>; //INT preselection vector area opacity 0-100 (%)</code><br />
+		<code>mapzoom.<b>defaultPvbopac</b> &nbsp;&nbsp; = <tt>66</tt>; //INT preselection vector border area opacity 0-100 (%)</code><br />
+		<code>mapzoom.<b>defaultPvacolor</b> &nbsp; = <tt>'#ffffff'</tt>; //STR preselection vector area color '#000000'-'#ffffff'</code><br />
+		<code>mapzoom.<b>defaultPvbcolor</b> &nbsp; = <tt>'#808080'</tt>; //STR preselection vector border color '#000000'-'#ffffff'</code><br />
+		<code>mapzoom.<b>defaultVaopac</b> &nbsp; &nbsp; = <tt>33</tt>; //INT vector area opacity 0-100 (%)</code><br />
+		<code>mapzoom.<b>defaultVbopac</b> &nbsp; &nbsp; = <tt>66</tt>; //INT vector border opacity 0-100 (%)</code><br />
+		<code>mapzoom.<b>defaultVbwidth</b> &nbsp;&nbsp; = <tt>80</tt>; //INT vector border width 20-100 (%)</code><br />
+		<code>mapzoom.<b>defaultVbcolor</b> &nbsp;&nbsp; = <tt>'#000000'</tt>; //STR vector border color '#000000'-'#ffffff'</code><br />
+		<code>mapzoom.<b>defaultVacolor</b> &nbsp;&nbsp; = <tt>'#0000ff'</tt>; //STR vector area color '#000000'-'#ffffff'</code><br />
+		<code>mapzoom.<b>defaultVnborder</b> &nbsp; = <tt>false</tt>; //BOOLEAN vector area no border (true or false)</code><br />
+		<code>mapzoom.<b>defaultVafading</b> &nbsp; = <tt>false</tt>; //BOOLEAN vector area fading (true or false)</code><br />
+  		<p></p>
+	</dd>
+	<dt>Add functionality to image</dt>
+  	<dd>
+  		<code>mapzoom.add(<tt>image</tt>[, <tt>options</tt>]);</code><br />
+		<dl><dt><code><tt>image</tt>&nbsp; == div surrounded image</code></dt></dl>
+		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; &nbsp; e.g. {<b>overview</b>: <tt>true</tt>, <b>opacity</b>: <tt>32</tt>, ...}</code></dt>
+		<dd>
+			<code><b>callback</b> &nbsp; == STRING <tt>null</tt> or <tt>'myFunction'</tt> Default: <tt>null</tt></code><br />
+			<code><b>fading</b> &nbsp; &nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>true</tt></code><br />
+			<code><b>buttons</b> &nbsp;&nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>true</tt></code><br />
+			<code><b>nozoom</b> &nbsp; &nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>bicubic</b> &nbsp;&nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>wheelinvert</b>== BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>wheelstep</b> &nbsp;== INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>20</tt></code><br />
+			<code><b>zoom</b> &nbsp; &nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>0</tt></code><br />
+			<code><b>xpos</b> &nbsp; &nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>50</tt></code><br />
+			<code><b>ypos</b> &nbsp; &nbsp; &nbsp; == INT/FLOAT <tt>0</tt> - <tt>100</tt> Default: <tt>50</tt></code><br />
+			<code><b>opacity</b> &nbsp;&nbsp; == INT <tt>0</tt> - <tt>100</tt> Default: <tt>90</tt></code><br />			<code><b>millisec</b> &nbsp; == INT <tt>5</tt> - <tt>100</tt> Default: <tt>40</tt></code><br />
+			<code><b>intitle</b> &nbsp;&nbsp; == STRING Default: <tt>'click or press shift key to zoom in'</tt></code><br />
+			<code><b>outtitle</b> &nbsp; == STRING Default: <tt>'click or press alt key to zoom out'</tt></code><br />
+			<code><b>infoblock</b>&nbsp; == STRING Default: <tt>'&lt;dl&gt;...&lt;\/dl&gt;'</tt></code><br />
+			<code><b>curpath</b> &nbsp;&nbsp; == STRING Default: <tt>''</tt></code><br />
+			<code><b>lowres</b> &nbsp; &nbsp; == STRING Default: <tt>''</tt> (faster zooming)</code><br />
+			<code><b>icons</b> &nbsp; &nbsp;&nbsp; == OBJECT Default: <tt>null</tt> (icon array)</code><br />
+			<code><b>showcoords</b> == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>relativecoords</b>==BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br/>
+			<code><b>pixelcoords</b>== BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>true</tt></code><br />
+			<code><b>percentcoords</b>==BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br/>
+			<code><b>forcetouchui</b>==BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br/>
+			<code><b>overview</b> &nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>true</tt></code><br />
+			<code><b>ovsfact</b> &nbsp;&nbsp; == INT <tt>10</tt> - <tt>50</tt> Default: <tt>25</tt></code><br />
+			<code><b>ovaopac</b> &nbsp;&nbsp; == INT <tt>0</tt> - <tt>100</tt> Default: <tt>75</tt></code><br />
+			<code><b>ovacolor</b> &nbsp; == STRING <tt>'#ffaa00'</tt> or <tt>'orange'</tt> Default: <tt>'red'</tt></code><br />
+			<code><b>ovbcolor</b> &nbsp; == STRING <tt>'#0000ff'</tt> or <tt>'blue'</tt> Default: <tt>'white'</tt></code><br />
+			<code><b>ovborder</b> &nbsp; == INT <tt>0</tt> - <tt>20</tt> Default: <tt>automatic</tt></code>
+			<code><b>pvaopac</b> &nbsp;&nbsp; == INT <tt>0</tt> - <tt>100</tt> Default: <tt>33</tt></code><br />
+			<code><b>pvbopac</b> &nbsp;&nbsp; == INT <tt>0</tt> - <tt>100</tt> Default: <tt>66</tt></code><br />
+			<code><b>pvacolor</b> &nbsp; == <tt>'#000000'</tt> to <tt>'#ffffff'</tt> Default: <tt>'#ffffff'</tt></code><br />
+			<code><b>pvbcolor</b> &nbsp; == <tt>'#000000'</tt> to <tt>'#ffffff'</tt> Default: <tt>'#808080'</tt></code><br />
+			<code><b>vaopac</b> &nbsp; &nbsp; == INT <tt>0</tt> - <tt>100</tt> Default: <tt>33</tt></code><br />
+			<code><b>vbopac</b> &nbsp; &nbsp; == INT <tt>0</tt> - <tt>100</tt> Default: <tt>66</tt></code><br />
+			<code><b>vbwidth</b> &nbsp;&nbsp; == INT <tt>20</tt> - <tt>100</tt> Default: <tt>80</tt></code><br />
+			<code><b>vbcolor</b> &nbsp;&nbsp; == <tt>'#000000'</tt> to <tt>'#ffffff'</tt> Default: <tt>'#000000'</tt></code><br />
+			<code><b>vacolor</b> &nbsp;&nbsp; == <tt>'#000000'</tt> to <tt>'#ffffff'</tt> Default: <tt>'#0000ff'</tt></code><br />
+			<code><b>vnborder</b> &nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>vafading</b> &nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+  		</dd></dl>
+  		<p></p>
+  	</dd>
+	<dt>Get some informations</dt>
+	<dd>
+		<code><tt>FLOAT</tt>|<tt>INT</tt> = mapzoom.get(<tt>image</tt>, ['<b>maxzoomx</b>'|'<b>maxzoomy</b>'|'<b>maxwidth</b>'|'<b>maxheight</b>']);</code><br />
+		<code><tt>BOOLEAN</tt> = mapzoom.get(<tt>image</tt>,'<b>playing</b>');</code><br />
+		<code><tt>BOOLEAN</tt> = mapzoom.get(<tt>image</tt>,'<b>vectorsupport</b>');</code><br />
+		<code><tt>OBJECT</tt> = mapzoom.get(<tt>image</tt>,'<b>currentxyz</b>');</code><br />
+		<em>(<small>returns current</small> <code><tt>x</tt>=<b>xpos</b>, <tt>y</tt>=<b>ypos</b> and <tt>z</tt>=<b>zoom</b></code> <small> values as INT/FLOAT 0-100 (%)</small>)</em><br />
+		<code><tt>FLOAT</tt> = mapzoom.version;</code><br />
+		<code><tt>STRING</tt> = mapzoom.released;</code>
+  		<p></p>
+	</dd>
+	<dt>Convert Lat/Long to Pixel value</dt>
+	<dd>
+		<code>mapzoom.findpxpos(<tt>image</tt>, <b>latitude</b>, <b>longitude</b>, <b>type</b> [, <b>imagewidth</b>, <b>elementwidth</b>, <b>imageheight</b>, <b>elementheight</b>, <b>coordbox</b>]);</code><br />
+		<dl><dt><code><tt>image</tt>&nbsp; == mapzoom element</code></dt>
+		<dd>
+			<code><b>latitude</b> &nbsp;&nbsp; &nbsp; == x position as float <tt>-90.0</tt> - <tt>90.0</tt> mandatory</code><br />
+			<code><b>longitude</b> &nbsp;&nbsp;&nbsp; == y position as float <tt>-180.0</tt> - <tt>180.0</tt> mandatory</code><br />
+			<code><b>type</b> &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; == type of object is <tt>"area"</tt> or <tt>"icon"</tt> mandatory</code><br />
+			<code><b>imagewidth</b> &nbsp;&nbsp; == optional natural image width</code><br />
+			<code><b>elementwidth</b>&nbsp; == optional element width</code><br />
+			<code><b>imageheight</b> &nbsp; == optional natural image height</code><br />
+			<code><b>elementheight</b> == optional element height</code><br />
+			<code><b>coordbox</b> &nbsp; &nbsp;&nbsp; == optional [<tt>90</tt>, <tt>-180</tt>, <tt>-90</tt>, <tt>180</tt>]</code><br />
+			<em>(<small>returns</small> <code><tt>x</tt>=<b>xpos</b>, <tt>y</tt>=<b>ypos</b></code> <small> values as FLOAT</small>)</em>
+  		</dd></dl>
+  		<p></p>
+  	</dd>
+	<dt>Modify some defaults</dt>
+	<dd>
+		<code>mapzoom.set(<tt>image</tt>, ['<b>buttons</b>'|'<b>overview</b>'|'<b>showcoords</b>'|'<b>relativecoords</b>'|'<b>pixelcoords</b>'|'<b>zoomin</b>'|'<b>zoomout</b>'|'<b>nozoom</b>'], [<tt>true</tt>|<tt>false</tt>]);</code><br />
+		<em>(<small>The external zoom button control</small> <code><b>zoomin</b>|<b>zoomout</b></code> <small>depends on the settings</small> <code><b>buttons</b>=<tt>false</tt></code> <small>and</small> <code><b>nozoom</b>=<tt>false</tt></code>)</em>
+  		<p></p>
+	</dd>
+	<dt>Modify current infoblock</dt>
+	<dd>
+		<code>mapzoom.info(<tt>image</tt>, <b>value</b>);</code><br />
+		<code><b>value</b> == <tt>innerHTML-block</tt> (e.g. '<b>&lt;dl&gt;...&lt;\/dl&gt;</b>')</code><br />
+  		<p></p>
+	</dd>
+	<dt>Modify current source image</dt>
+	<dd>
+		<code>mapzoom.source(<tt>image</tt>, <b>value</b>, <b>boolean</b>);</code><br />
+		<code><b>value</b> == <tt>URI</tt> (e.g. '<b>images/world.jpg</b>')<br />
+		<b>boolean</b> == fade out/in (<tt>true</tt> or <tt>false</tt>)</code>
+  		<p></p>
+	</dd>
+	<dt>Modify current lowres source image</dt>
+	<dd>
+		<code>mapzoom.lowsource(<tt>image</tt>, <b>value</b>);</code><br />
+		<code><b>value</b> == <tt>URI</tt> (e.g. '<b>images/world_lowres.jpg</b>')</code>
+  		<p></p>
+	</dd>
+	<dt>Modify current zooming</dt>
+	<dd>
+		<code>mapzoom.zooming(<tt>image</tt>, <b>value</b>);</code><br />
+		<code><b>value</b> == <tt>0</tt> - <tt>100</tt> (%) default: <tt>0</tt></code>
+  		<p></p>
+	</dd>
+	<dt>Modify current position</dt>
+	<dd>
+		<code>mapzoom.moveto(<tt>image</tt>, <b>x</b>, <b>y</b>);</code>
+		<dl><dt><code><b>x</b>,<b>y</b> default: <tt>0</tt>,<tt>0</tt></code></dt><dd>
+			<code>if <b>x</b> or <b>y</b> == INT e.g. <tt>189</tt><br />
+then <tt>it's interpreted as</tt> pixel <tt>from within natural image dimension</tt></code><br />			<code>if <b>x</b> or <b>y</b> == STR e.g. <tt>'50%'</tt> Pattern: <b>(</b>INT<b>|</b>FLOAT<b>)%</b><br /> 
+then <tt>it's interpreted as</tt> percentage</code><br />			<code>if <b>x</b> or <b>y</b> == STR e.g. <tt>'-23.057'</tt> Pattern: <b>(</b>+<b>|</b>-<b>)(</b>INT<b>|</b>FLOAT<b>)</b><br /> 
+then <tt>it's interpreted as</tt> longitude <tt>or</tt> latitude</code><br />
+  		</dd></dl>
+		
+  		<p></p>
+	</dd>
+	<dt>Modify current position and zoom (animated)</dt>
+	<dd>
+		<code>mapzoom.kenburns(<tt>image</tt>, [<b>x</b>, <b>y</b>, <b>z</b>, <b>e</b>, <b>s</b>, <b>d</b>, <b>c</b>, <b>a</b>]);</code><br />
+		<code><b>x</b> == left position <tt>0</tt> - <tt>100</tt> (%) default: <tt>50</tt></code><br />
+		<code><b>y</b> == top position <tt>0</tt> - <tt>100</tt> (%) default: <tt>50</tt></code><br />
+		<code><b>z</b> == zomm factor <tt>0</tt> - <tt>100</tt> (%) default: <tt>50</tt></code><br />
+		<code><b>e</b> == optional progression <tt>0.0</tt> - <tt>2.0</tt> | <tt>3</tt> default: <tt>1</tt></code><br />
+		<code> &nbsp; &nbsp; [< 1 == <tt>ease-out</tt> | 1 == <tt>linear</tt> | > 1 == <tt>ease-in</tt> | 3 == <tt>ease-in-out</tt>]</code><br />
+		<code><b>s</b> == optional animation steps <tt>10</tt> - <tt>100</tt> default: <tt>max distance/interval delay</tt></code><br />
+		<code><b>d</b> == optional interval delay <tt>10</tt> - <tt>100</tt> default: <tt>30</tt></code><br />
+		<code><b>c</b> == optional callback function name (executes on end of animation) default: <tt>''</tt></code><br />
+		<code><b>a</b> == optional callback argument (string or number only) default: <tt>''</tt></code><br />
+		<em>(<small>To use callback and default values for</small> <code> <b>e</b>, <b>s</b>, <b>d</b> </code> <small>set</small> <code> <b>e</b>, <b>s</b>, <b>d</b> </code> <small>to</small> <code><tt>false</tt></code>)</em>
+  		<p></p>
+	</dd>
+	<dt>Start playing</dt>
+	<dd>
+		<code>mapzoom.play(<tt>image</tt>, <b>delay</b>, <b>loop</b>, <b>array</b>, <b>callback</b>);</code><br />
+		<code><b>delay</b> &nbsp;&nbsp; == delay between play positions <tt>0</tt> - <tt>100000</tt> millisec. default: <tt>0</tt></code><br />
+		<code><b>loop</b> &nbsp; &nbsp; == loop array <tt>true</tt> or <tt>false</tt> default: <tt>false</tt></code><br />
+		<code><b>array</b> &nbsp;&nbsp; == two dimensional array with syntax from kenburns <tt>[[x,y,z], [x,y,z,e], [x,y,z,e,s], [x,y,z,e,s,d]...]</tt></code><br />
+		<code><b>callback</b> == optional function name (executes on stop playing)</code><br />
+		<em>(<small>Start playing will set</small> <code> <b>buttons</b>, <b>showcoords</b>, <b>overview</b> </code> <small>to</small> <code><tt>false</tt> </code> <small>and</small> <code><b>nozoom</b> </code> <small>to</small> <code><tt>true</tt></code>)</em>
+  		<p></p>
+	</dd>
+	<dt>Stop playing</dt>
+	<dd>
+		<code>mapzoom.stop(<tt>image</tt>);</code><br />
+		<em>(<small>Stop playing is also executed on user action through mouse or keyboard</small>)</em>
+  		<p></p>
+	</dd>
+	<dt>Add icon(s) to image</dt>
+	<dd>
+		<code>mapzoom.construct(<tt>image</tt>, <b>object</b>);</code><br />
+		<dl><dt><code><tt>object</tt> &nbsp; &nbsp; &nbsp; &nbsp; e.g. [{<b>x</b>: <tt>52</tt>, <b>y</b>: <tt>31</tt>, ...},{...}]</code></dt>
+		<dd>
+			<code><b>x</b> &nbsp;&nbsp; &nbsp; == x position relative to images natural width <tt>0</tt> - <tt>n</tt> (px) Default: <tt>0</tt></code><br />
+			<code><b>y</b> &nbsp;&nbsp; &nbsp; == y position relative to images natural height <tt>0</tt> - <tt>n</tt> (px) Default: <tt>0</tt></code><br />
+			<code><b>w</b> &nbsp;&nbsp; &nbsp; == icon width <tt>8</tt> - <tt>n</tt> (px) Default: <tt>0</tt></code><br />
+			<code><b>h</b> &nbsp;&nbsp; &nbsp; == icon height <tt>8</tt> - <tt>n</tt> (px) Default: <tt>0</tt></code><br />
+			<code><b>src</b> &nbsp;&nbsp; == icon #1 image URL Default: <tt>''</tt></code><br />
+			<code><b>src2</b> &nbsp; == optional icon #2 image URL Default: <tt>''</tt></code><br />
+			<code><b>pos</b> &nbsp;&nbsp; == optional icon position <tt>0</tt> - <tt>9</tt> Default: <tt>0</tt> <small>(<tt>1</tt>=left-top, <tt>2</tt>=center-top, <tt>3</tt>=right-top, <tt>4</tt>=center-left, <tt>0</tt>/<tt>5</tt>=center-center, <tt>6</tt>=center-right, <tt>7</tt>=left-bottom, <tt>8</tt>=center-bottom, <tt>9</tt>=right-bottom)</small></code><br />
+			<code><b>id</b> &nbsp;&nbsp;&nbsp; == optional icon id Default: <tt>''</tt></code><br />
+			<code><b>title</b>&nbsp; == optional icon tooltip text Default: <tt>''</tt></code><br />
+			<code><b>href</b> &nbsp; == optional icon link URL Default: <tt>''</tt></code><br />			<code><b>target</b> == optional icon link target Default: <tt>''</tt></code>
+  		</dd></dl>
+  		<p></p>
+  	</dd>
+	<dt>Modify icon image</dt>
+	<dd>
+		<code>mapzoom.restruct(<tt>image</tt>, <b>icon-id</b>, <b>options</b>);</code><br />
+		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; &nbsp; e.g. {<b>href</b>: <tt>'http://www.google.com/'</tt>, ...}</code></dt>
+		<dd>
+			<code><b>title</b>&nbsp; == icon tooltip text Default: <tt>''</tt></code><br />
+			<code><b>href</b> &nbsp; == icon link URL Default: <tt>''</tt></code><br />			<code><b>target</b> == icon link target Default: <tt>''</tt></code>
+  		</dd></dl>
+  		<p></p>
+	</dd>
+	<dt>Remove icon(s) from image</dt>
+	<dd>
+		<code>mapzoom.destruct(<tt>image</tt>, <b>value</b>);</code><br />
+		<code><b>value</b> == <tt>STRING</tt> (remove named icon)</code><br />
+		<code><b>value</b> == <tt>BOOLEAN</tt> (remove all icons)</code>
+  		<p></p>
+	</dd>
+	<dt>Set vector area highlight on</dt>
+	<dd>
+		<code>mapzoom.areaover(<tt>image</tt>, <b>area-id</b>);</code><br />
+  		<p></p>
+	</dd>
+	<dt>Set vector area highlight off</dt>
+	<dd>
+		<code>mapzoom.areaout(<tt>image</tt>, <b>area-id</b>);</code><br />
+  		<p></p>
+	</dd>
+	<dt>Remove vector area(s)</dt>
+	<dd>
+		<code>mapzoom.deletearea(<tt>image</tt>, <b>value</b>);</code><br />
+		<code><b>value</b> == <tt>STRING</tt> (remove named area)</code><br />
+		<code><b>value</b> == <tt>BOOLEAN</tt> (remove all areas)</code>
+  		<p></p>
+	</dd>
+	<dt>Add vector area</dt>
+	<dd>
+		<code>mapzoom.createarea(<tt>image</tt>, <b>area-id</b>, <b>options</b>);</code><br />
+		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; &nbsp; e.g. {<b>coords</b>: <tt>10,10,100,100</tt>, ...}</code></dt>
+		<dd>
+			<code><b>shape</b> &nbsp;&nbsp; == shape type (rect|circle|ellipse|polygon|poly|path|polyline|line) Default: <tt>'poly'</tt></code><br />
+			<code><b>coords</b> &nbsp; == coordination array Default: <tt>[]</tt> relative to elements dimensions</code><br />
+			<code><b>rel</b> &nbsp;&nbsp; &nbsp; == array of area-id's to show synchronous Default: <tt>[]</tt></code><br />
+			<code><b>rev</b> &nbsp;&nbsp; &nbsp; == array of area-id's to subtract from this (must be polyline) Default: <tt>[]</tt></code><br />
+			<code><b>tooltip</b>&nbsp; == optional area html tooltip Default: <tt>''</tt></code><br />
+			<code><b>alttitle</b> == optional area alt and title text Default: <tt>''</tt></code><br />
+			<code><b>href</b> &nbsp; &nbsp; == optional area link URL Default: <tt>''</tt></code><br />			<code><b>target</b> &nbsp; == optional area link target Default: <tt>''</tt></code><br />
+			<code><b>classes</b>&nbsp; == optional area classes(vbdash10, vbwidth100, vbcapround, vbcapflat, vbopacity00, vbcolor000000, vaopacity00, vacolor000000, paopacity00, pbopacity00, pacolor000000, pbcolor000000, noborder, specified, forcegroup) Default: <tt>''</tt></code><br />
+			<code><small><tt>vbdash</tt> + <tt>0</tt>==solid, <tt>1</tt>==shortdot, <tt>2</tt>==dot, <tt>3</tt>==shortdash, <tt>4</tt>==dash, <tt>5</tt>==longdash ,<tt>6</tt>==shortdashdot ,<tt>7</tt>==dashdot ,<tt>8</tt>==longdashdot ,<tt>9</tt>==shortdashdotdot, <tt>10</tt>==longdashdotdot</small></code><br />
+			<code><tt>vbdash</tt>0-10 with <tt>vbcapround</tt> and <tt>vbcapflat</tt>:<br/><img src="images/vbcapround.png" width="340" height="200" alt="dashes" border="0"/><img src="images/vbcapflat.png" width="340" height="200" alt="dashes" border="0"/></code><br />
+  		</dd></dl>
+  		<p></p>
+  	</dd>
+	<dt>Modify vector area</dt>
+	<dd>
+		<code>mapzoom.modifyarea(<tt>image</tt>, <b>area-id</b>, <b>options</b>);</code><br />
+		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; &nbsp; e.g. {<b>coords</b>: <tt>10,10,100,100</tt>, ...}</code></dt>
+		<dd>
+			<code><b>coords</b> &nbsp; == coordination array Default: <tt>[]</tt> relative to elements dimensions</code><br />
+			<code><b>rel</b> &nbsp;&nbsp; &nbsp; == array of area-id's to show synchronous Default: <tt>[]</tt></code><br />
+			<code><b>rev</b> &nbsp;&nbsp; &nbsp; == array of area-id's to subtract from this (must be polyline) Default: <tt>[]</tt></code><br />
+			<code><b>tooltip</b>&nbsp; == optional area html tooltip Default: <tt>''</tt></code><br />
+			<code><b>alttitle</b> == optional area alt and title text Default: <tt>''</tt></code><br />
+			<code><b>href</b> &nbsp; &nbsp; == optional area link URL Default: <tt>''</tt></code><br />			<code><b>target</b> &nbsp; == optional area link target Default: <tt>''</tt></code><br />
+			<code><b>classes</b>&nbsp; == optional area classes (vbdash10, vbwidth100, vbcapround, vbcapflat, vbopacity00, vbcolor000000, vaopacity00, vacolor000000, paopacity00, pbopacity00, pacolor000000, pbcolor000000, noborder, specified, forcegroup) Default: <tt>''</tt></code>
+  		</dd></dl>
+  		<p></p>
+  	</dd>
+	<dt>Remove functionality from image</dt>
+	<dd>
+		<code>mapzoom.remove(<tt>image</tt>, <b>value</b>);</code><br />
+		<code><b>value</b> == <tt>BOOLEAN</tt> (reset image to natural dimension)</code>
+  		<p></p>
+	</dd>
+	<dt>Examples</dt>
+	<dd>
+  		<code>&lt;img onLoad="mapzoom.add(<tt>this</tt>);" ...&gt;</code><br />
+  		<code>mapzoom.add(<tt>document.getElementById('img')</tt>);</code><br />
+		<code>if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}}</code><br />
+  		<code>mapzoom.add(<tt>$('img')</tt>);</code><br />
+  		<code>mapzoom.add(<tt>$('img')</tt>, {<b>fading</b>:<tt>false</tt>, <b>curpath</b>:<tt>'cursors/'</tt>});</code><br />
+  		<code>mapzoom.set(<tt>$('img')</tt>,'<b>overview</b>',<tt>false</tt>);</code><br />
+		<code>&lt;button type="button" onclick="mapzoom.set(<tt>$('img')</tt>,'<b>zoomin</b>',<tt>true</tt>);"&gt; + &lt;/button&gt;</code><br />
+		<code>&lt;button type="button" onclick="mapzoom.set(<tt>$('img')</tt>,'<b>zoomout</b>',<tt>true</tt>);"&gt; - &lt;/button&gt;</code><br />
+  		<code>alert(mapzoom.get(<tt>$('img')</tt>,'<b>maxwidth</b>'));</code><br/>
+  		<code>alert('mapzoom: '+mapzoom.version+' ('+mapzoom.released+')');</code><br/>
+  		<code>mapzoom.info(<tt>$('img')</tt>,'<b>&lt;p&gt;eat my shorts&lt;\/p&gt;</b>');</code><br />
+  		<code>mapzoom.source(<tt>$('img')</tt>,'<b>images/world.jpg</b>',<tt>false</tt>);</code><br />
+  		<code>mapzoom.lowsource(<tt>$('img')</tt>,'<b>images/world_lowres.jpg</b>');</code><br />
+  		<code>mapzoom.zooming(<tt>$('img')</tt>,<b>100</b>);</code><br/>
+  		<code>mapzoom.moveto(<tt>$('img')</tt>,<b>'50%'</b>,<b>'50%'</b>);</code><br />
+  		<code>mapzoom.kenburns(<tt>$('img')</tt>,[<b>25</b>,<b>75</b>,<b>100</b>]);</code><br />
+  		<code>mapzoom.play(<tt>$('img'),<b>0</b>,<b>true</b>,[[<b>25</b>,<b>75</b>,<b>100</b>],[<b>0</b>,<b>0</b>,<b>0</b>]])</tt>);</code><br />
+  		<code>mapzoom.stop(<tt>$('img')</tt>);</code><br />
+  		<code>mapzoom.construct(<tt>$('img')</tt>,[{x:<b>250</b>,y:<b>75</b>,w:<b>48</b>,h:<b>48</b>,src:'<b>icon.png</b>',id:'<b>ico</b>'}]);</code><br />
+  		<code>mapzoom.destruct(<tt>$('img')</tt>,'<b>ico</b>');</code><br />
+  		<code>mapzoom.createarea(<tt>$('img')</tt>,<tt>'<b>Samoa</b>'</tt>,{shape:<b>'poly'</b>,coords:<b>[10,10,100,100]</b>,alttitle:'<b>Samoa</b>'});</code><br />
+  		<code>mapzoom.modifyarea(<tt>$('img')</tt>,<tt>'<b>Samoa</b>'</tt>,{coords:<b>[100,100,210,210]</b>});</code><br />
+  		<code>mapzoom.remove(<tt>$('img')</tt>);</code><br />
+  		<p></p>
+	</dd>
+</dl>
+<p>If you need utility functions, use "<b>maputil.js</b>". You can generate SVG files out of Image maps.</p>
+<dl>
+	<dt><strong>makeSVGfromMap()</strong></dt>
+	<dd>
+	  	<code>makeSVGfromMap(<tt>map</tt>, <tt>options</tt>);</code><br><small>
+		<tt>map</tt> should be a map element: document.getElementsByName(<b>"myimg"</b>)[0]
+		<dl><dt><tt>options</tt> (contains zero or more values)</dt>
+			<dd><b>output</b> <tt>e.g.  true (return svg document) | false (open window with source)</tt></dd>
+			<dd><b>width</b>  <tt>e.g.  502 (image width as pixel value)</tt></dd>
+			<dd><b>height</b> <tt>e.g.  482 (image height as pixel value)</tt></dd>
+			<dd><b>stroke-width</b> <tt>e.g. 0.75 | default 0.5 px</tt></dd>
+			<dd><b>stroke-miterlimit</b> <tt>e.g. 8 | default 1</tt></dd>
+			<dd><b>initialfillcolor</b> <tt>e.g. #cccccc | default silver</tt></dd>
+			<dd><b>initialstrokecolor</b> <tt>e.g. #808080 | default gray</tt></dd>
+			<dd><b>hoverfillcolor</b> <tt>e.g. #66ff66 | default limegreen</tt></dd>
+			<dd><b>hoverstrokecolor</b> <tt>e.g. #00ff00 | default green</tt></dd>
+			<dd><b>backgroundcolor</b> <tt>e.g. #ffffff | default null</tt></dd>
+		</dl>
+		</small>
+		<dl><dt>Example:</dt>
+		<dd>
+			<code>&lt;a href="#" onClick="makeSVGfromMap(document.getElementsByName(<b>"myimg"</b>)[0],<tt>false</tt>,<tt>502</tt>,<tt>482</tt>);"&gt;Generate SVG&lt;/a&gt;</code>
+  		</dd></dl>
+		<dl><dt>Note:</dt>
+		<dd>
+			<small><code>makeSVGfromMap()</code> parses the <tt>style</tt> attribute of <tt>&lt;area /&gt;</tt> tags for <b>fill</b> and <b>stroke</b> styles to complete the SVG!</small>
+  		</dd></dl>
+  		<p></p>
+	</dd>
+	
+	<dt><strong>scaleMapAreaCoords()</strong></dt>
+	<dd>
+	  	<code>scaleMapAreaCoords(<tt>map</tt>, <tt>nw</tt>, <tt>nh</tt>, <tt>sw</tt>, <tt>sh</tt>, <tt>options</tt>);</code><br><small>
+		<tt>map</tt> should be a map element: document.getElementsByName(<b>"myimg"</b>)[0]<br>
+		<tt>nw</tt> = width e.g. 800 (natural image width as pixel value)<br>
+		<tt>nh</tt> = height e.g. 400 (natural image height as pixel value)<br>
+		<tt>sw</tt> = width e.g. 400 (scaled image width as pixel value)<br>
+		<tt>sh</tt> = height e.g. 200 (scaled image height as pixel value)
+		<dl><dt><tt>options</tt> (contains zero or more values)</dt>
+			<dd><b>arg1</b> <tt>xoff e.g. -2 (horizontal offset as pixel value)</tt></dd>
+			<dd><b>arg2</b> <tt>yoff e.g. -2 (vertical offset as pixel value)</tt></dd>
+		</dl>
+		</small>
+		<dl><dt>Note:</dt>
+		<dd>
+			<small><code>scaleMapAreaCoords()</code> opens a window with the source!</small>
+  		</dd></dl>
+  		<p></p>
+	</dd>
+</dl>
+
+<h2>Why use Javascript Mapzoom?</h2>
+
+<ul>
+<li>Fast and easy to implement. Just add onload="<tt>mapzoom.add(this);</tt>" to the image.</li>
+<li>Works even well with 100 Megapixel images (use lowres argument to speed up zooming). </li>
+<li>Makes large images completely visibly through small page-areas.</li>
+<li>Supports an extensive mouse and keyboard control for pan and zoom.</li>
+<li>Supports overlayed and autoscaled vector graphics and is backward compatible to image maps.</li>
+<li>Supports preselected and multiple vector areas at once and also boolean subtraction.</li>
+<li>Supports overlayed and autoscaled icons and timed ken-burns-animations.</li>
+<li>Allows to build interactive applications (e.g. play|stop|construct|destruct|createarea|modifyarea). You can build interactive floorplans, complex presentations, image based magazine readers, maps with increased functionality and more.</li>
+<li>Works and looks really well. Doesn't require additional resources.</li>
+<li>Image-maps are still functional, even without JavaScript.</li>
+</ul>
+<p>In very old browsers, the script degrades and your visitors won't notice a thing.</p>
+
+
+<h2>Restrictions</h2>
+
+<p>Element dimensions should always respect the Aspect Ratio of the image.</p>
+<p>iOS (iPod/iPad/iPhone) Resource Limits (Quote):<br/>"JPEG images can be up to 32 megapixels due to subsampling, which allows JPEG images to decode to a size that has one sixteenth the number of pixels. JPEG images larger than 2 megapixels are subsampled—that is, decoded to a reduced size. JPEG subsampling allows the user to view images from the latest digital cameras."</p>
+<p>Android zooming (pinch gesture). Currently not, because android emulator do not support multiple finger gestures!</p>
+<p>Internet Explorer's image scaling through bicubic interpolation is only 
+available in version 7 and up. So don't expect to much (smooth display) 
+from older browsers like IE 5, IE 5.5, and IE 6. IE needs external cursor images (*.cur).
+IE 6/7/8 do neither support vector borders nor vector fading.
+</p>
+<p>Opera and old Safaris are unable to interpret style sheet percentages properly and exactly.</p>
+<p>Handling javascript mouse events is not a simple thing, because there  
+are inconsistancies in the way different browsers implement mouse events.
+That's the reason why the response on right mouse button is inconsistent 
+in mapzoom. With Opera it's impossible to prevent the context menu from showing up.
+</p>
+
+<h2>History</h2>
+
+Version 1.4<ul><li>Fixed wheel behavior in conjunction with the argument "nozoom" again.</li></ul>
+Version 1.3<ul><li>Fixed wheel behavior in conjunction with the argument "nozoom".</li></ul>
+Version 1.2<ul><li>Extended vector support (path - currently without elliptical arc support).</li></ul>
+Version 1.1<ul><li>Extended vector support (incl. line/polyline with dasharray and strokewidth).</li></ul>
+Version 1.0<ul><li>Initial Release</li></ul>
+
+<h2>License</h2>
+
+<p>Mapzoom.js and MapUtils.js are distributed under this <a href="LICENSE.txt">LICENSE</a>. License permits free of charge use on non-commercial and private web sites only under special conditions <em>(as described in the license)</em>. This license equals neither "<span style="text-decoration: line-through;">open source</span>" nor "<span style="text-decoration: line-through;">public domain</span>". There are also <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#099;&#118;&#105;&#064;&#110;&#101;&#116;&#122;&#103;&#101;&#115;&#116;&#097;&#046;&#100;&#101;">Commercial Software Licenses</a> available.</p>
+
+<h6>YOU AGREE TO ALL CONDITIONS OF THIS LICENCE AGREEMENT CONCERNING THE USE OF THE SOFTWARE BY ACCEPTING THIS LICENCE.
+<br>IF YOU DO NOT AGREE TO ALL CONDITIONS OF THIS AGREEMENT, YOU SHALL NOT INSTALL THE SOFTWARE, OR USE IT IN OTHER WAYS.</h6>
+
+<p><a href="http://cvi.netzgesta.de/">cvi.netzgesta.de</a>&nbsp;&nbsp;also visit&nbsp;&nbsp;<a href="http://lab.netzgesta.de/">CVI-lab</a>, <a href="http://s5.netzgesta.de/">S5 Reloaded</a> and <a href="http://ajaxfilmdb.sourceforge.net/">AJAX-FilmDB</a></p>
+
+</body>
+</html>
