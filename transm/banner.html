@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>transm.js (javascript programmable transition effects)</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-language" content="en" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<style type="text/css">
+		html, body { 
+			margin: 0px;
+			padding: 0px;
+			width: 100%; 
+			height: 100%; 
+			background: blue url(images/banner/backgrnd.jpg) 0% 25% repeat-x;
+		}
+		.logo { 
+			display: block;
+			position:relative;
+			width: 696px; 
+			height: 80px; 
+			margin: 0px auto; 
+			padding: 0px;
+			background: transparent url(images/banner/faraway.png) 0% 0% no-repeat;
+		}
+		.head { 
+			display: block;
+			position:relative;
+			width: 696px; 
+			height: 13px; 
+			margin: 0px auto; 
+			padding: 0px;
+			font-size: 8px;
+			line-height: 8px;
+			background: transparent url(images/banner/head.png) 0% 0% no-repeat;
+		}
+		.foot { 
+			display: block;
+			position:relative;
+			width: 696px; 
+			height: 13px; 
+			margin: 0px auto; 
+			padding: 0px;
+			font-size: 8px;
+			line-height: 8px;
+			background: transparent url(images/banner/foot.png) 0% 0% no-repeat;
+		}
+		.bgrnd { 
+			display: block;
+			position:relative;
+			width: 696px; 
+			height: auto; 
+			margin: 0px auto; 
+			padding: 0px;
+			color: gray;
+			font-size: 14px;
+			line-height: 18px;
+			font-weight: normal;
+			font-family: Tahoma, Arial, Helvetica, sans-serif; 
+			font-variant: normal;
+			font-style: normal;
+			text-align: center;
+		}
+		.left { 
+			width: 8px; 
+			background: transparent url(images/banner/left.png) 0% 0% repeat-y;
+		}
+		.right { 
+			width: 8px; 
+			background: transparent url(images/banner/right.png) 0% 0% repeat-y;
+		}
+		.cell { 
+			width: 680px; 
+			background: white;
+		}
+		.inner { 
+			display: block;
+			position:relative;
+			width: 640px; 
+			height: auto;
+			margin: 0px 20px 20px 20px; 
+			padding: 0px;
+			overflow: hidden;
+		}
+		.inner p { 
+			text-align: justify;
+			column-count: 3;
+			-moz-column-count: 3;
+			-webkit-column-count: 3;
+			column-gap: 16px;
+			-moz-column-gap: 16px;
+			-webkit-column-gap: 16px;
+		}
+		big {
+			color: #0094CE;
+			font-weight: bold;
+			font-size: 24px;
+			line-height: 40px;
+		}
+		small {
+			color: silver;
+			font-size: 12px;
+			line-height: 16px;
+		}
+		.demo { 
+			display: block;
+			position:relative;
+			width: 640px; 
+			height: 150px;
+			margin: 16px 20px 4px 20px; 
+			padding: 0px;
+			background: white url(images/banner/travel.jpg) center no-repeat;
+		}
+	</style>
+<!--[if lte IE 6]>
+	<style type="text/css">
+		.logo { 
+			background-color: transparent; 
+			background-image: none;
+			filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/banner/faraway.png", sizingMethod="crop");
+		}
+		.head { 
+			background-color: transparent; 
+			background-image: none;
+			filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/banner/head.png", sizingMethod="crop");
+		}
+		.foot { 
+			background-color: transparent; 
+			background-image: none;
+			filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/banner/foot.png", sizingMethod="crop");
+		}
+		.left { 
+			background-color: transparent; 
+			background-image: none;
+			filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/banner/left.png", sizingMethod="scale");
+		}
+		.right { 
+			background-color: transparent; 
+			background-image: none;
+			filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="images/banner/right.png", sizingMethod="scale");
+		}
+	</style>
+<![endif]-->	
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<script type="text/javascript" src="cvi_tween_lib.js"></script>
+	<script type="text/javascript" src="cvi_trans_lib.js"></script>
+	<script type="text/javascript" src="transm.js"></script>
+<script type="text/javascript">
+<!--
+var pics = new Array();
+pics = [
+	{source:'http://www.netzgesta.de/transm/images/countries/germany.jpg', option2:2, target:'_blank', title:'Official tourist Infos', href:"http://www.germany-tourism.de"},	{source:'http://www.netzgesta.de/transm/images/countries/egypt.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.egypt.travel"},	{source:'http://www.netzgesta.de/transm/images/countries/thailand.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.tourismthailand.org"},	{source:'http://www.netzgesta.de/transm/images/countries/italy.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.italiantourism.com"},	{source:'http://www.netzgesta.de/transm/images/countries/france.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.franceguide.com"},	{source:'http://www.netzgesta.de/transm/images/countries/switzerland.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.switzerland.com"},	{source:'http://www.netzgesta.de/transm/images/countries/greece.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.gnto.gr"},	{source:'http://www.netzgesta.de/transm/images/countries/newyork.jpg',option2:2,target:'_blank',title:'Official tourist Infos',href:"http://www.nycgo.com"}
+];
+
+var opts = new Object();
+opts = {
+	width:640,
+	height:150,
+	timeout:3,
+	delay: 4,
+	mfgcolor: '#00a0ff',
+	mopacity: 0.5,
+	fadein:true,
+	autoplay:true,
+	name:'test',
+	data: pics
+};
+
+if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}}
+window.onload = function () { 
+	transm.add($("wrapper"),opts);
+};
+
+-->	
+</script>
+</head>
+<body>
+<div class="logo"></div><div class="head"></div>
+<table class="bgrnd" border="0" cellpadding="0" cellspacing="0"><tr><td class="left"></td>
+<td class="cell">
+<div class="demo" id="wrapper"><marquee style="height:150px;color:white;font-size:24px;line-height:32px;text-align:center;" scrollamount="1" scrolldelay="20" direction="up">
+With deactivated <b>JavaScript</b>: ...nothing will happen.<br/>
+<p><b>TransM</b> depends on Internet Explorer specific <b>Filter</b><br/>&amp; <b>VML</b> and on HTML 5 specific <b>Canvas</b> element.</p> 
+</marquee></div><div class="inner">
+<small>Images are copyrighted and used for demonstration only <em>(random transitions)</em>.<br/></small><br/>
+<big>Faraway - You'll Like Where We're Going</big><br/>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.</p>
+</div>
+</td><td class="right"></td></tr></table>
+<div class="foot"></div>
+</body>
+</html>

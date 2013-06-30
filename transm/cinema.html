@@ -1,0 +1,455 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>transm.js (javascript programmable transition effects)</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-language" content="en" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link rel="icon" href="favicon.ico" type="image/ico">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<style type="text/css">
+		html, body { 
+			margin: 0px;
+			padding: 0px;
+			width: 100%; 
+			height: 100%; 
+			background-color: black;
+			background-image: url(images/cinema/linear.jpg);
+			background-repeat: repeat-x;
+			background-position: center center;
+		}
+		.bgrnd { 
+			display: block;
+			position:absolute;
+			width: 588px; 
+			height: 400px; 
+			left: 50%; 
+			top: 50%; 
+			margin: 0px; 
+			margin-left:-294px;
+			margin-top:-200px;
+			padding: 0px;
+			float: none;
+			background: url(images/cinema/cinema.jpg) center no-repeat;
+			border-radius: 8px;
+			-moz-border-radius: 8px;
+			-webkit-border-radius: 8px;
+			-khtml-border-radius: 8px;
+			box-shadow: 0px 0px 32px #fcc; 
+			-moz-box-shadow: 0px 0px 32px #fcc;
+			-khtml-box-shadow: 0px 0px 32px #fcc;
+			-webkit-box-shadow: 0px 0px 32px #fcc;
+		}
+		.demo { 
+			display: block;
+			position:absolute;
+			width: 400px; 
+			height: 220px;
+			left: 94px; 
+			top: 52px; 
+			margin: 0px; 
+			padding: 0px;
+			background: url(images/intro/curtain.jpg) center no-repeat;
+		}
+		#output {
+			display: block;
+			position:absolute;
+			left: 10px;
+			top: 280px;
+			color: white;
+			font-size: 10px;
+			line-height: 13px;
+			font-weight: bold;
+			text-shadow: 0px 0px 2px black;
+			font-family: Arial, Helvetica, sans-serif; 
+		}
+		#overlay {
+			display: block;
+			position:absolute;
+			overflow:hidden;
+			width: 400px; 
+			height: 220px;
+			left: 94px; 
+			top: 52px; 
+			margin: 0px; 
+			padding: 0px;
+			z-index: 100;
+			background: transparent;
+		} 
+		#text {
+			position:absolute;
+			width: 380px; 
+			height: auto;
+			left: 10px; 
+			bottom: 8px;
+			margin: 0px; 
+			padding: 0px;
+			text-align: center;
+			vertical-align: bottom;
+			color: white;
+			font-size: 24px;
+			line-height: 32px;
+			font-weight: normal;
+			font-family: Tahoma, Arial, Helvetica, sans-serif; 
+			font-variant: normal;
+			font-style: normal;
+			text-align: center;
+			text-shadow: 0px 0px 4px black;
+		} 
+		#text var { font-variant: small-caps; font-style: normal; }
+		#text em { color: orange; font-style: normal; }
+		#text dfn { color: black; font-style: normal; }
+		#text big { font-size: 32px; line-height: 40px; }
+		#text small { font-size: 16px; line-height: 18px; }
+		#thumbs {
+			display: block;
+			position:absolute;
+			overflow:hidden;
+			width: 564px; 
+			height: 48px;
+			left: 12px; 
+			bottom: 12px; 
+			margin: 0px; 
+			padding: 0px;
+			z-index: 100;
+			background: black;
+			background-color: rgba(0,0,0,0.33);
+		}
+		#images {
+			display: block;
+			overflow:visible;
+			position:absolute;
+			width: auto; 
+			height: 48px;
+			left: 0px; 
+			top: 0px; 
+			margin: 0px; 
+			padding: 0px;
+			white-space:nowrap;
+		}
+		#images img {
+			height: 44px; 
+			margin: 0px; 
+			padding: 0px;
+			border: 2px solid transparent;
+			outline: 0px none;
+		}
+		#images img:hover {
+			border: 2px dotted red;
+			cursor: pointer;
+		}
+		#scroll_left {
+			display: block;
+			position:absolute;
+			width: 24px; 
+			height: 48px;
+			margin: 0px; 
+			padding: 0px;
+			left: 0px; 
+			top: 0px;
+			background: transparent; 
+			border: 0px none;
+			z-index: 110;
+		}
+		#scroll_right {
+			display: block;
+			position:absolute;
+			width: 24px; 
+			height: 48px;
+			margin: 0px; 
+			padding: 0px;
+			right: 0px; 
+			top: 0px;
+			background: transparent; 
+			border: 0px none;
+			z-index: 110;
+		}
+		#scroll_right:hover { 
+			background: url(images/cinema/right_a.gif); 
+		}
+		#scroll_left:hover { 
+			background: url(images/cinema/left_a.gif); 
+		}
+		#scroll_left:active { 
+			background: url(images/cinema/left_b.gif); 
+		}
+		#scroll_right:active { 
+			background: url(images/cinema/right_b.gif); 
+		}
+		#ctrl { 
+			display: block;
+			position:relative;
+			width: auto;
+			text-align: center; 
+			height: auto;
+			margin: auto;
+			top: 300px; 
+			padding: 0px;
+		}
+		.button { 
+			border-radius: 4px;
+			-moz-border-radius: 4px;
+			-webkit-border-radius: 4px;
+			-khtml-border-radius: 4px;
+			box-shadow: 0px 0px 8px gray; 
+			-moz-box-shadow: 0px 0px 8px gray;
+			-khtml-box-shadow: 0px 0px 8px gray;
+			-webkit-box-shadow: 0px 0px 8px gray;
+			text-shadow: 0px 0px 3px black;
+			border: 2px solid black;
+			outline: 0px none;
+			color: gray;
+			font-size: 12px;
+			line-height: 15px;
+			font-weight: bold;
+			font-family: Arial, Helvetica, sans-serif; 
+			background: transparent;
+		}
+		.button:hover { 
+			border: 2px solid #c00000;
+			color: white;
+		}
+		.button:active { 
+			border: 2px solid white;
+			color: white;
+			background: red;
+		}
+	</style>
+<!--[if IE]>
+	<style type="text/css">
+		#images img {
+			border: 2px solid black;
+			-ms-interpolation-mode: bicubic;
+		}
+		#scroll_left {
+			background: url(images/cinema/left_a.gif);
+		} 
+		#scroll_right {
+			background: url(images/cinema/right_a.gif); 
+		}
+		#scroll_right:hover { 
+			background: url(images/cinema/right_b.gif); 
+		}
+		#scroll_left:hover { 
+			background: url(images/cinema/left_b.gif); 
+		}		
+	</style>
+<![endif]-->
+	<meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<script type="text/javascript" src="cvi_tween_lib.js"></script>
+	<script type="text/javascript" src="cvi_trans_lib.js"></script>
+	<script type="text/javascript" src="transm.js"></script>
+<script type="text/javascript">
+<!--
+var pics = new Array();
+pics = [
+	{source:'images/intro/curtain.jpg',callbefore:'setOLTOut',transition:'split_horizontal_in'},
+	{source:'images/intro/transm.jpg',delay:5,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<var><big>Welcome to</big></var>...',transition:'split_horizontal_out'}, 
+	{source:'images/intro/backgrnd_a.jpg',delay:10,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<var><big>Features</big></var><br/><dfn>113</dfn> <b><em>transitions</em></b><br/><dfn>32</dfn> <b><em>tweenings</em></b><br/><dfn>remote</dfn> <b><em>control</em></b><br/><dfn>fallback</dfn> <b><em>system</em></b><br/><dfn>individual</dfn> <b><em>corners</em></b>',transition:'fade'},
+	{source:'images/intro/backgrnd_b.jpg',delay:10,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<var><big>Features</big></var><br/><dfn>overlay</dfn> <b><em>image</em></b><br/><dfn>robust</dfn> <b><em>loader</em></b><br/><dfn>delay</dfn> <b><em>meter</em></b><br/><dfn>progress</dfn> <b><em>meter</em></b><br/><dfn>individual</dfn> <b><em>timings</em></b>',transition:'fade'},
+	{source:'images/intro/backgrnd_a.jpg',delay:10,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<var><big>Features</big></var><br/><dfn>image</dfn> <b><em>links</em></b><br/><dfn>image</dfn> <b><em>events</em></b><br/><dfn>image</dfn> <b><em>shifting</em></b><br/><dfn>before</dfn>|<dfn>after</dfn> <b><em>callbacks</em></b><br/><dfn>different</dfn> <b><em>aspect ratios</em></b>',transition:'fade'},
+	{source:'images/intro/transitions.jpg',delay:6,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'with <b><em>fallback</em></b> system for <b>IE</b>',transition:'fade'},
+	{source:'images/intro/fade.jpg',delay:5,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>all<sup>*</sup> browsers</em></b>',transition:'fade'},
+	{source:'images/intro/barn.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'barn_vertical_in'},
+	{source:'images/intro/blinds.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'blinds_right'},
+	{source:'images/intro/checkerboard.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'checkerboard_right',option1:10,option2:5},
+	{source:'images/intro/gradientwipe.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'gradientwipe_right'},
+	{source:'images/intro/inset.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'inset_rightdown'},
+	{source:'images/intro/iris_a.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'iris_circle_in'},
+	{source:'images/intro/iris_b.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'iris_plus_in'},
+	{source:'images/intro/iris_c.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'iris_star_in'},
+	{source:'images/intro/radialwipe.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'radialwipe_clock'},
+	{source:'images/intro/randombars.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'randombars_vertical'},
+	{source:'images/intro/slide.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'slide_swap',option1:4},
+	{source:'images/intro/stretch_hide.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'stretch_hide_right'},
+	{source:'images/intro/stretch.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'stretch_horizontal_in'},
+	{source:'images/intro/stretch_push.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'stretch_push_right'},
+	{source:'images/intro/strips.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'strips_rightdown'},
+	{source:'images/intro/wheel.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>IE</em></b> &amp; <b><em>HTML 5</em></b> browsers',transition:'wheel'},
+	{source:'images/intro/backgrnd_a.jpg',delay:4,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<dfn>The following transitions are<br/>HTML 5</dfn> <b><em>canvas only</em></b><dfn>.</dfn>',transition:'fade'},
+	{source:'images/intro/circles.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'circles_in',option1:9,option2:5},
+	{source:'images/intro/copy.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'copy_right'},
+	{source:'images/intro/corner_a.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'corner_leftbottom_in'},
+	{source:'images/intro/corner_b.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'corner_righttop_out'},
+	{source:'images/intro/curl.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'curl_horizontal'},
+	{source:'images/intro/flash.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'flash'},
+	{source:'images/intro/pull.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'pull_right'},
+	{source:'images/intro/push.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'push_right'},
+	{source:'images/intro/reveal.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'reveal_right'},
+	{source:'images/intro/rotate.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'rotate_in'},
+	{source:'images/intro/scale.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'scale_in'},
+	{source:'images/intro/split.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'split_horizontal_in'},
+	{source:'images/intro/squares.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'squares_in',option1:9,option2:5},
+	{source:'images/intro/turn.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'turn_vertical_right'},
+	{source:'images/intro/wrench.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'wrench_horizontal'},
+	{source:'images/intro/zoom.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'zoom_out'},
+	{source:'images/intro/smudge.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'smudge'},
+	{source:'images/intro/alpha.jpg',delay:3,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'matches <b><em>HTML 5</em></b> browsers only',transition:'alpha',alphaimg:'images/intro/circle.png'},
+	{source:'images/intro/backgrnd_a.jpg',delay:8,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<var><big>Feature</big></var><br/>Transition <b><em>alpha</em></b><br/><dfn>gives you the opportunity<br/>to define unlimited,<br/></dfn><b><em>individual transitions</em></b><dfn>.</dfn>',transition:'fade'},
+	{source:'images/intro/red.jpg',callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<dfn>random</dfn> <b><em>transitions</em></b>'},
+	{source:'images/intro/yellow.jpg'},
+	{source:'images/intro/blue.jpg'},
+	{source:'images/intro/green.jpg'},
+	{source:'images/intro/violet.jpg'},
+	{source:'images/intro/cyan.jpg'},
+	{source:'images/intro/tweenings.jpg',delay:6,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<b>IE</b> supports only <b><em>linear</em></b>',transition:'fade'},
+	{source:'images/intro/tween_a.jpg',delay:6,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<dfn>the soft</dfn> <b><em>tweenings</em></b>',transition:'fade'},
+	{source:'images/intro/tween_b.jpg',delay:6,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<dfn>the heavy</dfn> <b><em>tweenings</em></b>',transition:'fade'},
+	{source:'images/intro/tween_c.jpg',delay:5,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<dfn>the special</dfn> <b><em>tweenings</em></b>',transition:'fade'},
+	{source:'images/intro/backgrnd_a.jpg',delay:8,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<var><big>Feature</big></var><br/><b><em>cubicBezierCurve</em></b><br/><dfn>gives you the opportunity<br/>to define unlimited,<br/></dfn><b><em>individual tweenings</em></b><dfn>.</dfn>',title:'WYSIWYG-Editor',href:'../dev/cubic-bezier-timing-function.html',target:'_blank',transition:'fade'},
+	{source:'images/intro/backgrnd_b.jpg',delay:10,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<var><big>Feature</big></var><br/><dfn>Image dimensions will always</dfn> <b><em>match</em></b><dfn>, regardless of the</dfn> <b><em>aspect ratio</em></b><dfn>. Assumed width and height is equal to or higher than</dfn> <b><em>64</em></b> <dfn>pixel.</dfn>',transition:'fade'},
+	{source:'images/intro/small.jpg',delay:5,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<b><em>very small image</em></b>',transition:'fade'},
+	{source:'images/intro/backgrnd_a.jpg',delay:10,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'<var><big>Feature</big></var><br/><dfn>If the</dfn> <b><em>aspect ratio</em></b> <dfn>of an image<br/>is different from</dfn> <b><em>TransM</em></b><dfn>, it can be</dfn> <b><em>aligned</em></b><dfn> by the attribute</dfn> <b><em>imgshift</em></b><dfn>, else it is</dfn> <b><em>centered</em></b><dfn>.</dfn>',transition:'fade'},
+	{source:'images/intro/landscape.jpg',delay:5,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'No imgshift equals <b><em>centered</em></b>',transition:'fade'},
+	{source:'images/intro/landscape.jpg',delay:5,imgshift:0.001,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'imgshift : <b><em>0.001</em></b>',transition:'fade'},
+	{source:'images/intro/landscape.jpg',delay:5,imgshift:1,callbefore:'setOLTOut',callafter:'setOLTIn',argafter:'imgshift : <b><em>1.0</em></b>',transition:'fade'}
+];
+
+var opts = new Object();
+opts = {
+	width:400,
+	height:220,
+	radius:0,
+	timeout:3,
+	delay: 1,
+	callback:'setup_scroller',
+	autoplay:true,
+	clearbg:true,
+	nopreload:true,
+	meter: true,
+	mopacity: 0.5, 
+	msize: 31,
+	mposx: 360,
+	mposy: 180,
+	name:'intro',
+	data: pics
+};
+
+if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}}
+window.onload = function () { 
+	transm.add($("wrapper"),opts);
+};
+
+function setup_scroller() {
+	var obj=$('intro'),ele=$('images');
+	if(obj&&ele) {var tmp='';
+		for(var i=1; i<obj.data.length; i++) {
+			tmp+='<img onclick="showImages();setOLTOut();transm.show($(\'intro\'),'+i+');" src="'+obj.data[i].source+'" title="jump to this chart" alt="" \/>';
+		}
+		ele.innerHTML=tmp; ele=$('play');
+		if(ele) {ele.innerHTML='<span style="color:white;">stop</span>';}
+	}
+}
+function scroll_Left(ele) {
+	if(ele) {var par=ele.parentNode,obj=par.firstChild;
+		if(obj&&obj.id=="images") {
+			if(obj.timer) {window.clearInterval(obj.timer);} 
+			var x=parseFloat(obj.style.left)||0,w=obj.clientWidth,o=Math.min(x+8,0);
+			if(x<0) {x=o; o=0;
+				obj.timer=window.setInterval(function() {obj.style.left=x+'px'; o++; x+=o; if(!obj.timer||x>=0) {window.clearInterval(obj.timer);}},30);
+			}
+		}
+	}return false;
+}
+function scroll_Right(ele) {
+	if(ele) {var par=ele.parentNode,obj=par.firstChild;
+		if(obj&&obj.id=="images") {
+			if(obj.timer) {window.clearInterval(obj.timer);} 
+			var x=parseFloat(obj.style.left)||0,w=obj.clientWidth,p=par.clientWidth,m=(w-p)||0,o=Math.max(x-8,-m);
+			if(x<=0&&x>-m) {x=o; o=0; 
+				obj.timer=window.setInterval(function() {obj.style.left=x+'px'; o++; x-=o; if(!obj.timer||x<=-m||x>=0) {window.clearInterval(obj.timer);}},30);
+			}
+		}
+	}return false;
+}
+function stop_Scroll(ele) {
+	if(ele) {var obj=ele.parentNode.firstChild;
+		if(obj&&obj.id=="images") {
+			if(obj.timer) {window.clearInterval(obj.timer);}
+		}
+	}return false;
+}
+function playStop(ele,id) {var obj=$(id);
+	if(obj) {var stat=transm.get(obj,'playing');
+		if(stat) {
+			transm.stop(obj);
+			if(ele) {ele.innerHTML='<span>play</span>';}
+		}else {
+			if(ele) {ele.innerHTML='<span style="color:white;">stop</span>';}
+			transm.play(obj);
+		}
+	}return false;
+}
+function showInfo(id) {var obj=$(id),ele=$('output');
+	if(obj) {var i=transm.info(obj);
+		if(ele) {
+			ele.style.visibility=(ele.style.visibility=='hidden'?'visible':'hidden');
+			ele.innerHTML='trans: '+i.transition+'<br/>tween: '+i.tweening+'<br/>dur: '+i.duration+' ms<br/>fps: '+i.fps.toFixed(2);
+		}
+	}return false;
+}
+function setOpacity(stl,v) {
+	stl.filter="alpha(opacity="+v+")";
+	stl.MozOpacity=v*0.01;
+	stl.KhtmlOpacity=v*0.01;
+	stl.opacity=v*0.01;
+	return false;
+}
+function setOLTIn(str) {var ele=$('text');
+	if(ele) {
+		if(ele.parentNode.style.visibility=='visible') {
+			if(ele.timer) {window.clearInterval(ele.timer);}
+			var o=0,c=0,p=15,s=6; setOpacity(ele.style,0); ele.innerHTML=str||'';
+			ele.timer=window.setInterval(function() {
+				o=p*c; setOpacity(ele.style,o); c++; if(c>s) {window.clearInterval(ele.timer); setOpacity(ele.style,100);}
+			},25);
+		}else {setOpacity(ele.style,100); ele.innerHTML=str||'';}
+	}return false;
+}
+function setOLTOut(str) {var ele=$('text');
+	if(ele) {
+		if(ele.parentNode.style.visibility=='visible') {
+			if(ele.timer) {window.clearInterval(ele.timer);}
+			var o=0,c=0,p=15,s=6; setOpacity(ele.style,100);
+			ele.timer=window.setInterval(function() {
+				o=100-(p*c); setOpacity(ele.style,o); c++; if(c>s) {window.clearInterval(ele.timer); setOpacity(ele.style,0); ele.innerHTML=' ';}
+			},25);
+		}else {setOpacity(ele.style,100); ele.innerHTML='';}
+	}return false;
+}
+function showOverlay() {var ele=$('overlay');
+	if(ele) {
+		ele.style.visibility=(ele.style.visibility=='hidden'?'visible':'hidden');
+	}return false;
+}
+function showImages() {var ele=$('thumbs');
+	if(ele) {
+		ele.style.visibility=(ele.style.visibility=='hidden'?'visible':'hidden');
+	}return false;
+}
+-->	
+</script>
+</head>
+<body>
+<div class="bgrnd"><div class="demo" id="wrapper"><marquee style="height:220px;color:white;font-size:24px;text-align:center;" scrollamount="1" scrolldelay="20" direction="up">
+With deactivated <b>JavaScript</b>:<br/>...nothing will happen.<br/>
+<p><b>TransM</b> depends on<br/>Internet Explorer specific<br/><b>Filter</b> &amp; <b>VML</b>, and<br/>on HTML 5 specific<br/><b>Canvas</b> element.</p> 
+</marquee></div><div id="output" style="visibility:hidden;"></div>
+<div id="overlay" style="visibility:visible;"><div id="text"></div></div>
+<div id="thumbs" style="visibility:hidden;"><div id="images"></div>
+<a id="scroll_left" onmousedown="scroll_Left(this); return false;" onmouseup="stop_Scroll(this);" title="scroll left"></a>
+<a id="scroll_right" onmousedown="scroll_Right(this); return false;" onmouseup="stop_Scroll(this);" title="scroll right"></a>
+</div><div id="ctrl">
+<button class="button" type="button" title="Goto first image" onclick="transm.first($('intro'));">first</button>
+<button class="button" type="button" title="Goto previous image" onclick="transm.prev($('intro'));">prev</button>
+<button class="button" type="button" title="Autoplay on|off" onclick="playStop(this,'intro');" id="play"><span>play</span></button>
+<button class="button" type="button" title="Goto next image" onclick="transm.next($('intro'));">next</button>
+<button class="button" type="button" title="Goto last image" onclick="transm.last($('intro'));">last</button>&nbsp;&nbsp;
+<button class="button" type="button" title="Switch overlay text on|off" onclick="showOverlay();">&nbsp;&plusmn;&nbsp;</button>
+<button class="button" type="button" title="Switch last transition info on|off" onclick="showInfo('intro');">&nbsp;?&nbsp;</button>
+<button class="button" type="button" title="Switch image selector on|off" onclick="showImages();">&nbsp;!&nbsp;</button>
+</div></div>
+</body>
+</html>

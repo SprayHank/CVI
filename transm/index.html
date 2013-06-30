@@ -1,0 +1,2337 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>TransM.js (javascript programmable image transitions)</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-language" content="en">
+	<link rel="bookmark" type="text/html" title="TransM.js" href="http://www.netzgesta.de/transm/">
+	<meta name="Author" lang="en" content="transm.netzgesta.de - Christian Effenberger">	<meta name="Publisher" lang="en" content="www.netzgesta.de">	<meta name="Copyright" lang="en" content="www.netzgesta.de - Christian Effenberger">	<meta name="Generator" lang="en" content="Christian Effenberger">
+	<meta name="Description" lang="en" content="transm.js 1.3 allows you to add image transitions to your webpages through unobtrusive javascript">
+	<meta name="Keywords" lang="en" content="transm.js, corners, overlay, images, transitions, tweenings, unobtrusive javascript, IE, Mozilla, Firefox, Opera, Safari, Chrome">
+	<meta http-equiv="imagetoolbar" content="no">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<style type="text/css">
+		a { color: blue; font-style:italic; text-decoration:none; }
+		tt {color: green;}
+		b {color: #993333;}
+		body { background: url(images/backgrnd.jpg); color: black; font-family: Georgia; line-height: 1.5; margin: 0.5em 1em;}
+		h2 { line-height: 1; }
+		em {font-family: times,serif; }
+		.demo { float: left; padding: 16px 8px; text-align: center;}
+		.logo { display: block; float: left; margin: 0 1em 1em 0; position: relative; width: 400px; height: 174px; }
+		.demo img, .logo img { 
+			box-shadow: 0px 0px 16px black; 
+			-moz-box-shadow: 0px 0px 16px black;
+			-khtml-box-shadow: 0px 0px 16px black;
+			-webkit-box-shadow: 0px 0px 16px black;
+		}
+		#guru { float: none; padding: 4px; width: 99%; height: auto; text-align: center; background-color: black; }
+		#guru div { float: none; border: solid 3px red; padding: 4px; font-family: monospace; font-size: 1.25em; width: auto; height: auto; color: red; text-align: center; text-decoration: blink; }
+		.bookmarks { white-space: nowrap; width: 98%; margin: 0; padding-top: 10px; border-top: 1px dotted gray;}
+		.editor {
+			display: block;
+			position: relative;
+			width:500px;
+			height: auto; 
+			margin: 20px auto; 
+			padding: 0px;
+			color: white;
+			font-size: 12px;
+			line-height: 16px;
+			font-weight: normal;
+			font-family: Tahoma, Arial, Helvetica, sans-serif; 
+			font-variant: normal;
+			font-style: normal;
+			text-align: center;
+			box-shadow: 0px 8px 32px black; 
+			-moz-box-shadow: 0px 8px 32px black;
+			-khtml-box-shadow: 0px 8px 32px black;
+			-webkit-box-shadow: 0px 8px 32px black;
+		}
+		.editor th {
+			background:black;
+		}
+		.form {
+			background:white;
+			font-size: 12px;
+			line-height: 12px;
+			text-align: left;
+			vertical-align: top;
+			color: black;
+		}
+		.form form {
+			margin-top: 4px;
+			margin-left: 8px;
+		}
+		.form #result {
+			display:block; 
+			position: absolute;
+			width:236px; 
+			height: auto;
+			left: 256px;
+			bottom: 0px;
+			background:black; 
+			color:white; 
+			margin:0px; 
+			padding:4px;
+		}
+		.form #result b {
+			color:white;
+		}
+		.form b {
+			color:black;
+		}
+		#transmit {
+			width:256px;
+			height:256px;
+			background:url(images/A.gif);
+			cursor:pointer;
+		}
+		#returns {
+			width:240px;
+			height:80px;
+			background: white;
+		}
+		div.outer {
+			background: orange;
+			margin: 0 1% 2% 0;
+			position: relative;
+			display: block;
+			width: auto;
+			float: left;
+			border: 1px solid gray;
+			border-radius: 10px;
+			-moz-border-radius: 10px;
+			-webkit-border-radius: 10px;
+			-khtml-border-radius: 10px;
+			box-shadow: rgba(0,0,0,0.4) 3px 3px 5px;
+			-moz-box-shadow: rgba(0,0,0,0.4) 3px 3px 5px;
+			-webkit-box-shadow: rgba(0,0,0,0.4) 3px 3px 5px;
+		}
+		div.outer h3 {
+			color: white;
+			display: block;
+			font: 1.3em/1.5em Impact, Verdana, Helvetica, Arial, sans-serif;
+			font-weight: normal;
+			margin: .1em 0 0 10px;
+			padding: 0;
+			text-shadow: #666666 1px 1px 0px;
+		}
+		div.inner {
+			background: white;
+			padding: .5em;
+			position: relative;
+			display: inline-block;
+			color: orange;
+			text-align: center;
+			text-shadow: #444444 1px 1px 0px;
+			font: 0.9em/1.1em Arial, Helvetica, Arial, sans-serif;
+			margin: 0;
+			border-radius: 5px;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-khtml-border-radius: 5px;
+			background: white -webkit-gradient(linear, left top, right top, from(#ffffff), to(#f0f0f0));
+		}
+		div.inner table th {
+			vertical-align: bottom;
+		}
+		div.inner table td {
+			vertical-align: top;
+		}
+		div.inner table td.txt {
+			padding: 0 4px 0 4px;
+			text-align: left;
+			color: gray;
+			text-shadow: silver 1px 1px 2px;
+		}
+		div.inner table th.txt {
+			text-align: left;
+		}
+		@media print {
+			div.outer {
+				background: white;
+				border: 0px none;
+				box-shadow: white 0px 0px 0px;
+				-moz-box-shadow: white 0px 0px 0px;
+				-webkit-box-shadow: white 0px 0px 0px;
+			}
+			div.outer h3 {
+				color: black;
+				text-shadow: white 0px 0px 0px;
+				font: 1.3em/1.5em Arial, Helvetica, Arial, sans-serif;
+			}
+			div.inner {
+				background: white;
+				color: gray;
+				text-shadow: white 0px 0px 0px;
+				background: white;
+			}
+		}		
+	</style>
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	<script type="text/javascript" src="cvi_stackblur.js"></script>
+	<script type="text/javascript" src="cvi_tween_lib.js"></script>
+	<script type="text/javascript" src="cvi_trans_lib.js"></script>
+	<script type="text/javascript" src="transm.js"></script>
+<script type="text/javascript">
+<!--
+function showInfo() {var ele=$("edit");
+	if(ele) {var i=transm.info(ele);
+		if(i) {
+			var tr=document.parameter.transition.options[document.parameter.transition.selectedIndex].value;
+			if(tr=="random"||tr!=i.transition) {var img=$('t_img'),val=i.transition||"fade";
+				img.title=val; img.src="images/transitions/"+val+".gif";
+				if(cvi_tfx[val].max) {
+					$("opt1").value=cvi_tfx[val].val;
+					$("min1").innerHTML=cvi_tfx[val].min;
+					$("max1").innerHTML=cvi_tfx[val].max;
+					$("opt2").value=cvi_tfx[val].val;
+					$("min2").innerHTML=cvi_tfx[val].min;
+					$("max2").innerHTML=cvi_tfx[val].max;
+				}else {
+					$("opt1").value=0;
+					$("min1").innerHTML='–';
+					$("max1").innerHTML='–';
+					$("opt2").value=0;
+					$("min2").innerHTML='–';
+					$("max2").innerHTML='–';
+				}
+			}img=$('g_img');
+			var tw=document.parameter.tweening.options[document.parameter.tweening.selectedIndex].value; 
+			if(!hasCanvas||!i.tweening) {
+				img.title="linear"; img.src="images/tweening/linear.gif";
+			}else if(tw=="default") {
+				img.title=i.tweening||"linear"; img.src="images/tweening/"+(i.tweening||"linear")+".gif";
+			}img=$('result').innerHTML='<b>result</b>: '+i.duration+' <b>ms</b> - '+i.fps.toFixed(2)+' <b>fps</b>';
+		}
+	}return false;
+}
+function setTransValue(obj) {var ele=$("edit"),img=$('t_img');
+	var val=obj.options[obj.selectedIndex].value;
+	if(ele) {ele.data[0].transition=ele.data[1].transition=val;}
+	if(val!="random"&&cvi_tfx[val].max) {
+		$("opt1").value=cvi_tfx[val].val;
+		$("min1").innerHTML=cvi_tfx[val].min;
+		$("max1").innerHTML=cvi_tfx[val].max;
+		$("opt2").value=cvi_tfx[val].val;
+		$("min2").innerHTML=cvi_tfx[val].min;
+		$("max2").innerHTML=cvi_tfx[val].max;
+		if(ele) {ele.data[0].option1=ele.data[1].option1=ele.data[0].option2=ele.data[1].option2=cvi_tfx[val].val;}
+	}else {
+		$("opt1").value=0;
+		$("min1").innerHTML='–';
+		$("max1").innerHTML='–';
+		$("opt2").value=0;
+		$("min2").innerHTML='–';
+		$("max2").innerHTML='–';
+		if(ele) {ele.data[0].option1=ele.data[1].option1=ele.data[0].option2=ele.data[1].option2=0;}
+	}
+	if(img) {img.title=val;} if(val=="random") {val="fade";}
+	if(img) {img.src="images/transitions/"+val+".gif";}
+	return false;}
+function setTweenValue(obj) {var ele=$("edit"),img=$('g_img');
+	var val=obj.options[obj.selectedIndex].value;
+	if(ele) {ele.data[0].tweening=ele.data[1].tweening=!hasCanvas?"linear":val;}
+	if(img) {img.title=val;} if(val=="default"||!hasCanvas) {val="linear"; obj.selectedIndex=1;}
+	if(img) {img.src="images/tweening/"+val+".gif";}
+	return false;}
+function setAlphaValue(obj) {var ele=$("edit"),img=$('a_img');
+	var val=obj.options[obj.selectedIndex].value;
+	if(img) {img.title=val; img.src="images/alpha/"+val+".png";}
+	if(ele) {ele.data[0].alphaimg=ele.data[1].alphaimg="images/alpha/"+val+".png";}
+	return false;}
+function setFpsValue(obj) {var ele=$("edit");
+	if(obj.checked) {if(ele) {ele.data[0].fps=ele.data[1].fps=obj.value;}}
+	return false;}
+function setDurValue(obj) {var ele=$("edit");
+	if(obj.checked) {if(ele) {ele.data[0].duration=ele.data[1].duration=obj.value;}}
+	return false;}
+function setOpt1Value(obj) {var ele=$("edit");
+	var tr=document.parameter.transition.options[document.parameter.transition.selectedIndex].value;
+	if(tr!="random"&&cvi_tfx[tr].max) {
+		if(ele) {ele.data[0].option1=ele.data[1].option1=Math.min(Math.max(obj.value,cvi_tfx[tr].min),cvi_tfx[tr].max);}
+		obj.value=Math.min(Math.max(obj.value,cvi_tfx[tr].min),cvi_tfx[tr].max);
+	}else {
+		if(ele) {ele.data[0].option1=ele.data[1].option1=0;}
+		obj.value=0;
+	}
+	return false;}
+function setOpt2Value(obj) {var ele=$("edit");
+	var tr=document.parameter.transition.options[document.parameter.transition.selectedIndex].value;
+	if(tr!="random"&&cvi_tfx[tr].max) {
+		if(ele) {ele.data[0].option2=ele.data[1].option2=Math.min(Math.max(obj.value,cvi_tfx[tr].min),cvi_tfx[tr].max);}
+		obj.value=Math.min(Math.max(obj.value,cvi_tfx[tr].min),cvi_tfx[tr].max);
+	}else {
+		if(ele) {ele.data[0].option2=ele.data[1].option2=0;}
+		obj.value=0;
+	}
+	return false;}
+if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}} var hasCanvas=false;
+window.onload=function () {hasCanvas=transm.canvas(); 
+	transm.add($("transmit"), {width:256,height:256,clearbg:true,name:'edit',data: [{source:'images/A.gif',alphaimg:'images/alpha/check.png',callafter:'showInfo'},{source:'images/B.gif',alphaimg:'images/alpha/check.png',callafter:'showInfo'}]});
+};
+-->
+</script>
+</head>
+<body><noscript><div id="guru" title="By this you can recognize the Amiga fan!"><div><b>Guru Meditation</b> - With deactivated JavaScript: Images stay unmodified!</div></div></noscript>
+
+<div class="logo"><img src="images/transm.jpg" width="400" height="174" border="0" title="TransM" alt="transm" /></div>
+<div class="text">
+<strong><span class="uc">transm</span>.js 1.3</strong> allows you to add programmable image transitions to your webpages. It uses unobtrusive javascript to keep your code clean.
+<p></p>
+It works in all the major browsers - Mozilla Firefox 1.5+, Opera 9+, Safari 2+, Chrome 3+ and IE 6+. Works also on older browsers supporting JS 1.5 and images and filter or opacity, else it'll degrade and your visitors won't notice a thing.
+</div>
+<p style="clear: left;"></p>
+
+<h2>Demonstration</h2>
+<div id="demo" class="inlet">
+<table class="editor" border="0" cellpadding="0" cellspacing="0">
+<tr><th>Transition area</th><th>Transition &nbsp;&nbsp; Tweening &nbsp;&nbsp; Alphamask</th></tr>
+<tr><td><div id="transmit" title="click to perform transition" onclick="$('result').innerHTML='<b>result</b>: 0 <b>ms</b> - 0.0 <b>fps</b>';transm.next($('edit'));"></div></td><td class="form">
+<div id="returns"><img id="t_img" title="fade" src="images/transitions/fade.gif" width="80" height="80" border="0" alt="" /><img id="g_img" title="linear" src="images/tweening/linear.gif" width="80" height="80" alt="" /><img id="a_img" title="check" src="images/alpha/check.png" width="80" height="80" border="0" alt="" /></div>
+<form name="parameter">
+<b>Transition</b>: <select style="width:160px;" name="transition" id="transition" size="1" onchange="setTransValue(this)">
+<option value="random" checked="checked">random</option><script type="text/javascript">
+<!--
+for(var i in cvi_tfx) {
+	document.writeln('<option value="'+i+'">'+i+'<\/option>');
+};
+-->
+</script>
+</select>
+<b>Tweening</b>: <select name="tweening" id="tweening" size="1" onchange="setTweenValue(this)">
+<option value="default" checked="checked">default</option>
+<script type="text/javascript">
+<!--
+for(var i in cvi_tween) {
+	document.writeln('<option value="'+i+'">'+i+'<\/option>');
+};
+-->
+</script>
+</select><br/>
+<b>Alphamask</b>: <select name="alpha" id="alpha" size="1" onchange="setAlphaValue(this)">
+<option value="check" checked="checked">check</option>
+<option value="circle">circle</option>
+<option value="corner">corner</option>
+<option value="flames">flames</option>
+<option value="gbflag">gbflag</option>
+<option value="inner">inner</option>
+<option value="melt">melt</option>
+<option value="outer">outer</option>
+<option value="raster">raster</option>
+<option value="ripple">ripple</option>
+<option value="ripple1">ripple1</option>
+<option value="ripple2">ripple2</option>
+<option value="ripple3">ripple3</option>
+<option value="ripple4">ripple4</option>
+<option value="spiral">spiral</option>
+<option value="squares">squares</option>
+<option value="usflag">usflag</option>
+<option value="wave">wave</option>
+<option value="whirlpool">whirlpool</option>
+<option value="wipers">wipers</option>
+<option value="zigzag">zigzag</option>
+</select><br/>
+<b>Option1</b>: <input type="input" name="opt1" id="opt1" min="0" max="100" value="0" size="3" maxlength="5" onchange="setOpt1Value(this)" /> <b>min</b>: <span id="min1">0</span> <b>max</b>: <span id="max1">0</span><br/>
+<b>Option2</b>: <input type="input" name="opt2" id="opt2" min="0" max="100" value="0" size="3" maxlength="5" onchange="setOpt2Value(this)" /> <b>min</b>: <span id="min2">0</span> <b>max</b>: <span id="max2">0</span><br/>
+<b>Duration</b>: <input type="radio" name="duration" value="0.5" onclick="setDurValue(this)" />0.5 
+<input type="radio" name="duration" value="1.0" onclick="setDurValue(this)" />1.0 
+<input type="radio" name="duration" value="2.0" onclick="setDurValue(this)" checked="checked" />2.0 
+<input type="radio" name="duration" value="4.0" onclick="setDurValue(this)" />4.0<br/>
+<b>FPS</b>: <input type="radio" name="fps" value="20" onclick="setFpsValue(this)" />20 
+<input type="radio" name="fps" value="24" onclick="setFpsValue(this)" />24 
+<input type="radio" name="fps" value="25" onclick="setFpsValue(this)" />25 
+<input type="radio" name="fps" value="30" onclick="setFpsValue(this)" checked="checked" />30 
+<input type="radio" name="fps" value="40" onclick="setFpsValue(this)" />40<br/>
+</form><div id="result"><b>result</b>: 0 <b>ms</b> - 0.0 <b>fps</b></div>
+</td></tr>
+</table>
+<div class="demo"><a href="banner.html" target="_blank"><img src="banner.jpg" title="Banner (simple)" alt="banner" width="225" height="150" border="0"><br />Banner <b>(simple)</b></a></div>
+<div class="demo"><a href="eyewitness.html" target="_blank"><img src="eyewitness.jpg" title="Eyewitness (overlay)" alt="eyewitness" width="225" height="150" border="0"><br />Eyewitness <b>(overlay)</b></a></div>
+<div class="demo"><a href="cinema.html" target="_blank"><img src="cinema.jpg" title="Introduction (complex)" alt="introduction" width="225" height="150" border="0"><br />Introduction <b>(complex)</b></a></div>
+</div>
+<p style="clear: left;"></p>
+
+
+<h2>Transitions</h2>
+
+<p><b>cvi_trans_lib.js</b> supports image transition capabilities. 
+<b>TransM.js</b> uses 115 transitions for HTML 5 canvas element supporting browsers,
+51 transitions for filter|VML supporting browsers and fade and cut for the rest.</p>
+
+<div class="outer"><h3>alpha</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th>External<br/>resource</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/alpha.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/fade.gif" width="80" height="80" border="0" alt="" /><br/>fade</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td><img src="images/alpha/circle.png" width="80" height="80" border="0" alt="" /><br/>mask image</td>
+	<td class="txt">Alpha is unique in its ability to use alpha masks themselves as transition effects. Transparent parts appear early, and opac parts appear last. Therefore, no programming is required to generate new transition effects.</td>
+	<td class="txt">Mask image flipping. Default is <b>0</b>. <b>1</b> equals flip horizontal. <b>2</b> equals flip vertical. <b>3</b> equals flip both.</td>
+	<td class="txt">Using images without alpha channel <i>(e.g. JPEG)</i> as a mask is also supported <i>(requires get / setImageData browser support)</i>.</td>
+</tr></table></div></div>
+
+<div class="outer"><h3>barn_horizontal_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/barn_horizontal_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseOut</td>
+	<td class="txt">Two horizontal lines expands from top and bottom edges toward the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>barn_horizontal_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/barn_horizontal_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseOut</td>
+	<td class="txt">A central, horizontal line splits and expands toward the top and bottom edges.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>barn_vertical_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/barn_vertical_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseOut</td>
+	<td class="txt">Two vertical lines expands from left and right edges toward the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>barn_vertical_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/barn_vertical_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseOut</td>
+	<td class="txt">A central, vertical line splits and expands toward the left and right edges.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>blinds_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/blinds_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/quadEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseIn</td>
+	<td class="txt">Multiple vertical lines expands from right to left.</td>
+	<td class="txt">Number of vertical lines. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>blinds_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/blinds_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/quadEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseIn</td>
+	<td class="txt">Multiple vertical lines expands from left to right.</td>
+	<td class="txt">Number of vertical lines. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>blinds_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/blinds_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/quadEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseIn</td>
+	<td class="txt">Multiple horizontal lines expands from bottom to top.</td>
+	<td class="txt">Number of horizontal lines. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>blinds_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/blinds_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/quadEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseIn</td>
+	<td class="txt">Multiple horizontal lines expands from top to bottom.</td>
+	<td class="txt">Number of horizontal lines. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>blur</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/blur.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/pixelate.gif" width="80" height="80" border="0" alt="" /><br/>pixelate</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A bluring effect to transition from one content to another.</td>
+	<td class="txt">Radius of bluring. Default is <b>100</b>. Minimum is <b>8</b>. Maximum is <b>180</b>.</td>
+	<td class="txt">Only if "cvi_stackblur.js" (<b><a href="http://www.quasimondo.com/">Algorithm by Mario Klingemann</a></b>) is loaded and get/setImageData support is available.<br/>Extremely <b>cpu</b> intensive.</td>
+</tr></table></div></div>
+
+<div class="outer"><h3>checkerboard_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/checkerboard_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Multiple displaced blocks expands from right to left.</td>
+	<td class="txt">#1 Number of horizontal blocks. Default is <b>8</b>. Minimum is <b>2</b>. Maximum is <b>100</b>. #2 Number of vertical blocks. Default is <b>8</b>. Minimum is <b>2</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>checkerboard_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/checkerboard_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Multiple displaced blocks expands from left to right.</td>
+	<td class="txt">#1 Number of horizontal blocks. Default is <b>8</b>. Minimum is <b>2</b>. Maximum is <b>100</b>. #2 Number of vertical blocks. Default is <b>8</b>. Minimum is <b>2</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>checkerboard_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/checkerboard_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Multiple displaced blocks expands from bottom to top.</td>
+	<td class="txt">#1 Number of horizontal blocks. Default is <b>8</b>. Minimum is <b>2</b>. Maximum is <b>100</b>. #2 Number of vertical blocks. Default is <b>8</b>. Minimum is <b>2</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>checkerboard_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/checkerboard_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Multiple displaced blocks expands from top to bottom.</td>
+	<td class="txt">#1 Number of horizontal blocks. Default is <b>8</b>. Minimum is <b>2</b>. Maximum is <b>100</b>. #2 Number of vertical blocks. Default is <b>8</b>. Minimum is <b>2</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>circles_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/circles_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/checkerboard_right.gif" width="80" height="80" border="0" alt="" /><br/>checkerboard</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Multiple circle shapes expands from the center of each circle toward the radius of each circle.</td>
+	<td class="txt">#1 Number of horizontal circles. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>50</b>. #2 Number of vertical circles. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>50</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>circles_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/circles_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/checkerboard_right.gif" width="80" height="80" border="0" alt="" /><br/>checkerboard</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Multiple circle shapes expands from the the radius of each circle toward the center of each circle.</td>
+	<td class="txt">#1 Number of horizontal circles. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>50</b>. #2 Number of vertical circles. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>50</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>color</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/color.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/flash.gif" width="80" height="80" border="0" alt="" /><br/>flash</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Transition by fading to and from a solid color.</td>
+	<td class="txt">Hex color string. Default is <b>'#fff'</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>copy_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/copy_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/gradientwipe_left.gif" width="80" height="80" border="0" alt="" /><br/>gradientwipe</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A Xerox like copy procedure with horizontal movement from right to left.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>copy_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/copy_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/gradientwipe_right.gif" width="80" height="80" border="0" alt="" /><br/>gradientwipe</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A Xerox like copy procedure with horizontal movement from left to right.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>copy_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/copy_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/gradientwipe_up.gif" width="80" height="80" border="0" alt="" /><br/>gradientwipe</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A Xerox like copy procedure with vertical movement from bottom to top.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>copy_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/copy_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/gradientwipe_down.gif" width="80" height="80" border="0" alt="" /><br/>gradientwipe</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A Xerox like copy procedure with vertical movement from top to bottom.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>corner_lefttop_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/corner_lefttop_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /><br/>radialwipe</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">Image rotates clockwise in from the upper-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>corner_righttop_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/corner_righttop_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /><br/>radialwipe</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">Image rotates counter-clockwise in from the upper-right corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>corner_leftbottom_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/corner_leftbottom_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /><br/>radialwipe</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">Image rotates clockwise in from the lower-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>corner_rightbottom_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/corner_rightbottom_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /><br/>radialwipe</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">Image rotates counter-clockwise in from the lower-right corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>corner_lefttop_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/corner_lefttop_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /><br/>radialwipe</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">Image rotates clockwise out from the upper-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>corner_righttop_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/corner_righttop_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /><br/>radialwipe</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">Image rotates counter-clockwise out from the upper-right corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>corner_leftbottom_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/corner_leftbottom_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /><br/>radialwipe</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">Image rotates clockwise out from the lower-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>corner_rightbottom_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/corner_rightbottom_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /><br/>radialwipe</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">Image rotates counter-clockwise out from the lower-right corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>curl_horizontal</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/curl_horizontal.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/gradientwipe_left.gif" width="80" height="80" border="0" alt="" /><br/>gradientwipe</td>
+	<td><img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseOut</td>
+	<td class="txt">A curl wipe with horizontal movement from right to left.</td>
+	<td class="txt">Divisor of the image width as curl width. Default is <b>6</b>. Minimum is <b>2</b>. Maximum is <b>10</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>curl_vertical</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/curl_vertical.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/gradientwipe_up.gif" width="80" height="80" border="0" alt="" /><br/>gradientwipe</td>
+	<td><img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseOut</td>
+	<td class="txt">A curl wipe with vertical movement from bottom to top.</td>
+	<td class="txt">Divisor of the image height as curl height. Default is <b>6</b>. Minimum is <b>2</b>. Maximum is <b>10</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>cut</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/cut.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A classic hard cut wipe.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt">No tweening <b>available</b>. Transition starts <b>immediately</b>.</td>
+</tr></table></div></div>
+
+<div class="outer"><h3>fade</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/fade.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A fade effect to transition from one content to another.</td>
+	<td class="txt">Percentage of time where the old and new content <b>overlap</b> and are shown simultaneously as the transition is being played as a fraction of the duration time. Default is <b>100</b>. Minimum is <b>0</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>flash</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/flash.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/fade.gif" width="80" height="80" border="0" alt="" /><br/>fade</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Simulates a photographers camera flash light as transition by fading to and from solid white color.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>gradientwipe_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/gradientwipe_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">A gradient wipe with horizontal movement from right to left.</td>
+	<td class="txt">Percentage of the wipe area width. Default is <b>25</b>. Minimum is <b>5</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>gradientwipe_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/gradientwipe_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">A gradient wipe with horizontal movement from left to right.</td>
+	<td class="txt">Percentage of the wipe area width. Default is <b>25</b>. Minimum is <b>5</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>gradientwipe_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/gradientwipe_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">A gradient wipe with vertical movement from bottom to top.</td>
+	<td class="txt">Percentage of the wipe area height. Default is <b>25</b>. Minimum is <b>5</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>gradientwipe_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/gradientwipe_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">A gradient wipe with vertical movement from top to bottom.</td>
+	<td class="txt">Percentage of the wipe area height. Default is <b>25</b>. Minimum is <b>5</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>inset_leftup</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/inset_leftup.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/inset_rightdown.gif" width="80" height="80" border="0" alt="" /><br/>inset_rightdown</td>
+	<td><img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseInOut</td>
+	<td class="txt">A box expands from the lower-right corner to the upper-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>inset_rightup</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/inset_rightup.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/inset_rightdown.gif" width="80" height="80" border="0" alt="" /><br/>inset_rightdown</td>
+	<td><img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseInOut</td>
+	<td class="txt">A box expands from the lower-left corner to the upper-right corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>inset_leftdown</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/inset_leftdown.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/inset_rightdown.gif" width="80" height="80" border="0" alt="" /><br/>inset_rightdown</td>
+	<td><img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseInOut</td>
+	<td class="txt">A box expands from the upper-right corner to the lower-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>inset_rightdown</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/inset_rightdown.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseInOut</td>
+	<td class="txt">A box expands from the upper-left corner to the lower-right corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>iris_cross_in | iris_cross_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+</tr><tr>
+	<td><img src="images/transitions/iris_cross_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseIn</td>
+	<td class="txt">A cross shape expands from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+	<td><img src="images/transitions/iris_cross_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseOut</td>
+	<td class="txt">A cross shape shrinks to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>iris_plus_in | iris_plus_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+</tr><tr>
+	<td><img src="images/transitions/iris_plus_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseIn</td>
+	<td class="txt">A plus shape expands from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+	<td><img src="images/transitions/iris_plus_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseOut</td>
+	<td class="txt">A plus shape shrinks to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>iris_square_in | iris_square_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+</tr><tr>
+	<td><img src="images/transitions/iris_square_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseIn</td>
+	<td class="txt">A square shape expands from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+	<td><img src="images/transitions/iris_square_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseOut</td>
+	<td class="txt">A square shape shrinks to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>iris_circle_in | iris_circle_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+</tr><tr>
+	<td><img src="images/transitions/iris_circle_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseIn</td>
+	<td class="txt">A circle shape expands from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+	<td><img src="images/transitions/iris_circle_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseOut</td>
+	<td class="txt">A circle shape shrinks to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>iris_diamond_in | iris_diamond_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+</tr><tr>
+	<td><img src="images/transitions/iris_diamond_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseIn</td>
+	<td class="txt">A diamond shape expands from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+	<td><img src="images/transitions/iris_diamond_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseOut</td>
+	<td class="txt">A diamond shape shrinks to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>iris_star_in | iris_star_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrict.</th>
+</tr><tr>
+	<td><img src="images/transitions/iris_star_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseIn</td>
+	<td class="txt">A five-pointed star shape expands from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+	<td><img src="images/transitions/iris_star_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseOut</td>
+	<td class="txt">A five-pointed star shape shrinks to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>pixelate</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/pixelate.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A pixelization effect to transition from one content to another.</td>
+	<td class="txt">Sets the maximum width in pixels of each pixelated <b>square</b>. Default is <b>40</b>. Minimum is <b>10</b>. Maximum is <b>50</b>.</td>
+	<td class="txt"><b>IE</b> do not respect the elements shape and performs always a rectangle transition.</td>
+</tr></table></div></div>
+
+<div class="outer"><h3>pull_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/pull_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /><br/>slide_hide</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">The new content is pulled in from right to left.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>pull_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/pull_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /><br/>slide_hide</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">The new content is pulled in from left to right.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>pull_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/pull_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /><br/>slide_hide</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">The new content is pulled in from bottom to top.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>pull_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/pull_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /><br/>slide_hide</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">The new content is pulled in from top to bottom.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>push_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/push_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_push.gif" width="80" height="80" border="0" alt="" /><br/>slide_push</td>
+	<td><img src="images/tweening/cubicEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseOut</td>
+	<td class="txt">The old content is pushed out by new content from right to left.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>push_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/push_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_push.gif" width="80" height="80" border="0" alt="" /><br/>slide_push</td>
+	<td><img src="images/tweening/cubicEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseOut</td>
+	<td class="txt">The old content is pushed out by new content from left to right.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>push_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/push_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_push.gif" width="80" height="80" border="0" alt="" /><br/>slide_push</td>
+	<td><img src="images/tweening/cubicEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseOut</td>
+	<td class="txt">The old content is pushed out by new content from bottom to top.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>push_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/push_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_push.gif" width="80" height="80" border="0" alt="" /><br/>slide_push</td>
+	<td><img src="images/tweening/cubicEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseOut</td>
+	<td class="txt">The old content is pushed out by new content from top to bottom.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>radialgradient</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/radialgradient.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/fade.gif" width="80" height="80" border="0" alt="" /><br/>fade</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">A circle gradient expands from the center in two steps.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>radialwipe_clock</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/radialwipe_clock.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">A radial hand sweeps clockwise from the twelve o'clock position.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>radialwipe_wedge</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/radialwipe_wedge.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">A fan unfolds from the top edge, the fan axis at the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>radialwipe_radial</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/radialwipe_radial.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">A radial hand sweeps clockwise from the upper-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>randombars_horizontal</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/randombars_horizontal.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Transition reveals new content by exposing random horizontal lines of pixels.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt">Tweening is always <b>linear</b>.</td>
+</tr></table></div></div>
+<div class="outer"><h3>randombars_vertical</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/randombars_vertical.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Transition reveals new content by exposing random vertical lines of pixels.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt">Tweening is always <b>linear</b>.</td>
+</tr></table></div></div>
+<div class="outer"><h3>randomdissolve</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/randomdissolve.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Transition reveals new content by exposing random pixels.</td>
+	<td class="txt">Sets the pixel <b>width</b> in pixels. Default is <b>2</b>. Minimum is <b>1</b>. Maximum is <b>16</b>.</td>
+	<td class="txt">The transition is <b>extremely</b> CPU intensive. Tweening is always <b>linear</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>reveal_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/reveal_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /><br/>slide_hide</td>
+	<td><img src="images/tweening/backEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>backEaseIn</td>
+	<td class="txt">The old content is pulled out from right to left.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>reveal_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/reveal_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /><br/>slide_hide</td>
+	<td><img src="images/tweening/backEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>backEaseIn</td>
+	<td class="txt">The old content is pulled out from left to right.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>reveal_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/reveal_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /><br/>slide_hide</td>
+	<td><img src="images/tweening/backEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>backEaseIn</td>
+	<td class="txt">The old content is pulled out from bottom to top.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>reveal_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/reveal_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /><br/>slide_hide</td>
+	<td><img src="images/tweening/backEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>backEaseIn</td>
+	<td class="txt">The old content is pulled out from top to bottom.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>rotate_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/rotate_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/iris_circle_out.gif" width="80" height="80" border="0" alt="" /><br/>iris_circle_out</td>
+	<td><img src="images/tweening/backEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>backEaseIn</td>
+	<td class="txt">The old content rotates and scales down to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>rotate_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/rotate_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/iris_circle_in.gif" width="80" height="80" border="0" alt="" /><br/>iris_circle_in</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">The new content rotates and scales up from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>scale_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/scale_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/iris_square_out.gif" width="80" height="80" border="0" alt="" /><br/>iris_square_out</td>
+	<td><img src="images/tweening/backEaseIn.gif" width="80" height="80" border="0" alt="" /><br/>backEaseIn</td>
+	<td class="txt">The old content scales down to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>scale_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/scale_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/iris_square_in.gif" width="80" height="80" border="0" alt="" /><br/>iris_square_in</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">The new content scales up from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>slide_swap</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/slide_swap.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">The old content is swaped out by new content in multiple horizontal bands from right to left.</td>
+	<td class="txt">Number of horizontal bands. Default is <b>1</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>IE</b> do not respect the elements shape and performs always a rectangle transition.</td>
+</tr></table></div></div>
+<div class="outer"><h3>slide_push</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/slide_push.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">The old content is pushed out by new content in multiple horizontal bands from right to left.</td>
+	<td class="txt">Number of horizontal bands. Default is <b>1</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>IE</b> do not respect the elements shape and performs always a rectangle transition.</td>
+</tr></table></div></div>
+<div class="outer"><h3>slide_hide</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/slide_hide.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">The old content is hided out by new content in multiple horizontal bands from right to left.</td>
+	<td class="txt">Number of horizontal bands. Default is <b>1</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt"><b>IE</b> do not respect the elements shape and performs always a rectangle transition.</td>
+</tr></table></div></div>
+
+<div class="outer"><h3>spiral</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/spiral.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Tiles spiral clockwise from the upper-left corner.</td>
+	<td class="txt">#1 Number of <b>rows</b>. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>100</b>. #2 Number of <b>columns</b>. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt">Tweening is always <b>linear</b>.</td>
+</tr></table></div></div>
+
+<div class="outer"><h3>split_horizontal_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/split_horizontal_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/barn_vertical_in.gif" width="80" height="80" border="0" alt="" /><br/>barn_vertical</td>
+	<td><img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseOut</td>
+	<td class="txt">New content splits from left and right edges and expands toward the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>split_horizontal_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/split_horizontal_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/barn_vertical_out.gif" width="80" height="80" border="0" alt="" /><br/>barn_vertical</td>
+	<td><img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseOut</td>
+	<td class="txt">Old content splits from center and shrinks toward the left and right edges.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>split_vertical_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/split_vertical_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/barn_horizontal_in.gif" width="80" height="80" border="0" alt="" /><br/>barn_horizontal</td>
+	<td><img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseOut</td>
+	<td class="txt">New content splits from top and bottom edges and expands toward the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>split_vertical_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/split_vertical_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/barn_horizontal_out.gif" width="80" height="80" border="0" alt="" /><br/>barn_horizontal</td>
+	<td><img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>quadEaseOut</td>
+	<td class="txt">Old content splits from center and shrinks toward the top and bottom edges.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>smudge</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/smudge.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/gradientwipe_down.gif" width="80" height="80" border="0" alt="" /><br/>gradientwipe</td>
+	<td><img src="images/tweening/circEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>circEaseInOut</td>
+	<td class="txt">A gradient wipe with vertical smearing and movement from top to bottom.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>squares_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/squares_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/checkerboard_right.gif" width="80" height="80" border="0" alt="" /><br/>checkerboard</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Multiple box shapes expands from the center of each quadrant toward the corners of each quadrant.</td>
+	<td class="txt">#1 Number of horizontal boxes. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>50</b>. #2 Number of vertical boxes. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>50</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>squares_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/squares_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/checkerboard_right.gif" width="80" height="80" border="0" alt="" /><br/>checkerboard</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Multiple box shapes expands from the corners of each quadrant toward the center of each quadrant.</td>
+	<td class="txt">#1 Number of horizontal boxes. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>50</b>. #2 Number of vertical boxes. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>50</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>stretch_hide_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_hide_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_hide_right.gif" width="80" height="80" border="0" alt="" /><br/>stretch_hide</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content expands from right edge to left edge.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_hide_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_hide_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content expands from left edge to right edge.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>IE</b> do not respect the elements shape and performs always a rectangle transition.</td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_hide_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_hide_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_hide_right.gif" width="80" height="80" border="0" alt="" /><br/>stretch_hide</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content expands from bottom edge to top edge.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_hide_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_hide_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_hide_right.gif" width="80" height="80" border="0" alt="" /><br/>stretch_hide</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content expands from top edge to bottom edge.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>stretch_push_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_push_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_push_right.gif" width="80" height="80" border="0" alt="" /><br/>stretch_push</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content expands from right edge to left edge as old content shrinks from left edge to right edge.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_push_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_push_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content expands from left edge to right edge as old content shrinks from right edge to left edge.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>IE</b> do not respect the elements shape and performs always a rectangle transition.</td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_push_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_push_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_push_right.gif" width="80" height="80" border="0" alt="" /><br/>stretch_push</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content expands from bottom edge to top edge as old content shrinks from top edge to bottom edge.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_push_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_push_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_push_right.gif" width="80" height="80" border="0" alt="" /><br/>stretch_push</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content expands from top edge to bottom edge as old content shrinks from bottom edge to top edge.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>stretch_horizontal_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_horizontal_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content splits and expands from center toward the left and right edges.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>IE</b> do not respect the elements shape and performs always a rectangle transition.</td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_horizontal_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_horizontal_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_horizontal_in.gif" width="80" height="80" border="0" alt="" /><br/>stretch_horizontal</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">Old content splits and shrinks from the left and right edges toward center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_vertical_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_vertical_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_horizontal_in.gif" width="80" height="80" border="0" alt="" /><br/>stretch_horizontal</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">New content splits and expands from center toward the top and bottom edges.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>stretch_vertical_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/stretch_vertical_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/stretch_horizontal_in.gif" width="80" height="80" border="0" alt="" /><br/>stretch_horizontal</td>
+	<td><img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>backEaseOut</td>
+	<td class="txt">Old content splits and shrinks from the top and bottom edges toward center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>strips_leftup</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/strips_leftup.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseInOut</td>
+	<td class="txt">A diagonal sweep from the lower-right corner to the upper-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>strips_rightup</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/strips_rightup.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseInOut</td>
+	<td class="txt">A diagonal sweep from the lower-left corner to the upper-right corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>strips_leftdown</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/strips_leftdown.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseInOut</td>
+	<td class="txt">A diagonal sweep from the upper-right corner to the lower-left corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>strips_rightdown</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/strips_rightdown.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>cubicEaseInOut</td>
+	<td class="txt">A diagonal sweep from the upper-left corner to the lower-right corner.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>turn_horizontal_up</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/turn_horizontal_up.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/blinds_up.gif" width="80" height="80" border="0" alt="" /><br/>blinds_up</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">The even horizontal bands expands from bottom to top as the odd horizontal bands shrinks from top to bottom.</td>
+	<td class="txt">Number of horizontal <b>bands</b>. Default is <b>4</b>. Minimum is <b>2</b>. Maximum is <b>12</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>turn_horizontal_down</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/turn_horizontal_down.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/blinds_down.gif" width="80" height="80" border="0" alt="" /><br/>blinds_down</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">The odd horizontal bands expands from top to bottom as the even horizontal bands shrinks from bottom to top.</td>
+	<td class="txt">Number of horizontal <b>bands</b>. Default is <b>4</b>. Minimum is <b>2</b>. Maximum is <b>12</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>turn_vertical_left</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/turn_vertical_left.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/blinds_left.gif" width="80" height="80" border="0" alt="" /><br/>blinds_left</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">The even vertical bands expands from right to left as the odd vertical bands shrinks from left to right.</td>
+	<td class="txt">Number of vertical <b>bands</b>. Default is <b>4</b>. Minimum is <b>2</b>. Maximum is <b>12</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>turn_vertical_right</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/turn_vertical_right.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/blinds_right.gif" width="80" height="80" border="0" alt="" /><br/>blinds_right</td>
+	<td><img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" /><br/>bounceEaseOut</td>
+	<td class="txt">The odd vertical bands expands from left to right as the even vertical bands shrinks from right to left.</td>
+	<td class="txt">Number of vertical <b>bands</b>. Default is <b>4</b>. Minimum is <b>2</b>. Maximum is <b>12</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>wheel</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/wheel.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" /><br/>sineEaseInOut</td>
+	<td class="txt">Multiple radial hands sweep clockwise.</td>
+	<td class="txt">Number of <b>hands</b>. Default is <b>4</b>. Minimum is <b>2</b>. Maximum is <b>20</b>.</td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>wrench_horizontal</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/wrench_horizontal.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/pixelate.gif" width="80" height="80" border="0" alt="" /><br/>pixelate</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">The old content is horizontal expanded until the pixel width equals the image width, than faded to the new content which shrinks horizontal until the pixel width equals the pixel height.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>wrench_vertical</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/wrench_vertical.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/pixelate.gif" width="80" height="80" border="0" alt="" /><br/>pixelate</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">The old content is vertical expanded until the pixel height equals the image height, than faded to the new content which shrinks vertical until the pixel height equals the pixel width.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+
+<div class="outer"><h3>zigzag</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/zigzag.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">Tiles move in a horizontal zigzag from the upper-left corner.</td>
+	<td class="txt">#1 Number of <b>rows</b>. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>100</b>. #2 Number of <b>columns</b>. Default is <b>8</b>. Minimum is <b>1</b>. Maximum is <b>100</b>.</td>
+	<td class="txt">Tweening is always <b>linear</b>.</td>
+</tr></table></div></div>
+
+<div class="outer"><h3>zoom_in</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/zoom_in.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/fade.gif" width="80" height="80" border="0" alt="" /><br/>fade</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">The new content fades in and scales down to the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<div class="outer"><h3>zoom_out</h3><div class="inner"><table border="0" cellpadding="0" cellspacing="4"><tr>
+	<th>Transition</th>
+	<th>IE fallback</th>
+	<th>Default<br/>tweening</th>
+	<th class="txt">Description</th>
+	<th class="txt">Options</th>
+	<th class="txt">Restrictions</th>
+</tr><tr>
+	<td><img src="images/transitions/zoom_out.gif" width="80" height="80" border="0" alt="" /></td>
+	<td><img src="images/transitions/fade.gif" width="80" height="80" border="0" alt="" /><br/>fade</td>
+	<td><img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" /><br/>linear</td>
+	<td class="txt">The old content fades out and scales up from the center.</td>
+	<td class="txt"><b>none</b></td>
+	<td class="txt"><b>none</b></td>
+</tr></table></div></div>
+<p style="clear:left;"></p>
+
+
+<h2>Tweenings</h2>
+
+<p><b>cvi_tween_lib.js</b> supports tweening capabilities. <b>TransM.js</b> uses only linear 
+tweening, if this lib is missing or if the browser engine do not support HTML 5 canvas element.</p>
+
+<div class="outer"><h3>linear</h3><div class="inner">
+<img src="images/tweening/linear.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>linear</strong></div></div>
+
+<div class="outer"><h3>sine</h3><div class="inner">
+<img src="images/tweening/sineEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>sine</h3><div class="inner">
+<img src="images/tweening/sineEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>sine</h3><div class="inner">
+<img src="images/tweening/sineEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>quad</h3><div class="inner">
+<img src="images/tweening/quadEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>quad</h3><div class="inner">
+<img src="images/tweening/quadEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>quad</h3><div class="inner">
+<img src="images/tweening/quadEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>cubic</h3><div class="inner">
+<img src="images/tweening/cubicEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>cubic</h3><div class="inner">
+<img src="images/tweening/cubicEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>cubic</h3><div class="inner">
+<img src="images/tweening/cubicEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>quart</h3><div class="inner">
+<img src="images/tweening/quartEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>quart</h3><div class="inner">
+<img src="images/tweening/quartEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>quart</h3><div class="inner">
+<img src="images/tweening/quartEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>quint</h3><div class="inner">
+<img src="images/tweening/quintEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>quint</h3><div class="inner">
+<img src="images/tweening/quintEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>quint</h3><div class="inner">
+<img src="images/tweening/quintEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>expo</h3><div class="inner">
+<img src="images/tweening/expoEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>expo</h3><div class="inner">
+<img src="images/tweening/expoEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>expo</h3><div class="inner">
+<img src="images/tweening/expoEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>circ</h3><div class="inner">
+<img src="images/tweening/circEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>circ</h3><div class="inner">
+<img src="images/tweening/circEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>circ</h3><div class="inner">
+<img src="images/tweening/circEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>bounce</h3><div class="inner">
+<img src="images/tweening/bounceEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>bounce</h3><div class="inner">
+<img src="images/tweening/bounceEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>bounce</h3><div class="inner">
+<img src="images/tweening/bounceEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>back</h3><div class="inner">
+<img src="images/tweening/backEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>back</h3><div class="inner">
+<img src="images/tweening/backEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>back</h3><div class="inner">
+<img src="images/tweening/backEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>elastic</h3><div class="inner">
+<img src="images/tweening/elasticEaseIn.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseIn</strong></div></div>
+<div class="outer"><h3>elastic</h3><div class="inner">
+<img src="images/tweening/elasticEaseOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseOut</strong></div></div>
+<div class="outer"><h3>elastic</h3><div class="inner">
+<img src="images/tweening/elasticEaseInOut.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>EaseInOut</strong></div></div>
+
+<div class="outer"><h3>cubic</h3><div class="inner">
+<img src="images/tweening/cubicBezierCurve.gif" width="80" height="80" border="0" alt="" />
+<br/><strong>BezierCurve</strong></div></div>
+
+<p style="clear:left;"><b>cubicBezierCurve</b> function is compatible with <tt>-webkit-transition-timing-function</tt> 
+<a title="WYSIWYG-Editor" target="_blank" href="http://www.netzgesta.de/dev/cubic-bezier-timing-function.html">WYSIWYG-Editor</a><br/>
+<i>"cubicBezierCurve gives you the opportunity to define unlimited, individual tweenings"</i>.<br/>
+<small>This timing function is specified using a cubic Bezier curve, which is defined by four control points. The first and last 
+control points are always set to (0,0) and (1,1), so you just need to specify the two in-between control points. The points 
+are specified as a percentage of the overall duration <i>(percentage: interpolated as a real number between 0 and 1)</i>.
+</small></p>
+<p style="clear:left;"></p>
+
+
+<h2>Setting Up</h2>
+<p>Download the <b>TransM</b> archive and include the following files <i>(consider the order)</i> into your webpage.</p>
+<p>
+<code>
+&lt;script type="text/javascript" src="<tt>cvi_tween_lib.js</tt>"&gt;&lt;/script&gt;<br/>
+&lt;script type="text/javascript" src="<tt>cvi_trans_lib.js</tt>"&gt;&lt;/script&gt;<br/>
+&lt;script type="text/javascript" src="<tt>transm.js</tt>"&gt;&lt;/script&gt;
+</code>
+</p>
+
+
+<h2>Using It</h2>
+<p>To add a transm object, just execute the function "<tt>transm.add( <b>element</b>, { <b>options</b> } );</tt>" to a block-level element.</p>
+
+
+<h2>Usage</h2>
+<dl>
+	<dt>Set defaults</dt>
+  	<dd>
+		<code>transm.<b>defaultWidth</b> &nbsp; &nbsp;&nbsp; = <tt>320</tt>; //INT 64-1024 (px) canvas width</code><br />
+		<code>transm.<b>defaultHeight</b> &nbsp; &nbsp; = <tt>180</tt>; //INT 64-1024 (px) canvas height</code><br />
+		<code>transm.<b>defaultRadius</b> &nbsp; &nbsp; = <tt>0</tt>; //INT|OBJ [0,0,0,0] radius of the corners</code><br />
+		<code>transm.<b>defaultName</b> &nbsp; &nbsp; &nbsp; = <tt>null</tt>; //STR canvas name|id</code><br />
+		<code>transm.<b>defaultLayer</b> &nbsp; &nbsp;&nbsp; = <tt>null</tt>; //STR overlay image path&amp;file</code><br />
+		<code>transm.<b>defaultCallback</b> &nbsp; = <tt>null</tt>; //STR callback function name</code><br />
+		<code>transm.<b>defaultData</b> &nbsp; &nbsp; &nbsp; = <tt>null</tt>; //OBJ array of images</code><br />
+		<code>transm.<b>defaultAutoplay</b>&nbsp;&nbsp; = <tt>false</tt>; //BOOLEAN auto playing at startup</code><br />
+		<code>transm.<b>defaultPingpong</b>&nbsp; &nbsp;= <tt>false</tt>; //BOOLEAN playing pingpong direction</code><br />
+		<code>transm.<b>defaultVerbose</b> &nbsp; &nbsp;= <tt>false</tt>; //BOOLEAN be verbose via console</code><br />
+		<code>transm.<b>defaultClearbg</b> &nbsp; &nbsp;= <tt>false</tt>; //BOOLEAN clear outer elements background</code><br />
+		<code>transm.<b>defaultNocache</b> &nbsp; &nbsp;= <tt>false</tt>; //BOOLEAN VML image caching (IE only)</code><br />
+		<code>transm.<b>defaultNopreload</b> &nbsp;= <tt>false</tt>; //BOOLEAN just in time image loading</code><br />
+		<code>transm.<b>defaultFadein</b> &nbsp; &nbsp; = <tt>false</tt>; //BOOLEAN fade in at startup (not IE)</code><br />
+		<code>transm.<b>defaultTimeout</b>&nbsp; &nbsp; = <tt>6</tt>; //FLOAT 1-60 (seconds before break off image loading)</code><br />
+		<code>transm.<b>defaultTransition</b> = <tt>'random'</tt>; //STR transition name</code><br />
+		<code>transm.<b>defaultTweening</b> &nbsp; = <tt>'default'</tt>; //STR tweening name</code><br />
+		<code>transm.<b>defaultCparray</b> &nbsp;&nbsp; = <tt>null</tt>; //OBJ control points array</code><br />
+		<code>transm.<b>defaultDuration</b> &nbsp; = <tt>2</tt>; //FLOAT 0.5-5.0 seconds</code><br />
+		<code>transm.<b>defaultFps</b> &nbsp; &nbsp;&nbsp; &nbsp; = <tt>30</tt>; //INT 15-100 frames per seconds (not IE)</code><br />
+		<code>transm.<b>defaultDelay</b> &nbsp; &nbsp;&nbsp; = <tt>5</tt>; //FLOAT 0.0-600.0 seconds</code><br />
+		<code>transm.<b>defaultMeter</b> &nbsp; &nbsp;&nbsp; = <tt>false</tt>; //BOOLEAN show delay meter while auto playing</code><br />
+		<code>transm.<b>defaultMfgcolor</b> &nbsp; = <tt>'#ff0000'</tt>; //STR meter foreground color</code><br />
+		<code>transm.<b>defaultMbgcolor</b> &nbsp; = <tt>'#ffffff'</tt>; //STR meter background color</code><br />
+		<code>transm.<b>defaultMopacity</b> &nbsp; = <tt>0.75</tt>; //FLOAT 0.1-1.0 meter opacity</code><br />
+		<code>transm.<b>defaultMsize</b> &nbsp;&nbsp; &nbsp; = <tt>32</tt>; //INT 24-min(width,height) meter dimension</code><br />
+		<code>transm.<b>defaultMposx</b> &nbsp;&nbsp; &nbsp; = <tt>0</tt>; //INT 0-(width-msize) meter position x</code><br />
+		<code>transm.<b>defaultMposy</b> &nbsp;&nbsp; &nbsp; = <tt>0</tt>; //INT 0-(height-msize) meter position y</code><br />
+  		<p></p>
+	</dd>
+	<dt>Data format</dt>
+  	<dd>
+		<dl><dt><code><tt>data</tt> = [{</code></dt>
+		<dd>
+			<code><b>source</b>: <tt>'path/file.jpg'</tt>, //STR mandatory image path &amp; file</code><br />
+			<code><b>imgshift</b>: <tt>0.5</tt>,	//FLT optional image shift value (0==top|left, 0.5==center, 1==bottom|right)</code><br />
+			<code><b>callbefore</b>: <tt>null</tt>, //STR optional simple callback function name (executes on start of transition)</code><br />
+			<code><b>argbefore</b>: <tt>null</tt>,	//STR|INT optional callback argument (string or number only)</code><br />
+			<code><b>callafter</b>: <tt>null</tt>, 	//STR optional simple callback function name (executes on end of transition)</code><br />
+			<code><b>argafter</b>: <tt>null</tt>,	//STR|INT optional callback argument (string or number only)</code><br />
+			<code><b>transition</b>: <tt>null</tt>,	//STR optional transition name</code><br />
+			<code><b>alphaimg</b>: <tt>null</tt>,	//STR optional image path &amp; file (if transition=='alpha')</code><br />
+			<code><b>option1</b>: <tt>null</tt>,	//INT optional transition argument #1 (number only)</code><br />
+			<code><b>option2</b>: <tt>null</tt>,	//INT optional transition argument #2 (number only)</code><br />
+			<code><b>tweening</b>: <tt>null</tt>,	//STR optional tweening name</code><br />
+			<code><b>cparray</b>: <tt>null</tt>,	//STR optional control points array (if tweening=='cubicBezierCurve')</code><br />
+			<code><b>duration</b>: <tt>null</tt>,	//FLT optional duration value (seconds)</code><br />
+			<code><b>delay</b>: <tt>null</tt>,		//FLT optional delay value (seconds)</code><br />
+			<code><b>fps</b>: <tt>null</tt>,		//INT optional frames per second</code><br />
+			<code><b>title</b>: <tt>''</tt>,		//STR optional tooltip</code><br />
+			<code><b>onclick</b>: <tt>''</tt>,		//STR optional js-function</code><br />
+			<code><b>href</b>: <tt>''</tt>,			//STR optional URL</code><br />
+			<code><b>target</b>: <tt>'_self'</tt>,	//STR optional target</code>
+  		</dd><dt><code>}, {<b>source</b>: <tt>'image.jpg'</tt>}]</code></dt></dl>
+  		<p></p>
+	</dd>
+	<dt>Add canvas</dt>
+  	<dd>
+  		<code><tt>STRING</tt> = transm.add(<tt>element</tt>, <tt>options</tt>);</code><br />
+		<dl><dt><code><tt>element</tt>&nbsp; == block-level element</code></dt></dl>
+		<dl><dt><code><tt>options</tt> &nbsp; &nbsp; &nbsp; e.g. {<b>width</b>: <tt>128</tt>, <b>height</b>: <tt>64</tt>, ...}</code></dt>
+		<dd>
+			<code><b>width</b> &nbsp; &nbsp;&nbsp; == INT <tt>64</tt> - <tt>1024</tt> Default: <tt>320</tt></code><br />
+			<code><b>height</b> &nbsp; &nbsp; == INT <tt>64</tt> - <tt>1024</tt> Default: <tt>180</tt></code><br />
+			<code><b>radius</b> &nbsp; &nbsp; == INT <tt>0</tt> - <tt>[0,0,0,0]</tt> Default: <tt>0</tt></code><br />
+			<code><b>name</b> &nbsp; &nbsp; &nbsp; == STRING Default: <tt>null</tt></code><br />
+			<code><b>layer</b> &nbsp; &nbsp;&nbsp; == STRING Default: <tt>null</tt></code><br />
+			<code><b>callback</b> &nbsp; == STRING Default: <tt>null</tt></code><br />
+			<code><b>data</b> &nbsp; &nbsp; &nbsp; == OBJECT Default: <tt>null</tt></code><br />
+			<code><b>autoplay</b>&nbsp;&nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>pingpong</b>&nbsp; &nbsp;== BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>verbose</b> &nbsp; &nbsp;== BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>clearbg</b> &nbsp; &nbsp;== BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>nocache</b> &nbsp; &nbsp;== BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>nopreload</b>&nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>fadein</b> &nbsp; &nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>timeout</b>&nbsp; &nbsp; == FLOAT <tt>1</tt> - <tt>60</tt> Default: <tt>6</tt></code><br />
+			<code><b>transition</b> == STRING Default: <tt>'random'</tt></code><br />
+			<code><b>tweening</b> &nbsp; == STRING Default: <tt>'default'</tt></code><br />
+			<code><b>cparray</b> &nbsp;&nbsp; == OBJECT Default: <tt>[0.25,0.1,0.25,1.0]</tt></code><br />
+			<code><b>duration</b> &nbsp; == FLOAT <tt>0.5</tt> - <tt>5.0</tt> Default: <tt>2</tt></code><br />
+			<code><b>fps</b> &nbsp; &nbsp;&nbsp; &nbsp; == INT <tt>15</tt> - <tt>100</tt> Default: <tt>30</tt></code><br />
+			<code><b>delay</b> &nbsp; &nbsp;&nbsp; == FLOAT <tt>5</tt>; //FLOAT 0.0-600.0 seconds</code><br />
+			<code><b>meter</b> &nbsp; &nbsp;&nbsp; == BOOLEAN <tt>true</tt> or <tt>false</tt> Default: <tt>false</tt></code><br />
+			<code><b>mfgcolor</b> &nbsp; == STRING Default: <tt>'#ff0000'</tt></code><br />
+			<code><b>mbgcolor</b> &nbsp; == STRING <tt>'#ffffff'</tt></code><br />
+			<code><b>mopacity</b> &nbsp; == FLOAT Default: <tt>0.1</tt> - <tt>1.0</tt> Default: <tt>0.75</tt></code><br />
+			<code><b>msize</b> &nbsp;&nbsp; &nbsp; == INT <tt>24</tt> - <tt>min(width,height)</tt> Default: <tt>32</tt></code><br />
+			<code><b>mposx</b> &nbsp;&nbsp; &nbsp; == INT <tt>0</tt> - <tt>(width-msize)</tt> Default: <tt>0</tt></code><br />
+			<code><b>mposy</b> &nbsp;&nbsp; &nbsp; == INT <tt>0</tt> - <tt>(height-msize)</tt> Default: <tt>0</tt></code><br />
+  		</dd></dl>
+		<dl><dt><em>(<small><b>Advice:</b> By adding a canvas to a block-level element, the former content of the element will be overwritten)</small></em></dt></dl>
+  		<p></p>
+  	</dd>
+	<dt>Remote control canvas</dt>
+  	<dd>
+  		<code>transm.play(<tt>canvas</tt>);</code> <em>(<small>start playing</small>)</em><br />
+  		<code>transm.stop(<tt>canvas</tt>);</code> <em>(<small>stop playing</small>)</em><br />
+  		<code>transm.first(<tt>canvas</tt>);</code> <em>(<small>show first image</small>)</em><br />
+  		<code>transm.prev(<tt>canvas</tt>);</code> <em>(<small>show previous image</small>)</em><br />
+  		<code>transm.show(<tt>canvas</tt>, <tt>image_number</tt>);</code> <em>(<small>show this image</small>)</em><br />
+  		<code>transm.next(<tt>canvas</tt>);</code> <em>(<small>show next image</small>)</em><br />
+  		<code>transm.last(<tt>canvas</tt>);</code> <em>(<small>show last image</small>)</em><br />
+  		<p></p>
+  	</dd>
+	<dt>Get some informations</dt>
+	<dd>
+		<code><tt>STRING</tt> = transm.add(<tt>element</tt>, <tt>options</tt>);</code>	<em>(<small>returns current canvas</small> <code><b>name|id</b></code>)</em><br />
+		<code><tt>OBJECT</tt> = transm.info(<tt>canvas</tt>);</code>	<em>(<small>returns informations about the last</small> <code><b>transition</b></code>)</em><br />
+		<code><tt>OBJECT</tt>.<b>transition</b>&nbsp; == used transition //STR</code><br />
+		<code><tt>OBJECT</tt>.<b>tweening</b> &nbsp;&nbsp; == used tweening //STR</code><br />
+		<code><tt>OBJECT</tt>.<b>duration</b> &nbsp;&nbsp; == real duration value //FLT</code><br />
+		<code><tt>OBJECT</tt>.<b>fps</b> &nbsp; &nbsp; &nbsp; &nbsp; == real fps value //FLT</code><br />
+		<code><tt>VALUE</tt> &nbsp;= transm.get(<tt>canvas</tt>, ['busy'|'playing'|'current'|'total'|'transition'|'tweening'|'duration'|'fps']);</code><br />
+		<code><tt>VALUE</tt> &nbsp;= <b>busy</b> &nbsp; &nbsp;&nbsp; &nbsp; == transition in action //BOL</code><br />
+		<code><tt>VALUE</tt> &nbsp;= <b>playing</b> &nbsp; &nbsp; == autoplay in action //BOL</code><br />
+		<code><tt>VALUE</tt> &nbsp;= <b>current</b> &nbsp; &nbsp; == current image number //INT</code><br />
+		<code><tt>VALUE</tt> &nbsp;= <b>total</b> &nbsp; &nbsp; &nbsp; == no. of all images //INT</code><br />
+		<code><tt>VALUE</tt> &nbsp;= <b>transition</b>&nbsp; == used transition //STR</code><br />
+		<code><tt>VALUE</tt> &nbsp;= <b>tweening</b> &nbsp;&nbsp; == used tweening //STR</code><br />
+		<code><tt>VALUE</tt> &nbsp;= <b>duration</b> &nbsp;&nbsp; == real duration value //FLT</code><br />
+		<code><tt>VALUE</tt> &nbsp;= <b>fps</b> &nbsp; &nbsp; &nbsp; &nbsp; == real fps value //FLT</code><br />
+		<code><tt>FLOAT</tt> &nbsp;= transm.version;</code><br />
+		<code><tt>STRING</tt> = transm.released;</code>
+  		<p></p>
+	</dd>
+	<dt>Remove canvas</dt>
+	<dd>
+		<code>transm.remove(<tt>canvas</tt>);</code>
+  		<p></p>
+	</dd>
+	<dt>Examples</dt>
+	<dd>
+		<code>var photos = new Array();</code><br />
+		<code>photos = [</code><br />
+		<code>&nbsp;&nbsp;{source:'images/demo/0.jpg', imgshift:0.75},</code><br />
+		<code>&nbsp;&nbsp;{source:'images/demo/1.jpg', title:'dummy', onclick:'alert("dummy")'},</code><br />
+		<code>&nbsp;&nbsp;{source:'images/demo/2.jpg', transition:'alpha', alphaimg:'images/alphamask/usflag.jpg'}</code><br />
+		<code>]</code><br />
+		<code>var opts = {width:655, height:150, radius:[64,64], timeout:3, layer:'images/layer.png', pingpong:true, clearbg:true, delay: 3.0, meter: true, mopacity: .75, mposx: 615, mposy: 110, data:photos, name:'viewer'};</code><br />
+  		<code>var <b>my_ele</b> = transm.add(<tt>document.getElementById('my_div')</tt>, <tt>opts</tt>);</code><br />
+		<code>if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}}</code><br />
+  		<code>transm.add(<tt>$('my_div')</tt>, <tt>opts</tt>);</code><br />
+  		<code>transm.play(<tt>$('viewer')</tt>);</code><br />
+  		<code>transm.stop(<tt>$('viewer')</tt>);</code><br />
+  		<code>transm.show(<tt>$('viewer')</tt>, <tt>2</tt>);</code><br />
+  		<code>alert('transm: '+transm.version+' ('+transm.released+')');</code><br/>
+  		<code>transm.remove(<tt>$('viewer')</tt>);</code><br />
+  		<p></p>
+	</dd>
+</dl>
+
+
+<h2>Restrictions</h2>
+<p>The Internet Explorer implementation has a few system immanent limitations. The problem is that VML images don't support the onload event (or onreadystate). 
+Also IE doesn't cache VML images across page loads. Notice the long delay on page reload! If you watch IE's http traffic <em>(say using Fiddler)</em>, you'll see that IE requests each image again.
+So for every image, <b>TransM.js</b> needs to download it twice. Even the images are in browser cache, VML still need to connect server and get a 304 response.
+I've found a way to cache VML images. IE 6/7/8 works well with the argument <tt>nocache: false</tt>, but if you get in conflict with it you can set it to <tt>nocache: true</tt>.
+With setting <tt>nocache: true</tt> IE needs to cycle one time through the play loop, before all images are cached.
+The number of transition types is limited to <b>51</b> and the tweening is always <b>linear</b>.
+In opposite to the frame accurate transitions, Internet Explorer transitions are time accurate. That is why IE do not support the <b>fps</b> parameter.</p>
+
+
+<h2>History</h2>
+<p>
+Version 1.3<ul><li>Added two new transition effects to library</li></ul>
+Version 1.2<ul><li>Added support for Internet Explorer 9</li></ul>
+Version 1.11<ul><li>Added just in time image loading feature</li></ul>
+Version 1.0<ul><li>Initial Release</li></ul>
+</p>
+
+
+<h2>License</h2>
+
+<p>transm.js and cvi_trans_lib.js are distributed under this <a href="LICENSE.txt">LICENSE</a>. License permits free of charge use on non-commercial and private web sites only under special conditions <em>(as described in the license)</em>. This license equals neither "<span style="text-decoration: line-through;">open source</span>" nor "<span style="text-decoration: line-through;">public domain</span>". There are also <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#099;&#118;&#105;&#064;&#110;&#101;&#116;&#122;&#103;&#101;&#115;&#116;&#097;&#046;&#100;&#101;">Commercial Software Licenses</a> available.</p>
+
+<h6>YOU AGREE TO ALL CONDITIONS OF THIS LICENCE AGREEMENT CONCERNING THE USE OF THE SOFTWARE BY ACCEPTING THIS LICENCE.
+<br>IF YOU DO NOT AGREE TO ALL CONDITIONS OF THIS AGREEMENT, YOU SHALL NOT INSTALL THE SOFTWARE, OR USE IT IN OTHER WAYS.</h6>
+
+<p><strong>Images used are copyrighted and are used for demonstration only.</strong></p>
+
+<p><a href="http://cvi.netzgesta.de/">cvi.netzgesta.de</a>&nbsp;&nbsp;also visit&nbsp;&nbsp;<a href="http://lab.netzgesta.de/">CVI-lab</a>, <a href="http://dev.netzgesta.de/">CVI-dev</a>, <a href="http://s5.netzgesta.de/">S5 Reloaded</a> and <a href="http://ajaxfilmdb.sourceforge.net/">AJAX-FilmDB</a></p>
+</body>
+</html>
