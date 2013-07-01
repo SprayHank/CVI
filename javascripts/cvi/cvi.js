@@ -1,31 +1,30 @@
 ;
 
-(function(){
+(function() {
 var div = document.createElement("DIV");
-if(typeof (div.style.borderRadius) === "undefined"){
-	if (typeof (div.style.MozBorderRadius) !== "undefined"){
-		CSSStyleDeclaration.prototype.__defineGetter__("borderRadius",function(){return this.MozBorderRadius});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderRadius",function(v){this.MozBorderRadius=v});
-		CSSStyleDeclaration.prototype.__defineGetter__("borderTopLeftRadius",function(){return this.MozBorderRadiusTopleft});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderTopLeftRadius",function(v){this.MozBorderRadiusTopleft=v});
-		CSSStyleDeclaration.prototype.__defineGetter__("borderTopRightRadius",function(){return this.MozBorderRadiusTopright});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderTopRightRadius",function(v){this.MozBorderRadiusTopright=v});
-		CSSStyleDeclaration.prototype.__defineGetter__("borderBottomLeftRadius",function(){return this.MozBorderRadiusBottomleft});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderBottomLeftRadius",function(v){this.MozBorderRadiusBottomleft=v});
-		CSSStyleDeclaration.prototype.__defineGetter__("borderBottomRightRadius",function(){return this.MozBorderRadiusBottomright});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderBottomRightRadius",function(v){this.MozBorderRadiusBottomright=v});
-	}else if(typeof (div.style.WebkitBorderRadius) !== "undefined"){
-		CSSStyleDeclaration.prototype.__defineGetter__("borderRadius",function(){return this.WebkitBorderRadius});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderRadius",function(v){this.WebkitBorderRadius=v});
-		CSSStyleDeclaration.prototype.__defineGetter__("borderTopLeftRadius",function(){return this.WebkitBorderTopLeftRadius});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderTopLeftRadius",function(v){this.WebkitBorderTopLeftRadius=v});
-		CSSStyleDeclaration.prototype.__defineGetter__("borderTopRightRadius",function(){return this.WebkitBorderTopRightRadius});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderTopRightRadius",function(v){this.WebkitBorderTopRightRadius=v});
-		CSSStyleDeclaration.prototype.__defineGetter__("borderBottomLeftRadius",function(){return this.WebkitBorderBottomLeftRadius});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderBottomLeftRadius",function(v){this.WebkitBorderBottomLeftRadius=v});
-		CSSStyleDeclaration.prototype.__defineGetter__("borderBottomRightRadius",function(){return this.WebkitBorderBottomRightRadius});
-		CSSStyleDeclaration.prototype.__defineSetter__("borderBottomRightRadius",function(v){this.WebkitBorderBottomRightRadius=v});
-	}
+if(typeof (div.style.borderRadius) !== "undefined") {return;}
+if(typeof (div.style.MozBorderRadius) !== "undefined") {
+	CSSStyleDeclaration.prototype.__defineGetter__("borderRadius", function() {return this.MozBorderRadius});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderRadius", function(v) {this.MozBorderRadius = v});
+	CSSStyleDeclaration.prototype.__defineGetter__("borderTopLeftRadius", function() {return this.MozBorderRadiusTopleft});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderTopLeftRadius", function(v) {this.MozBorderRadiusTopleft = v});
+	CSSStyleDeclaration.prototype.__defineGetter__("borderTopRightRadius", function() {return this.MozBorderRadiusTopright});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderTopRightRadius", function(v) {this.MozBorderRadiusTopright = v});
+	CSSStyleDeclaration.prototype.__defineGetter__("borderBottomLeftRadius", function() {return this.MozBorderRadiusBottomleft});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderBottomLeftRadius", function(v) {this.MozBorderRadiusBottomleft = v});
+	CSSStyleDeclaration.prototype.__defineGetter__("borderBottomRightRadius", function() {return this.MozBorderRadiusBottomright});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderBottomRightRadius", function(v) {this.MozBorderRadiusBottomright = v});
+} else if(typeof (div.style.WebkitBorderRadius) !== "undefined") {
+	CSSStyleDeclaration.prototype.__defineGetter__("borderRadius", function() {return this.WebkitBorderRadius});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderRadius", function(v) {this.WebkitBorderRadius = v});
+	CSSStyleDeclaration.prototype.__defineGetter__("borderTopLeftRadius", function() {return this.WebkitBorderTopLeftRadius});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderTopLeftRadius", function(v) {this.WebkitBorderTopLeftRadius = v});
+	CSSStyleDeclaration.prototype.__defineGetter__("borderTopRightRadius", function() {return this.WebkitBorderTopRightRadius});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderTopRightRadius", function(v) {this.WebkitBorderTopRightRadius = v});
+	CSSStyleDeclaration.prototype.__defineGetter__("borderBottomLeftRadius", function() {return this.WebkitBorderBottomLeftRadius});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderBottomLeftRadius", function(v) {this.WebkitBorderBottomLeftRadius = v});
+	CSSStyleDeclaration.prototype.__defineGetter__("borderBottomRightRadius", function() {return this.WebkitBorderBottomRightRadius});
+	CSSStyleDeclaration.prototype.__defineSetter__("borderBottomRightRadius", function(v) {this.WebkitBorderBottomRightRadius = v});
 }
 })();
 
