@@ -1216,6 +1216,7 @@ var transm;
 			return false;
 		},
 		_exec: function(self) {
+			function callTrans() {cvi_trans.play('transm_return', self, a ? self.a : self.b, a ? self.b : self.a, alpha, self.layer ? self.c : null, opt1, opt2, trans, tween, cpa, dur, fps);};
 			if(self && !self.TLbusy) {
 				if(self.parentNode.timer) {window.clearInterval(self.parentNode.timer);}
 				transm._clear(self);
@@ -1226,7 +1227,6 @@ var transm;
 				self.TLbarg = cba;
 				if(self.TLbcall) {if(typeof window[self.TLbcall] === 'function') {try {window[self.TLbcall](self.TLbarg);} catch(err) {if(self.verbose) {transm.log('error', 'transm: has failed ' + err.message);}}}}
 				if(self.w3c) {
-					function callTrans() {cvi_trans.play('transm_return', self, a ? self.a : self.b, a ? self.b : self.a, alpha, self.layer ? self.c : null, opt1, opt2, trans, tween, cpa, dur, fps);};
 					self.fromB = a ? 'b' : 'a';
 					transm._buffer(self, a ? self.b : self.a, i);
 					var mask = self.data[i].alphaimg || null, tween = self.data[i].tweening || self.tweening, cpa = self.data[i].cparray || self.cparray, fps = self.data[i].fps || self.fps;
