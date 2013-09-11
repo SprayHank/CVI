@@ -1345,7 +1345,7 @@ var transm;
 	}
 })();
 function transm_return(a, b, c, d) {
-	var self = G(d);
+	var self = document.getElementById(d);
 	if(self) {transm._return(self, a, b, c);}
 	return false;
 }
