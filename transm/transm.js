@@ -100,37 +100,44 @@ var transm;
 (function() {
 	"use strict";
 
+	var G = function(v) {return(document.getElementById(v));},
+		R = function(v) {return(document.body.removeChild(v));},
+		A = function(v) {return(document.body.appendChild(v));},
+		C = function(v) {return(document.createElement(v));},
+		defaultOption = {
+			width: 320,
+			height: 180,
+			radius: 0,
+			name: null,
+			data: null,
+			callback: null,
+			layer: null,
+			autoplay: 0,
+			pingpong: 0,
+			verbose: 0,
+			nocache: 0,
+			nopreload: 0,
+			fadein: 0,
+			clearbg: 0,
+			timeout: 6,
+			transition: 'random',
+			tweening: 'default',
+			cparray: null,
+			duration: 2,
+			delay: 5,
+			fps: 30,
+			meter: false,
+			mfgcolor: '#ff0000',
+			mbgcolor: '#ffffff',
+			mopacity: 0.75,
+			msize: 32,
+			mposx: 280,
+			mposy: 140
+		};
+
 	transm = {
 		version: 1.2,
 		released: '2010-08-10 12:00:00',
-		defaultWidth: 320,
-		defaultHeight: 180,
-		defaultRadius: 0,
-		defaultName: null,
-		defaultData: null,
-		defaultCallback: null,
-		defaultLayer: null,
-		defaultAutoplay: 0,
-		defaultPingpong: 0,
-		defaultVerbose: 0,
-		defaultNocache: 0,
-		defaultNopreload: 0,
-		defaultFadein: 0,
-		defaultClearbg: 0,
-		defaultTimeout: 6,
-		defaultTransition: 'random',
-		defaultTweening: 'default',
-		defaultCparray: null,
-		defaultDuration: 2,
-		defaultDelay: 5,
-		defaultFps: 30,
-		defaultMeter: false,
-		defaultMfgcolor: '#ff0000',
-		defaultMbgcolor: '#ffffff',
-		defaultMopacity: 0.75,
-		defaultMsize: 32,
-		defaultMposx: 280,
-		defaultMposy: 140,
 		engine: (window.opera ? "O" : document.all && !window.opera ? "Ms" : navigator.userAgent.indexOf('WebKit') > -1 ? "Webkit" : navigator.userAgent.indexOf('KHTML') > -1 && navigator.userAgent.indexOf('WebKit') == -1 ? "Khtml" : navigator.userAgent.indexOf('Gecko') > -1 && window.updateCommands ? "Moz" : ""),
 		css: function(v) {
 			var i, t, d = new Object(), s = new Array("O", "Ms", "Khtml", "Webkit", "Moz");
@@ -171,10 +178,6 @@ var transm;
 			if(window.console) {if(!window.console.warn) {window.console.log(s + ': ' + v);} else {window.console[s.toLowerCase() || 'log'](v);}} else if(window.opera) {opera.postError(s + ': ' + v);} else {window.document.title = s + ': ' + v;}
 			return false;
 		},
-		G: function(v) {return(document.getElementById(v));},
-		R: function(v) {return(document.body.removeChild(v));},
-		A: function(v) {return(document.body.appendChild(v));},
-		C: function(v) {return(document.createElement(v));},
 		add: function(object, options) {
 			function uniqueID() {
 				var v = Date.parse(new Date()) + Math.floor(Math.random() * 100000000000);
@@ -189,7 +192,7 @@ var transm;
 			function getArg(a, t) {return (typeof options[a.toLowerCase()] === t ? options[a.toLowerCase()] : transm["default" + a]);};
 			function getNum(a, n, m) {return Math.max(n, Math.min(m, (typeof options[a.toLowerCase()] === 'number' ? options[a.toLowerCase()] : transm["default" + a])));};
 			function finalize() {
-				tmp = transm.C('a');
+				tmp = C('a');
 				tmp.style.height = height + 'px';
 				tmp.style.width = width + 'px';
 				tmp.style.display = 'block';
@@ -212,7 +215,7 @@ var transm;
 				tmp.target = null;
 				if(self.meter) {
 					if(self.w3c) {
-						var meter = transm.C('canvas');
+						var meter = C('canvas');
 						meter.id = self.id + "_meter";
 						meter.width = self.msize;
 						meter.height = self.msize;
@@ -225,7 +228,7 @@ var transm;
 						if(nda) {meter.style[nda] = 'none';}
 						tmp.appendChild(meter);
 					} else if(self.vml) {
-						var meter = transm.C('div');
+						var meter = C('div');
 						meter.id = self.id + "_meter";
 						meter.style.height = self.msize + 'px';
 						meter.style.width = self.msize + 'px';
@@ -239,7 +242,7 @@ var transm;
 						meter.innerHTML = '<v:oval strokeweight="0" stroked="f" filled="t" fillcolor="#808080" style="zoom:1;display:block;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' + self.msize + 'px;height:' + self.msize + 'px;"><v:fill color="' + self.mbgcolor + '" opacity="' + self.mopacity + '" /></v:oval><v:shape path="m 500,500 ae 500,500,500,500,5898150,23592960 x e" coordorigin="0,0" coordsize="1000,1000" strokeweight="0" stroked="f" filled="t" fillcolor="#808080" style="zoom:1;display:block;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' + self.msize + 'px;height:' + self.msize + 'px;"><v:fill color="' + self.mfgcolor + '" opacity="' + self.mopacity + '" /></v:shape>';
 						meter.style.visibility = 'hidden';
 					} else {
-						var meter = transm.C('div');
+						var meter = C('div');
 						meter.id = self.id + "_meter";
 						meter.style.width = (self.cw - 4) + 'px';
 						meter.style.fontSize = '4px';
@@ -259,7 +262,7 @@ var transm;
 						if(nda) {meter.style[nda] = 'none';}
 					}
 				}
-				var cover = transm.C('div');
+				var cover = C('div');
 				cover.id = self.id + "_cover";
 				cover.style.width = parseInt(self.cw / 2, 10) + 'px';
 				cover.style.height = '16px';
@@ -277,7 +280,7 @@ var transm;
 				if(nda) {cover.style[nda] = 'none';}
 				cover.style[self.opa] = self.mopacity;
 				cover.style.filter = "alpha(opacity=" + (self.mopacity * 100) + ")";
-				var pro = transm.C('div');
+				var pro = C('div');
 				pro.id = self.id + "_progress";
 				if(nbr) {pro.style[nbr] = '8px';}
 				pro.style.width = '0px';
@@ -295,7 +298,7 @@ var transm;
 				if(self.vml && document.documentMode) {pro.style.filter = "alpha(opacity=" + (self.mopacity * 100) + ")";}
 				if(self.nopreload) {cover.style.visibility = 'hidden';}
 				if(self.vml && !self.nocache) {
-					tmp = transm.C('v:image');
+					tmp = C('v:image');
 					tmp.id = self.id + "_vml_preloader";
 					tmp.src = "";
 					tmp.strokeweight = "0";
@@ -303,7 +306,7 @@ var transm;
 					tmp.style.display = 'block';
 					tmp.style.visibility = 'visible';
 					tmp.style.cssText = 'zoom:1;position:absolute;left:-9999px;top:0px;margin:0px;padding:0px;width:' + self.cw + 'px;height:' + self.ch + 'px;';
-					transm.A(tmp);
+					A(tmp);
 				}
 				transm._preload(self, 0);
 				return self.id;
@@ -328,34 +331,7 @@ var transm;
 				radius = 0,
 				radii,
 				verbose,
-				defopts = {
-					"width": transm.defaultWidth,
-					"height": transm.defaultHeight,
-					"radius": transm.defaultRadius,
-					"name": transm.defaultName,
-					"data": transm.defaultData,
-					"layer": transm.defaultLayer,
-					"autoplay": transm.defaultAutoplay,
-					"pingpong": transm.defaultPingpong,
-					"verbose": transm.defaultVerbose,
-					"fadein": transm.defaultFadein,
-					"callback": transm.defaultCallback,
-					"clearbg": transm.defaultClearbg,
-					"timeout": transm.defaultTimeout,
-					"transition": transm.defaultTransition,
-					"tweening": transm.defaultTweening,
-					"cparray": transm.defaultCparray,
-					"duration": transm.defaultDuration,
-					"delay": transm.defaultDelay,
-					"fps": transm.defaultFps,
-					"meter": transm.defaultMeter,
-					"mfgcolor": transm.defaultMfgcolor,
-					"mbgcolor": transm.defaultMbgcolor,
-					"mopacity": transm.defaultMopacity,
-					"msize": transm.defaultMsize,
-					"mposx": transm.defaultMposx,
-					"mposy": transm.defaultMposy
-				};
+				defopts = defaultOption;
 			if(options) {for(i in defopts) {if(!options[i]) {options[i] = defopts[i];}}} else {options = defopts;}
 			verbose = getArg('Verbose', 'boolean');
 			vml = transm.vml();
@@ -374,7 +350,7 @@ var transm;
 				id = getArg('Name', 'string');
 				tmp = (id == '' || id == null ? object.id + '_transm' : id);
 				data = (typeof options['data'] === 'object' ? options['data'] : new Array());
-				if(!transm.G(tmp) && data != null && data.length && data.length > 1) {
+				if(!G(tmp) && data != null && data.length && data.length > 1) {
 					tmp = transm.current(object);
 					if(tmp.display.match(/^none|inline|run-in|compact|marker$/i)) {object.style.display = 'block';}
 					if(tmp.position.match(/^none|static$/i)) {object.style.position = 'relative';}
@@ -397,12 +373,12 @@ var transm;
 								document.namespaces.add("v", "urn:schemas-microsoft-com:vml");
 							}
 							if(radius) {
-								var self = transm.C('v:roundrect');
+								var self = C('v:roundrect');
 								self.vml = true;
 								self.radius = Math.max(Math.min(100, radius / (Math.min(width, height) / 100)), 0) + '%';
 								self.arcsize = self.radius;
 							} else {
-								var self = transm.C('v:shape');
+								var self = C('v:shape');
 								self.vml = true;
 								self.coordsize = width + ',' + height;
 								var r = radii, w = width, h = height, p = "m 0," + r[0];
@@ -423,14 +399,14 @@ var transm;
 							self.style.cssText = 'zoom:1;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' + width + 'px;height:' + height + 'px;';
 							self.style.visibility = 'hidden';
 						} else if(w3c) {
-							var self = transm.C('canvas');
+							var self = C('canvas');
 							self.w3c = true;
 							self.csp = transm.canvas('getImageData');
 							self.wcs = navigator.userAgent.indexOf('WebKit') != -1 && !window.external && !document.defaultCharset ? 1 : 0;
 							self.wcf = navigator.userAgent.indexOf('Gecko') > -1 && window.updateCommands && !window.external ? 1 : 0;
 						} else {
 							if(document.images && document.getElementById && document.createElement && document.appendChild && document.removeChild && document.childNodes) {
-								var self = transm.C('img');
+								var self = C('img');
 								self.old = true;
 								self.style.position = 'absolute';
 								self.style.left = '0px';
@@ -523,7 +499,7 @@ var transm;
 								self.TLfps = 0;
 								object.appendChild(self);
 								if(self.w3c) {
-									var buff_a = transm.C('canvas'), buff_b = transm.C('canvas');
+									var buff_a = C('canvas'), buff_b = C('canvas');
 									if(self.wcs) {
 										buff_a.id = self.id + '_img_a';
 										buff_a.height = ch;
@@ -533,7 +509,7 @@ var transm;
 										buff_a.style.top = '0px';
 										buff_a.style.height = ch + 'px';
 										buff_a.style.width = cw + 'px';
-										transm.A(buff_a);
+										A(buff_a);
 										buff_b.id = self.id + '_img_b';
 										buff_b.height = ch;
 										buff_b.width = cw;
@@ -542,7 +518,7 @@ var transm;
 										buff_b.style.top = '0px';
 										buff_b.style.height = ch + 'px';
 										buff_b.style.width = cw + 'px';
-										transm.A(buff_b);
+										A(buff_b);
 									} else {
 										buff_a.width = buff_b.width = width;
 										buff_a.height = buff_b.height = height;
@@ -552,7 +528,7 @@ var transm;
 									self.ctx = self.getContext("2d");
 								}
 								if(self.old) {
-									tmp = transm.C('img');
+									tmp = C('img');
 									tmp.height = height;
 									tmp.width = width;
 									tmp.style.position = 'absolute';
@@ -577,7 +553,7 @@ var transm;
 									img.onload = function() {
 										if(img.width && img.height && img.width >= 64 && img.height >= 64) {
 											if(self.w3c) {
-												var buff_c = transm.C('canvas');
+												var buff_c = C('canvas');
 												if(self.wcs) {
 													buff_c.id = self.id + '_img_c';
 													buff_c.height = ch;
@@ -587,7 +563,7 @@ var transm;
 													buff_c.style.top = '0px';
 													buff_c.style.height = ch + 'px';
 													buff_c.style.width = cw + 'px';
-													transm.A(buff_c);
+													A(buff_c);
 												} else {
 													buff_c.width = width;
 													buff_c.height = height;
@@ -598,10 +574,10 @@ var transm;
 												ctx.drawImage(img, 0, 0, self.width, self.height);
 											} else if(self.vml) {
 												if(radius) {
-													tmp = transm.C('v:roundrect');
+													tmp = C('v:roundrect');
 													tmp.arcsize = self.radius;
 												} else {
-													tmp = transm.C('v:shape');
+													tmp = C('v:shape');
 													tmp.coordsize = width + ',' + height;
 													tmp.path = self.fillpath;
 												}
@@ -615,11 +591,11 @@ var transm;
 												tmp.id = self.id + "_layer";
 											} else if(self.old) {
 												if(self.tri) {
-													tmp = transm.C('div');
+													tmp = C('div');
 													tmp.style.display = 'block';
 													tmp.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + self.layer + '", sizingMethod="scale")';
 												} else {
-													tmp = transm.C('img');
+													tmp = C('img');
 													tmp.src = self.layer;
 													tmp.height = height;
 													tmp.width = width;
@@ -660,7 +636,7 @@ var transm;
 				if(self.parentNode.timer) {window.clearInterval(self.parentNode.timer);}
 				var delay = Math.max(0, Math.min((self.data[self.curI].delay || self.delay), 600)) * 1000;
 				if(self.meter) {
-					var meter = transm.G(self.id + "_meter");
+					var meter = G(self.id + "_meter");
 					if(meter.timer) {window.clearInterval(meter.timer);}
 					if(self.w3c) {
 						var ctx = meter.getContext("2d"), t = Math.round(delay / 40), d = Math.PI * 2, s = d / t, c = 0, w = meter.width, h = meter.height, x = w / 2, y = h / 2, a = (Math.PI / 2) * -1, r = x;
@@ -728,7 +704,7 @@ var transm;
 				self.autoplay = false;
 				if(self.parentNode.timer) {window.clearInterval(self.parentNode.timer);}
 				if(self.meter) {
-					var meter = transm.G(self.id + "_meter");
+					var meter = G(self.id + "_meter");
 					if(meter.timer) {window.clearInterval(meter.timer);}
 					if(self.w3c) {
 						var ctx = meter.getContext("2d");
@@ -827,12 +803,12 @@ var transm;
 				if(self.timer) {window.clearInterval(self.timer);}
 				if(par.timer) {window.clearInterval(par.timer);}
 				if(self.wcs) {
-					var ele = transm.G(self.id + '_img_a');
-					if(ele) {transm.R(ele);}
-					ele = transm.G(self.id + '_img_b');
-					if(ele) {transm.R(ele);}
-					ele = transm.G(self.id + '_img_c');
-					if(ele) {transm.R(ele);}
+					var ele = G(self.id + '_img_a');
+					if(ele) {R(ele);}
+					ele = G(self.id + '_img_b');
+					if(ele) {R(ele);}
+					ele = G(self.id + '_img_c');
+					if(ele) {R(ele);}
 				}
 				if(self.clearbg) {
 					par.style.backgroundImage = self.pbgimage;
@@ -848,10 +824,10 @@ var transm;
 				if(self.timer) {window.clearTimeout(self.timer);}
 				if((!self.nopreload && cnt < self.data.length) || (self.nopreload && self.noiL < noi && cnt < self.data.length)) {
 					var cw = parseInt((self.cw / 2) - 2, 10), ow = cw / (self.data.length - 1);
-					transm.G(self.id + "_progress").style.width = (cnt * ow) + 'px';
-					self.timer = window.setTimeout("if(" + self.verbose + "){transm.log('warn','transm: [" + self.timeout + "ms] timeout image > " + self.data[cnt].source + "');}transm._preload(transm.G('" + self.id + "')," + (cnt + 1) + ");", self.timeout);
+					G(self.id + "_progress").style.width = (cnt * ow) + 'px';
+					self.timer = window.setTimeout("if(" + self.verbose + "){transm.log('warn','transm: [" + self.timeout + "ms] timeout image > " + self.data[cnt].source + "');}transm._preload(G('" + self.id + "')," + (cnt + 1) + ");", self.timeout);
 					if(self.vml && !self.nocache) {
-						var pre = transm.G(self.id + "_vml_preloader");
+						var pre = G(self.id + "_vml_preloader");
 						if(pre) {pre.src = self.data[cnt].source;}
 					}
 					img = new Image();
@@ -969,7 +945,7 @@ var transm;
 		},
 		_prepare: function(self) {
 			if(self) {
-				var i = self.curI, link = transm.G(self.id + "_link");
+				var i = self.curI, link = G(self.id + "_link");
 				if(link) {
 					link.title = self.data[i].title || '';
 					link.target = self.data[i].target || '_self';
@@ -1010,10 +986,10 @@ var transm;
 						}
 					}
 				}
-				transm.G(self.id + "_cover").style.visibility = 'hidden';
+				G(self.id + "_cover").style.visibility = 'hidden';
 				if(self.vml && !self.nocache) {
-					var pre = transm.G(self.id + "_vml_preloader");
-					if(pre) {transm.R(pre);}
+					var pre = G(self.id + "_vml_preloader");
+					if(pre) {R(pre);}
 				}
 				if(self.data.length > 1) {
 					self.noi = self.data.length - 1;
@@ -1050,7 +1026,7 @@ var transm;
 		},
 		_clear: function(self) {
 			if(self) {
-				var link = transm.G(self.id + "_link");
+				var link = G(self.id + "_link");
 				if(link) {
 					link.title = '';
 					link.target = '_self';
@@ -1103,7 +1079,7 @@ var transm;
 					self.appendChild(fill);
 					self.style.visibility = 'visible';
 					if(self.layer) {
-						var tmp = transm.G(self.id + "_layer");
+						var tmp = G(self.id + "_layer");
 						if(tmp) {
 							fill = document.createElement(['<v:fill src="' + self.layer + '" type="frame" />'].join(''));
 							tmp.appendChild(fill);
@@ -1144,7 +1120,7 @@ var transm;
 			if(self && self.nopreload && !self.data[self.curI].l) {
 				var pre = null, cnt = self.curI, img = null;
 				if(self.vml && !self.nocache) {
-					pre = transm.G(self.id + "_vml_preloader");
+					pre = G(self.id + "_vml_preloader");
 					if(pre) {pre.src = self.data[cnt].source;}
 				}
 				img = new Image();
@@ -1220,7 +1196,17 @@ var transm;
 			if(self && !self.TLbusy) {
 				if(self.parentNode.timer) {window.clearInterval(self.parentNode.timer);}
 				transm._clear(self);
-				var alpha = null, a = self.fromB == 'a' ? 1 : 0, i = self.curI, opt1 = self.data[i].option1 || null, opt2 = self.data[i].option2 || null, trans = self.data[i].transition || self.transition, dur = self.data[i].duration || self.duration, caf = self.data[i].callafter || null, caa = self.data[i].argafter || null, cbf = self.data[i].callbefore || null, cba = self.data[i].argbefore || null;
+				var alpha = null,
+					a = self.fromB == 'a' ? 1 : 0,
+					i = self.curI,
+					opt1 = self.data[i].option1 || null,
+					opt2 = self.data[i].option2 || null,
+					trans = self.data[i].transition || self.transition,
+					dur = self.data[i].duration || self.duration,
+					caf = self.data[i].callafter || null,
+					caa = self.data[i].argafter || null,
+					cbf = self.data[i].callbefore || null,
+					cba = self.data[i].argbefore || null;
 				self.TLacall = caf;
 				self.TLaarg = caa;
 				self.TLbcall = cbf;
@@ -1242,7 +1228,7 @@ var transm;
 								if(img.width && img.height && img.width >= 8 && img.height >= 8) {
 									if(todo && self.csp) {
 										var ctx, i, n, s, t, w, h;
-										alpha = transm.C('canvas');
+										alpha = C('canvas');
 										alpha.width = w = img.width;
 										alpha.height = h = img.height;
 										ctx = alpha.getContext("2d");
@@ -1261,15 +1247,13 @@ var transm;
 											ctx.clearRect(0, 0, w, h);
 											ctx.putImageData(s, 0, 0);
 										}
-										callTrans();
 									} else {
 										alpha = img;
-										callTrans();
 									}
 								} else {
 									self.data[i].alphaimg = null;
-									callTrans();
 								}
+								callTrans();
 							};
 							img.src = mask;
 						}
@@ -1280,7 +1264,7 @@ var transm;
 				} else {
 					self.fromB = a ? 'b' : 'a';
 					self.TLbusy = true;
-					var buffer = transm.G(self.id + "_buffer"), timer = {d: null, t: null, start: function() {
+					var buffer = G(self.id + "_buffer"), timer = {d: null, t: null, start: function() {
 						timer.d = new Date();
 						timer.t = timer.d.getTime();
 					}, stop: function() {
@@ -1359,11 +1343,9 @@ var transm;
 			return false;
 		}
 	}
-
-	function transm_return(a, b, c, d) {
-		var self = transm.G(d);
-		if(self) {transm._return(self, a, b, c);}
-		return false;
-	}
-
 })();
+function transm_return(a, b, c, d) {
+	var self = G(d);
+	if(self) {transm._return(self, a, b, c);}
+	return false;
+}
