@@ -192,18 +192,16 @@ var transm;
 				tmp = transm.C('a');
 				tmp.style.height = height + 'px';
 				tmp.style.width = width + 'px';
-				with(tmp.style) {
-					display = 'block';
-					position = 'absolute';
-					background = 'transparent';
-					zIndex = 11;
-					left = '0px';
-					top = '0px';
-					padding = '0px';
-					margin = '0px';
-					outline = '0px none';
-					border = '0px none';
-				}
+				tmp.style.display = 'block';
+				tmp.style.position = 'absolute';
+				tmp.style.background = 'transparent';
+				tmp.style.zIndex = 11;
+				tmp.style.left = '0px';
+				tmp.style.top = '0px';
+				tmp.style.padding = '0px';
+				tmp.style.margin = '0px';
+				tmp.style.outline = '0px none';
+				tmp.style.border = '0px none';
 				object.appendChild(tmp);
 				tmp.unselectable = true;
 				if(nsa) {tmp.style[nsa] = 'none';}
@@ -244,17 +242,15 @@ var transm;
 						var meter = transm.C('div');
 						meter.id = self.id + "_meter";
 						meter.style.width = (self.cw - 4) + 'px';
-						with(meter.style) {
-							fontSize = '4px';
-							lineHeight = '4px';
-							height = '4px';
-							position = 'absolute';
-							display = 'block';
-							background = self.mfgcolor;
-							right = '2px';
-							bottom = '2px';
-							visibility = 'hidden';
-						}
+						meter.style.fontSize = '4px';
+						meter.style.lineHeight = '4px';
+						meter.style.height = '4px';
+						meter.style.position = 'absolute';
+						meter.style.display = 'block';
+						meter.style.background = self.mfgcolor;
+						meter.style.right = '2px';
+						meter.style.bottom = '2px';
+						meter.style.visibility = 'hidden';
 						meter.style[self.opa] = self.mopacity;
 						meter.style.filter = "alpha(opacity=" + (self.mopacity * 100) + ")";
 						tmp.appendChild(meter);
@@ -266,14 +262,12 @@ var transm;
 				var cover = transm.C('div');
 				cover.id = self.id + "_cover";
 				cover.style.width = parseInt(self.cw / 2, 10) + 'px';
-				with(cover.style) {
-					height = '16px';
-					fontSize = '12px';
-					lineHeight = '12px';
-					position = 'absolute';
-					display = 'block';
-					background = self.mbgcolor;
-				}
+				cover.style.height = '16px';
+				cover.style.fontSize = '12px';
+				cover.style.lineHeight = '12px';
+				cover.style.position = 'absolute';
+				cover.style.display = 'block';
+				cover.style.background = self.mbgcolor;
 				cover.style.left = parseInt((self.cw / 4), 10) + 'px';
 				cover.style.top = parseInt((self.ch / 2) - 7, 10) + 'px';
 				if(nbr) {cover.style[nbr] = '8px';}
@@ -286,18 +280,16 @@ var transm;
 				var pro = transm.C('div');
 				pro.id = self.id + "_progress";
 				if(nbr) {pro.style[nbr] = '8px';}
-				with(pro.style) {
-					width = '0px';
-					fontSize = '12px';
-					lineHeight = '12px';
-					height = '16px';
-					margin = '0px';
-					position = 'absolute';
-					display = 'block';
-					background = self.mfgcolor;
-					left = '0px';
-					top = '0px';
-				}
+				pro.style.width = '0px';
+				pro.style.fontSize = '12px';
+				pro.style.lineHeight = '12px';
+				pro.style.height = '16px';
+				pro.style.margin = '0px';
+				pro.style.position = 'absolute';
+				pro.style.display = 'block';
+				pro.style.background = self.mfgcolor;
+				pro.style.left = '0px';
+				pro.style.top = '0px';
 				cover.appendChild(pro);
 				pro.unselectable = true;
 				if(self.vml && document.documentMode) {pro.style.filter = "alpha(opacity=" + (self.mopacity * 100) + ")";}
@@ -387,13 +379,11 @@ var transm;
 					if(tmp.display.match(/^none|inline|run-in|compact|marker$/i)) {object.style.display = 'block';}
 					if(tmp.position.match(/^none|static$/i)) {object.style.position = 'relative';}
 					object.innerHTML = '';
-					with(object.style) {
-						overflow = 'hidden';
-						padding = '0px';
-						outline = '0px none';
-						border = '0px none';
-						cursor = 'progress';
-					}
+					object.style.overflow = 'hidden';
+					object.style.padding = '0px';
+					object.style.outline = '0px none';
+					object.style.border = '0px none';
+					object.style.cursor = 'progress';
 					object.unselectable = true;
 					object.style.height = height + 'px';
 					object.style.width = width + 'px';
@@ -510,12 +500,10 @@ var transm;
 								}
 								self.ch = height;
 								self.cw = width;
-								with(self.style) {
-									padding = '0px';
-									margin = '0px';
-									outline = '0px none';
-									border = '0px none';
-								}
+								self.style.padding = '0px';
+								self.style.margin = '0px';
+								self.style.outline = '0px none';
+								self.style.border = '0px none';
 								self.style.height = height + 'px';
 								self.style.width = width + 'px';
 								self.unselectable = true;
@@ -540,22 +528,18 @@ var transm;
 										buff_a.id = self.id + '_img_a';
 										buff_a.height = ch;
 										buff_a.width = cw;
-										with(buff_a.style) {
-											position = 'fixed';
-											left = '-9999px';
-											top = '0px';
-										}
+										buff_a.style.position = 'fixed';
+										buff_a.style.left = '-9999px';
+										buff_a.style.top = '0px';
 										buff_a.style.height = ch + 'px';
 										buff_a.style.width = cw + 'px';
 										transm.A(buff_a);
 										buff_b.id = self.id + '_img_b';
 										buff_b.height = ch;
 										buff_b.width = cw;
-										with(buff_b.style) {
-											position = 'fixed';
-											left = '-9999px';
-											top = '0px';
-										}
+										buff_b.style.position = 'fixed';
+										buff_b.style.left = '-9999px';
+										buff_b.style.top = '0px';
 										buff_b.style.height = ch + 'px';
 										buff_b.style.width = cw + 'px';
 										transm.A(buff_b);
@@ -571,15 +555,13 @@ var transm;
 									tmp = transm.C('img');
 									tmp.height = height;
 									tmp.width = width;
-									with(tmp.style) {
-										position = 'absolute';
-										left = '0px';
-										top = '0px';
-										padding = '0px';
-										margin = '0px';
-										outline = '0px none';
-										border = '0px none';
-									}
+									tmp.style.position = 'absolute';
+									tmp.style.left = '0px';
+									tmp.style.top = '0px';
+									tmp.style.padding = '0px';
+									tmp.style.margin = '0px';
+									tmp.style.outline = '0px none';
+									tmp.style.border = '0px none';
 									object.appendChild(tmp);
 									tmp.unselectable = true;
 									if(nsa) {tmp.style[nsa] = 'none';}
@@ -600,11 +582,9 @@ var transm;
 													buff_c.id = self.id + '_img_c';
 													buff_c.height = ch;
 													buff_c.width = cw;
-													with(buff_c.style) {
-														position = 'fixed';
-														left = '-9999px';
-														top = '0px';
-													}
+													buff_c.style.position = 'fixed';
+													buff_c.style.left = '-9999px';
+													buff_c.style.top = '0px';
 													buff_c.style.height = ch + 'px';
 													buff_c.style.width = cw + 'px';
 													transm.A(buff_c);
@@ -646,16 +626,14 @@ var transm;
 												}
 												tmp.style.height = height + 'px';
 												tmp.style.width = width + 'px';
-												with(tmp.style) {
-													position = 'absolute';
-													zIndex = 10;
-													left = '0px';
-													top = '0px';
-													padding = '0px';
-													margin = '0px';
-													outline = '0px none';
-													border = '0px none';
-												}
+												tmp.style.position = 'absolute';
+												tmp.style.zIndex = 10;
+												tmp.style.left = '0px';
+												tmp.style.top = '0px';
+												tmp.style.padding = '0px';
+												tmp.style.margin = '0px';
+												tmp.style.outline = '0px none';
+												tmp.style.border = '0px none';
 												object.appendChild(tmp);
 												tmp.unselectable = true;
 												if(nsa) {tmp.style[nsa] = 'none';}
