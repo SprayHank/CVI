@@ -1,66 +1,1741 @@
 /**
- * cvi_trans_lib.js 1.3 (12-Jan-2011) (c) by Christian Effenberger 
+ * cvi_trans_lib.js 1.3 (12-Jan-2011) (c) by Christian Effenberger
  * All Rights Reserved. Source: transm.netzgesta.de
  * This library is part of and supports only: TransM.js
  * Distributed under Netzgestade Software License Agreement.
- * This license permits free of charge use on non-commercial 
- * and private web sites only under special conditions. 
- * Read more at... http://www.netzgesta.de/cvi/LICENSE.html	
- * Commercial licenses available via... cvi[at]netzgesta[dot]de	
-**/
-var cvi_tfx=new Object();
-cvi_tfx.alpha={val:0,min:0,max:3,fail:"fade",tween:"linear",buffer:1,mask:1,alpha:1};
-cvi_tfx.barn_horizontal_in=cvi_tfx.barn_vertical_in=cvi_tfx.barn_horizontal_out=cvi_tfx.barn_vertical_out={tween:"quadEaseOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.blinds_left=cvi_tfx.blinds_right=cvi_tfx.blinds_up=cvi_tfx.blinds_down={val:8,min:1,max:100,tween:"quadEaseIn",buffer:1,mask:0,alpha:0};
-cvi_tfx.blur={val:100,min:8,max:180,tween:"linear",fail:"pixelate",noids:"pixelate",buffer:1,mask:0,alpha:0};
-cvi_tfx.checkerboard_left=cvi_tfx.checkerboard_up=cvi_tfx.checkerboard_right=cvi_tfx.checkerboard_down={val:8,min:2,max:100,tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.circles_in=cvi_tfx.circles_out={val:8,min:1,max:50,fail:"checkerboard_right",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.color={val:"#fff",fail:"fade",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.copy_right={fail:"gradientwipe_right",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.copy_left={fail:"gradientwipe_left",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.copy_up={fail:"gradientwipe_up",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.copy_down={fail:"gradientwipe_down",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.corner_lefttop_in=cvi_tfx.corner_righttop_in=cvi_tfx.corner_leftbottom_in=cvi_tfx.corner_rightbottom_in={fail:"radialwipe_radial",tween:"bounceEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.corner_lefttop_out=cvi_tfx.corner_righttop_out=cvi_tfx.corner_leftbottom_out=cvi_tfx.corner_rightbottom_out={fail:"radialwipe_radial",tween:"backEaseInOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.curl_horizontal={val:6,min:2,max:10,fail:"gradientwipe_left",tween:"sineEaseOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.curl_vertical={val:6,min:2,max:10,fail:"gradientwipe_up",tween:"sineEaseOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.cut={buffer:0,mask:0,alpha:0};
-cvi_tfx.fade={val:100,min:0,max:100,tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.flash={fail:"fade",tween:"linear",buffer:0,mask:0,alpha:0};
-cvi_tfx.gradientwipe_left=cvi_tfx.gradientwipe_right=cvi_tfx.gradientwipe_up=cvi_tfx.gradientwipe_down={val:25,min:5,max:100,tween:"sineEaseInOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.inset_leftup=cvi_tfx.inset_rightup=cvi_tfx.inset_leftdown=cvi_tfx.inset_rightdown={fail:"inset_rightdown",tween:"cubicEaseInOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.iris_cross_in=cvi_tfx.iris_plus_in=cvi_tfx.iris_square_in=cvi_tfx.iris_circle_in=cvi_tfx.iris_diamond_in=cvi_tfx.iris_star_in={tween:"sineEaseIn",buffer:1,mask:0,alpha:0};cvi_tfx.iris_cross_out=cvi_tfx.iris_plus_out=cvi_tfx.iris_diamond_out=cvi_tfx.iris_star_out=cvi_tfx.iris_square_out=cvi_tfx.iris_circle_out={tween:"sineEaseOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.pixelate={val:40,min:10,max:50,tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.pull_left=cvi_tfx.pull_right=cvi_tfx.pull_up=cvi_tfx.pull_down={fail:"slide_hide",tween:"backEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.push_left=cvi_tfx.push_right=cvi_tfx.push_up=cvi_tfx.push_down={fail:"slide_push",tween:"cubicEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.radialgradient={fail:"fade",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.radialwipe_clock=cvi_tfx.radialwipe_wedge=cvi_tfx.radialwipe_radial={tween:"sineEaseInOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.randombars_horizontal=cvi_tfx.randombars_vertical={buffer:1,mask:1,alpha:0};cvi_tfx.randomdissolve={val:2,min:1,max:16,buffer:1,mask:1,alpha:0};
-cvi_tfx.reveal_left=cvi_tfx.reveal_right=cvi_tfx.reveal_up=cvi_tfx.reveal_down={fail:"slide_hide",tween:"backEaseIn",buffer:0,mask:0,alpha:0};
-cvi_tfx.rotate_in={fail:"iris_circle_out",tween:"backEaseIn",buffer:1,mask:0,alpha:0}; 
-cvi_tfx.rotate_out={fail:"iris_circle_in",tween:"backEaseOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.scale_in={fail:"iris_square_out",tween:"backEaseIn",buffer:1,mask:0,alpha:0}; 
-cvi_tfx.scale_out={fail:"iris_square_in",tween:"backEaseOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.slide_swap=cvi_tfx.slide_push=cvi_tfx.slide_hide={val:1,min:1,max:100,tween:"sineEaseInOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.spiral={val:8,min:1,max:100,buffer:1,mask:1,alpha:0};
-cvi_tfx.split_horizontal_in={fail:"barn_vertical_in",tween:"quadEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.split_vertical_in={fail:"barn_horizontal_in",tween:"quadEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.split_horizontal_out={fail:"barn_vertical_out",tween:"quadEaseOut",buffer:0,mask:0,alpha:0}; 
-cvi_tfx.split_vertical_out={fail:"barn_horizontal_out",tween:"quadEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.smudge={fail:"gradientwipe_down",tween:"circEaseInOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.squares_in=cvi_tfx.squares_out={val:8,min:1,max:50,fail:"checkerboard_right",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.stretch_hide_right=cvi_tfx.stretch_hide_left=cvi_tfx.stretch_hide_up=cvi_tfx.stretch_hide_down={fail:"stretch_hide_right",tween:"backEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.stretch_push_up=cvi_tfx.stretch_push_down=cvi_tfx.stretch_push_left=cvi_tfx.stretch_push_right={fail:"stretch_push_right",tween:"backEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.stretch_vertical_out=cvi_tfx.stretch_horizontal_out=cvi_tfx.stretch_vertical_in=cvi_tfx.stretch_horizontal_in={fail:"stretch_horizontal_in",tween:"backEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.strips_leftup=cvi_tfx.strips_rightup=cvi_tfx.strips_leftdown=cvi_tfx.strips_rightdown={tween:"cubicEaseInOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.turn_horizontal_down={val:4,min:2,max:12,fail:"blinds_down",tween:"bounceEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.turn_horizontal_up={val:4,min:2,max:12,fail:"blinds_up",tween:"bounceEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.turn_vertical_right={val:4,min:2,max:12,fail:"blinds_right",tween:"bounceEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.turn_vertical_left={val:4,min:2,max:12,fail:"blinds_left",tween:"bounceEaseOut",buffer:0,mask:0,alpha:0};
-cvi_tfx.wheel={val:4,min:2,max:20,tween:"sineEaseInOut",buffer:1,mask:0,alpha:0};
-cvi_tfx.wrench_horizontal=cvi_tfx.wrench_vertical={fail:"pixelate",tween:"linear",buffer:1,mask:0,alpha:0};
-cvi_tfx.zigzag={val:8,min:1,max:100,buffer:1,mask:1,alpha:0};
-cvi_tfx.zoom_in=cvi_tfx.zoom_out={fail:"fade",tween:"linear",buffer:1,mask:0,alpha:0};
-var cvi_i,cvi_c=0,cvi_rfx=new Array(); for(cvi_i in cvi_tfx) {cvi_rfx[cvi_c]=cvi_i; cvi_c++;}; 
-if(typeof cvi_tween!=='object') {var cvi_tween=new Object(); cvi_tween.linear=function(s,c) {return (1/s)*c;};}
-eval(function(p,a,c,k,e,r){e=function(c){return(c<62?'':e(parseInt(c/62)))+((c=c%62)>35?String.fromCharCode(c+29):c.toString(36))};if('0'.replace(0,e)==0){while(c--)r[e(c)]=k[c];k=[function(e){return r[e]||e}];e=function(){return'([juA-Z]|[1-5]\\w)'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('H Y={version:1.3,released:\'2011-01-15 12:00:00\',1F:2.0,17:30,34:!T.35&&1X.all&&1X.namespaces&&(!1X.3O||1X.3O<9)?1:0,3P:Z(18,D,W,N,2f,G,1s,2o,R,1e,1l,11,17){3r.prototype.2S=2S;Z 2S(){H t,r,i;1y(i=0;i!=2H.2T;i++){r=C.3s(C.3t()*2H.2T);t=2H[i];2H[i]=2H[r];2H[r]=t}};Z 36(v,e){A(T.3Q){T.3Q.36(v+e)}I A(T.35){35.postError(v+e)}I{T.1X.title=v+e}2g 24};Z 1n(o,v,t){2g(C.1r(C.X(o||v,21[t].1r),21[t].X)||21[t].L)};Z 3R(v){Z 2y(h){2g(C.X(0,C.1r(1c(h,16),1D)))}H r=0,g=0,b=0;v=v||\'#fff\';A(v.3S(/^#[0-9a-f]{3}$/i)){r=2y(v.2p(1,1)+v.2p(1,1)),g=2y(v.2p(2,1)+v.2p(2,1)),b=2y(v.2p(3,1)+v.2p(3,1))}I A(v.3S(/^#[0-9a-f]{6}$/i)){r=2y(v.2p(1,2)),g=2y(v.2p(3,2)),b=2y(v.2p(5,2))}2g r+\',\'+g+\',\'+b}A(D&&!D.37){A(R===\'3t\'){R=3U[C.3s(C.3t()*3U.2T)]}R=(2I 21[R]===\'3V\'?R:\'2J\');A(Y.34&&21[R].3W){R=21[R].3W}11=C.1r(C.X(2z(11)||Y.1F,0.5),5.0)||Y.1F;H P=R.3X("_")||[\'2J\'];H E={d:2h,t:2h,1h:Z(){E.d=38 3Y();E.t=E.d.3Z()},1d:Z(){E.d=38 3Y();2g(E.d.3Z()-E.t)}};A(Y.34){H 13=2h,1G=2h,1J="DXImageTransform.Microsoft.",w=1c(D.2U.2i),h=1c(D.2U.2j);3u{D.37=2k;D.39=2h;A(P[0]=="41"){H 22=P[1]||"2t",Q=P[2]||"1w";D.1E=13=1J+"Barn";1G="1N:"+13+"(1F="+11+",3a="+Q+",42="+22+")"}I A(P[0]=="43"){H Q=P[1]||"2A",o=1c(1n(1s,8,R),10);D.1E=13=1J+"Blinds";1G="1N:"+13+"(1F="+11+",direction="+Q+",44="+o+")"}I A(P[0]=="46"){H Q=P[1]||"1K",x=1c(1n(1s,8,R),10),y=1c(1n(2o,x,R),10);D.1E=13=1J+"CheckerBoard";1G="1N:"+13+"(1F="+11+",squaresX="+x+",squaresY="+y+",Direction="+Q+")"}I A(P[0]=="47"){D.1E=13=1J+"48";1G="1N:"+13+"(1F=0.01,49=1.0)"}I A(P[0]=="2J"){H o=2z(1n(1s,2u,R)/2u);D.1E=13=1J+"48";1G="1N:"+13+"(1F="+11+",49="+o+")"}I A(P[0]=="4a"){H Q=P[1]||"1K",o=2z(1n(1s,25,R)/2u),v=(Q==\'1S\'||Q==\'1K\'?0:1),r=(Q==\'1S\'||Q==\'up\'?\'reverse\':\'forward\');D.1E=13=1J+"GradientWipe";1G="1N:"+13+"(1F="+11+",gradientSize="+o+",3a="+r+",WipeStyle="+v+")"}I A(P[0]=="4b"){D.1E=13=1J+"Inset";1G="1N:"+13+"(1F="+11+")"}I A(P[0]=="4c"){H 19=P[1].2V()||"PLUS",Q=P[2]||"1w";D.1E=13=1J+"Iris";1G="1N:"+13+"(1F="+11+",irisStyle="+19+",3a="+Q+")"}I A(P[0]=="4d"){H o=1c(1n(1s,40,R),10);D.1E=13=1J+"Pixelate";1G="1N:"+13+"(1F="+11+",maxSquare="+o+")"}I A(P[0]=="4e"){H 19=P[1].2V()||"CLOCK";D.1E=13=1J+"RadialWipe";1G="1N:"+13+"(1F="+11+",wipeStyle="+19+")"}I A(P[0]=="4f"){H 19=P[1]||"2t";D.1E=13=1J+"RandomBars";1G="1N:"+13+"(1F="+11+",42="+19+")"}I A(P[0]=="4g"){D.1E=13=1J+"RandomDissolve";1G="1N:"+13+"(1F="+11+")"}I A(P[0]=="4h"){H 19=P[1].2V()||"4i",o=1c(1n(1s,1,R),10);D.1E=13=1J+"Slide";1G="1N:"+13+"(1F="+11+",slideStyle="+19+",44="+o+")"}I A(P[0]=="2W"){H x=1c(1n(1s,8,R),10),y=1c(1n(2o,x,R),10);D.1E=13=1J+"Spiral";1G="1N:"+13+"(1F="+11+",4j="+x+",4k="+y+")"}I A(P[0]=="4l"){H 19=P[1].2V()||"4i";19=19==\'VERTICAL\'||19==\'HORIZONTAL\'?\'SPIN\':19;D.1E=13=1J+"Stretch";1G="1N:"+13+"(1F="+11+",stretchStyle="+19+")"}I A(P[0]=="4m"){H 19=P[1]||"3v";D.1E=13=1J+"Strips";1G="1N:"+13+"(1F="+11+",3a="+19+")"}I A(P[0]=="4n"){H o=1c(1n(1s,4,R),10);D.1E=13=1J+"Wheel";1G="1N:"+13+"(1F="+11+",spokes="+o+")"}I A(P[0]=="2X"){H x=1c(1n(1s,8,R),10),y=1c(1n(2o,x,R),10);D.1E=13=1J+"Zigzag";1G="1N:"+13+"(1F="+11+",4j="+x+",4k="+y+")"}A(P[0]!=""&&13!=2h&&N.nw>=8&&N.nh>=8){D.2U.13=1G;D.2C.2D(13).apply();A(D.2C.2D(13).3b==1){H b,a=D.firstChild,pw=N.wm||w,ph=N.hm||h,U=N.ox||0,O=N.oy||0;A(a){b=1X.3w([\'<v:1z src="\'+N.1H+\'" size="\'+pw+\'pt,\'+ph+\'pt" origin="\'+U+\',\'+O+\'" 3x="0,0" aspect="ignore"  type="frame" />\'].join(\'\'));D.replaceChild(b,a)}E.1h();D.2C.2D(13).3P();A(D.2C.2D(13).3b==2){D.onfilterchange=Z(){A(D.2C.2D(13).3b==0){H t=E.1d();D.1E=2h;Y.1a(18,R,t,30*((11*1f)/t),D)}}}}}}3y(2K){D.39=2K.3c;36(\'4r: \',2K.3c+\' - R "\'+R+\'" 4s 4t!\');Y.1a(18,R,0,0,D)}}I A(D.tagName.2V()=="CANVAS"){A(D.E){T.1i(D.E)}A(D.2L){H u=D.2L(\'2d\'),w=1c(D.2i),h=1c(D.2j),4u=2I(3z)==="Z"?2k:24,3d=24;3u{H t=u.getImageData(0,0,1,1);3d=2k}3y(e){3d=24}A((!3d||!4u)&&21[R].4v){R=21[R].4v;P[0]=R}1e=(2I(1p[1e])===\'Z\'?1e:21[R].1e&&2I(1p[21[R].1e])===\'Z\'?21[R].1e:\'linear\');1l=(1l==2h||2I 1l!==\'3V\'?[0.25,0.1,0.25,1.0]:1l);17=C.1r(C.X(1c(17,10)||Y.17,15),2u)||Y.17;Z 1z(c,x,y,w,h,wc){A(wc){c.1Z();c.rect(x,y,w,h);c.20();c.1z()}I{c.1t(x,y,w,h)}};Y.2q=navigator.userAgent.indexOf(\'WebKit\')!=-1&&!T.external&&!1X.defaultCharset?1:0;A(21[R].1o){H 1o=1X.3w(\'D\');A(Y.2q){3e(1o){id=\'4w\';2j=h;2i=w}3e(1o.2U){3x=\'4x\';1S=\'-4y\';4z=\'4A\';2j=h+\'px\';2i=w+\'px\'}1X.3g.4B(1o)}I{1o.2i=w;1o.2j=h}H j=1o.2L(\'2d\')}A(21[R].26){H 26=1X.3w(\'D\');A(Y.2q){3e(26){id=\'4C\';2j=h;2i=w}3e(26.2U){3x=\'4x\';1S=\'-4y\';4z=\'4A\';2j=h+\'px\';2i=w+\'px\'}1X.3g.4B(26)}I{26.2i=w;26.2j=h}H 1g=26.2L(\'2d\')}A(21[R].2f){A(!j||!1g||!2f||2f.2i<8||2f.2j<8){P[0]="2J";R=\'2J\';1s=2u}}H 1x=\'\',L=0,M=0,V=C.1q(1f/17),F=C.1q((11*1f)/V);u.2l();3u{D.37=2k;D.39=2h;A(P[0]=="2f"){H o=1c(1n(1s,0,R),10),x=o==1||o==3?1:0,y=o==2||o==3?1:0,c=C.1q(F*.5),a=1/c;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);1g.1j(0,0,w,h);A(M<=c){1g.1k="1H-1L";A(x||y){1g.2l();1g.28(x?w:0,y?h:0);1g.3h(x?-1:1,y?-1:1);1g.B(2f,0,0,w,h);1g.14()}I{1g.B(2f,0,0,w,h)}1g.1k="darker";1g.1A="1b(0,0,0,"+(1-(L*a))+")";1g.1t(0,0,w,h)}I{1g.2r=1-((L-c)*a);1g.1k="1H-1L";A(x||y){1g.2l();1g.28(x?w:0,y?h:0);1g.3h(x?-1:1,y?-1:1);1g.B(2f,0,0,w,h);1g.14()}I{1g.B(2f,0,0,w,h)}}j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.B(26,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="41"){H 22=P[1]||"2t",Q=P[2]||"1w",v=22=="2v"?1:0,m=Q=="in"?1:0,ow=w,oh=h,K=v?C.1q(w/2):w,J=v?h:C.1q(h/2),s=((v?w:h)/(F*2));E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";A(m){ow=v?(L*s):0;oh=v?0:(L*s);j.1t(ow,oh,C.X(w-(2*ow),1),C.X(h-(2*oh),1))}I{ow=v?K-(L*s):w;oh=v?h:J-(L*s);j.1t(0,0,C.X(ow,1),C.X(oh,1));j.1t(w-ow,h-oh,w,h)}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="43"){H q=1c(1n(1s,8,R),10),Q=P[1]||"1K",hz=Q=="1K"||Q=="1S"?1:0,r=(Q=="1K"?1:0),d=(Q=="2A"?1:0),K=hz?(w/q):w,J=hz?h:(h/q),sx=(K/F),sy=(J/F),s=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";A(hz){s=L*sx;1y(H i=0;i<q;i++){j.1t((i*K)+(r?s:0),0,C.X(K-s,1),J)}}I{s=L*sy;1y(H i=0;i<q;i++){j.1t(0,(i*J)+(d?s:0),K,C.X(J-s,1))}}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="blur"){H q=1c(1n(1s,0,R),10),c=C.1q(F*.5),a=1/c,d=q/c,b=q/F,s=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;s=M<=c?1:0;j.1j(0,0,w,h);A(s){k=1c(L*b,10);j.B(W,0,0,w,h);3z(j,k,0,0,w,h)}I{k=1c((F-L)*b,10);j.2r=a*(L-c);j.B(N,0,0,w,h);3z(j,k,0,0,w,h)}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="46"){H gx=1c(1n(1s,8,R),10),gy=1c(1n(2o,gx,R),10),Q=P[1]||"1K",hz=(Q==\'1S\'||Q==\'1K\'?1:0),r=(Q==\'1K\'?1:0),d=(Q==\'2A\'?1:0),K=(w/gx)*(hz?2:1),J=(h/gy)*(hz?1:2),sx=(K/F),sy=(J/F),w5=hz?K/2:0,h5=hz?0:J/2,s=0,p=0,k=0,q=0;A(hz){gx=C.27(gx/2)+1}I{gy=C.27(gy/2)+1}E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";1y(H y=0;y<gy;y++){p=y%2;1y(H x=0;x<gx;x++){k=x%2;A(hz){s=L*sx;q=C.X(K-s,1);A(p){j.1t(((x*K)+(r?s:0))-w5,y*J,q,J)}I{j.1t((x*K)+(r?s:0),y*J,q,J)}}I{s=L*sy;q=C.X(J-s,1);A(k){j.1t(x*K,((y*J)+(d?s:0))-h5,K,q)}I{j.1t(x*K,(y*J)+(d?s:0),K,q)}}}}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="circles"){H gx=1c(1n(1s,8,R),10),gy=1c(1n(2o,gx,R),10),Q=P[1]||"1w",m=Q=="in"?1:0,K=(w/gx),J=(h/gy),w5=K/2,h5=J/2,r=C.2w(C.1V(K,2)+C.1V(J,2))/2,s=(r/F),z=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(m?N:W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(m?W:N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";z=C.X(m?L*s:r-(L*s),1);1y(H x=0;x<gx;x++){1y(H y=0;y<gy;y++){j.1Z();j.1M((x*K)+w5,(y*J)+h5);j.2E((x*K)+w5,(y*J)+h5,z,0,C.PI*2,2k);j.20();j.1z()}}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="color"){H g=3R(1s),c=C.1q(F*.5),q=1/c,v=0;s=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;s=M<=c?1:0;j.1j(0,0,w,h);A(s){v=2z(L*q);j.B(W,0,0,w,h)}I{v=2z((F-L)*q);j.B(N,0,0,w,h)}j.1A="1b("+g+","+v+")";j.1t(0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="corner"){H 22=P[1]||"lefttop",Q=P[2]||"in",2M=C.PI/2,4D=2M/F,d=Q=="in"?1:0,p=22=="righttop"?1:22=="leftbottom"?2:22=="rightbottom"?3:0,z=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;z=(4D*L);u.B(d?W:N,0,0,w,h);u.2l();A(p==3){u.28(w,h);u.23((d?2M:0)-z);u.B(d?N:W,-w,-h,w,h)}I A(p==2){u.28(0,h);u.23((d?0-2M:0)+z);u.B(d?N:W,0,-h,w,h)}I A(p==1){u.28(w,0);u.23((d?2M:0)-z);u.B(d?N:W,-w,0,w,h)}I{u.28(0,0);u.23((d?0-2M:0)+z);u.B(d?N:W,0,0,w,h)}u.14();A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="curl"){H d=1c(1n(1s,6,R),10),Q=P[1]||"2t",v=Q=="2v"?1:0,ss=((v?h:w)/F),c=C.1q((v?h:w)/d),o=.5,p=0,s=0,sx=0,sy=0,dx=0,dy=0,K=0,J=0,wc=Y.2q;j.1j(0,0,w,h);j.2l();j.28(v?0:w,v?h:0);j.3h(v?1:-1,v?-1:1);j.B(W,0,0,w,h);j.14();E.1h();Z 4E(c,x,y,w,h,o){H s=c.2Y(x,y,w,h);s.1B(0.0,\'1b(0,0,0,\'+o+\')\');s.1B(0.2,\'1b(0,0,0,0)\');s.1B(0.3,\'1b(2s,2s,2s,0)\');s.1B(0.45,\'1b(2s,2s,2s,\'+o+\')\');s.1B(0.6,\'1b(2s,2s,2s,0)\');s.1B(0.66,\'1b(0,0,0,0)\');s.1B(1.0,\'1b(0,0,0,\'+o+\')\');2g s};Z 4F(c,x,y,w,h,o){H s=c.2Y(x,y,w,h);s.1B(0.0,\'1b(0,0,0,\'+o+\')\');s.1B(1.0,\'1b(0,0,0,0)\');2g s};D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;s=C.X(L*ss,1);u.B(N,0,0,w,h);A(v){J=C.1r(s,c);K=w;p=C.X(h-s-J,1);sx=0;sy=C.1r(h-J,s);dx=0;dy=h-s-J-J}I{K=C.1r(s,c);J=h;p=C.X(w-s-K,1);sy=0;sx=C.1r(w-K,s);dy=0;dx=w-s-K-K}u.B(W,0,0,v?w:p,v?p:h,0,0,v?w:p,v?p:h);u.B(1o,sx,sy,K,J,dx,dy,K,J);u.1A=4E(u,dx,dy,v?0:dx+K,v?dy+J:0,o);1z(u,dx,dy,K,J,wc);u.1A=4F(u,v?0:dx+K,v?dy+J:0,v?0:dx+K+c,v?dy+J+c:0,o);1z(u,v?0:dx+K,v?dy+J:0,v?w:c,v?c:h,wc);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="47"){H t=V;u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17,D)}I A(P[0]=="2J"){H o=2z(1n(1s,2u,R)/2u),fa=o+((1-o)/2),fb=1-fa,ap=C.1q(F*fa),bp=C.1q(F*fb),oa=1,ob=0,a=1/(F*fa);u.2r=1;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;oa=(L>ap?0:a*(ap-L));ob=(L<bp?0:a*(L-bp));u.1j(0,0,w,h);u.2r=(o==1?1:oa);u.B(W,0,0,w,h);j.1j(0,0,w,h);j.2r=ob;j.B(N,0,0,w,h);u.2r=1;u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="flash"){H r=C.2w(C.1V(w,2)+C.1V(h,2))/2,a=C.X(C.1r(C.1q(F*0.1),3),1),b=2*a,c=C.X(F-b,1),s=(r/a),q=(1/c),x=w/2,y=h/2,z=0,v=0,wc=Y.2q;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;A(M<=b){z=M<=a?1:0;v=C.X(s*(L-(z?0:a)),1);u.B(W,0,0,w,h);1x=u.4H(x,y,z?0:v,x,y,z?v:r);1x.1B(0,"1b(1D,1D,1D,1.0)");1x.1B(1,"1b(1D,1D,1D,0.0)");u.1A=1x;1z(u,0,0,w,h,wc)}I{v=C.X(1-(q*(L-b)),0);u.B(N,0,0,w,h);u.1A="1b(1D,1D,1D,"+v+")";u.1t(0,0,w,h)}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4a"||P[0]=="4I"){H cp=P[0]=="4I"?1:0,g=cp?0.3:2z(1n(1s,25,R)/2u),Q=P[1]||"1K",U=0,O=0,xp=0,yp=0,v=(Q==\'1S\'||Q==\'1K\'?0:1),r=(Q==\'1S\'||Q==\'up\'?1:0),gw=C.1q(v?w:w*g),gh=C.1q(v?h*g:h),sa=(v?h+gh:w+gw),ss=(sa/F),wc=Y.2q;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;U=C.1q(v?0:r?sa-(L*ss):L*ss);O=C.1q(v?r?sa-(L*ss):L*ss:0);xp=v?0:U-gw;yp=v?O-gh:0;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";A(r){A(wc||T.35){A(v){A(yp<0){j.1t(0,yp,w,C.4J(yp))}I{j.1t(0,0,w,yp)}}I{A(xp<0){j.1t(xp,0,C.4J(xp),h)}I{j.1t(0,0,xp,h)}}}I{j.1t(0,0,v?w:xp,v?yp:h)}}I{j.1t(U,O,w,h)}1x=j.2Y(xp,yp,U,O);1x.1B((r?1:0),"1b(0,0,0,0.0)");1x.1B((r?0:1),"1b(0,0,0,1.0)");j.1A=1x;1z(j,xp,yp,gw,gh,wc);u.B(1o,0,0,w,h);A(cp){1x=u.2Y(xp,yp,U,O);1x.1B((r?1:0),"1b(0,1D,0,0.0)");1x.1B((r?.6:.4),"1b(4K,1D,4L,0.6)");1x.1B((r?.3:.7),"1b(1D,1D,1D,0.9)");1x.1B((r?.25:.75),"1b(1D,1D,1D,1.0)");1x.1B((r?.2:.8),"1b(1D,1D,1D,0.9)");1x.1B((r?0:1),"1b(4K,1D,4L,0.0)");u.1A=1x;1z(u,xp,yp,gw,gh,wc)}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4b"){H Q=P[1]||"3G",sw=(w/F),sh=(h/F),K=0,J=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);K=C.1r(C.X(L*sw,1),w);J=C.1r(C.X(L*sh,1),h);A(Q==\'4O\'){u.B(N,0,h-J,K,J,0,h-J,K,J)}I A(Q==\'3v\'){u.B(N,w-K,0,K,J,w-K,0,K,J)}I A(Q==\'4P\'){u.B(N,w-K,h-J,K,J,w-K,h-J,K,J)}I{u.B(N,0,0,K,J,0,0,K,J)}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4c"){H 19=P[1]||"3H",Q=P[2]||"1w",o=Q=="in"?0:1,x=w/2,y=h/2,m=C.X(w,h),n=m/2,k=0;A(19==\'4Q\'||19==\'4R\'||19==\'star\'){H d=C.2w(C.1V(m,2)+C.1V(m,2)),ss=(m/F),sr=(d/F)}I A(19==\'4S\'||19==\'3H\'){H d=C.2w(C.1V(m,2)+C.1V(m,2)),ss=(m/F)}I A(19==\'4T\'){H d=C.2w(C.1V(w,2)+C.1V(h,2)),f=(C.PI/4)*-3,g=(C.PI*2),n=C.27(d/2),ss=(d/F)}H os=(ss/2),U=n-x,O=n-y;E.1h();Z 4U(c,x,y,n,r,p){H r1=r,r2=r*.4;c.28(x,y);c.23(p);c.1Z();c.1M(0,r1);1y(H i=0;i<=n;i++){c.2l();c.23(2*i*C.PI/n);c.S(0,r1);c.14();c.2l();c.23(2*i*C.PI/n+(2*C.PI/n)/2);c.S(0,r2);c.14()}c.20();c.1z();c.23(-p);c.28(-x,-y)};Z 4V(c,x,y,n,r,p){H r1=r,r2=r*.4;c.28(x,y);c.23(p);c.S(0,r1);1y(H i=0;i<=n;i++){c.2l();c.23(2*i*C.PI/n);c.S(0,r1);c.14();c.2l();c.23(2*i*C.PI/n+(2*C.PI/n)/2);c.S(0,r2);c.14()}c.23(-p);c.28(-x,-y)};D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";A(19==\'4Q\'){k=(L*ss);j.1Z();A(o){j.1M((0-U-n)+k,h/2);j.S(0-U+n,(0-O-n)+k);j.S((0-U+m+n)-k,h/2);j.S(0-U+n,(h+O+n)-k)}I{j.1M(0-U,0-O);j.S(x,y-k);j.S(x+k,y);j.S(x,y+k);j.S(x-k,y);j.S(x,y-k);j.S(0-U,0-O);j.S(0-U,h+O);j.S(w+U,h+O);j.S(w+U,0-O)}j.20();j.1z()}I A(19==\'4R\'){k=(L*os);j.1Z();A(o){j.1M(x,0-O+k);j.S(0-U-k,0-O-n);j.S(0-U-n,0-O-k);j.S(0-U+k,y);j.S(0-U-n,h+O+k);j.S(0-U-k,h+O+n);j.S(x,h+O-k);j.S(w+U+k,h+O+n);j.S(w+U+n,h+O+k);j.S(w+U-k,y);j.S(w+U+n,0-O-k);j.S(w+U+k,0-O-n)}I{j.1M(0-U-n,0-O-n);j.S(x,0-O-n);j.S(x,y-k);j.S(0-U-n+k,0-O-n);j.S(0-U-n,0-O-n+k);j.S(x-k,y);j.S(0-U-n,h+O+n-k);j.S(0-U-n+k,h+O+n);j.S(x,y+k);j.S(w+U+n-k,h+O+n);j.S(w+U+n,h+O+n-k);j.S(x+k,y);j.S(w+U+n,0-O-n+k);j.S(w+U+n-k,0-O-n);j.S(x,y-k);j.S(x,0-O-n);j.S(w+U+n,0-O-n);j.S(w+U+n,h+O+n);j.S(0-U-n,h+O+n)}j.20();j.1z()}I A(19==\'4T\'){k=(L*os);j.1Z();A(o){j.1M(x,y);j.2E(x,y,C.X(n-k,1),0,g,24)}I{j.1M(0-U,0-O);j.S(x,y);j.2E(x,y,C.X(k,1),f,g+f,24);j.S(0-U,0-O);j.S(0-U,h+O);j.S(w+U,h+O);j.S(w+U,0-O)}j.20();j.1z()}I A(19==\'4S\'){k=(L*os);A(o){j.1t(x-n+k,y-n+k,C.X(m-(k+k),1),C.X(m-(k+k),1))}I{j.1Z();j.1M(0-U,0-O);j.S(x-k,y-k);j.S(x+k,y-k);j.S(x+k,y+k);j.S(x-k,y+k);j.S(x-k,y-k);j.S(0-U,0-O);j.S(0-U,h+O);j.S(w+U,h+O);j.S(w+U,0-O);j.20();j.1z()}}I A(19==\'3H\'){k=(L*os);A(o){j.1t(0,y-n+k,w,C.X(m-(k+k),1));j.1t(x-n+k,0,C.X(m-(k+k),1),h)}I{j.1Z();j.1M(0-U,0-O);j.S(x-k,y-k);j.S(x-k,y-n);j.S(x+k,y-n);j.S(x+k,y-k);j.S(x+n,y-k);j.S(x+n,y+k);j.S(x+k,y+k);j.S(x+k,y+n);j.S(x-k,y+n);j.S(x-k,y+k);j.S(x-n,y+k);j.S(x-n,y-k);j.S(x-k,y-k);j.S(0-U,0-O);j.S(0-U,h+O);j.S(w+U,h+O);j.S(w+U,0-O);j.20();j.1z()}}I{A(o){4U(j,x,y,5,d-(L*sr),-(C.PI/5))}I{j.1Z();j.1M(0-U-n,0-O-n);j.S(0-U-n,h+O+n);j.S(x,h+O+n);4V(j,x,y,5,(L*sr),-(C.PI/5));j.S(x,h+O+n);j.S(w+U+n,h+O+n);j.S(w+U+n,0-O-n);j.20();j.1z()}}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4d"){H q=1c(1n(1s,40,R),10),c=C.1q(F*.5),a=1/c,ow=0,oh=0,mw=w/q,mh=h/q,d=q/c,s=0;u.4W=24;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;s=M<=c?1:0;j.1j(0,0,w,h);A(s){ow=C.1q(C.1r(C.X(w/((L*d)+1),mw),w));oh=C.1q(C.1r(C.X(h/((L*d)+1),mh),h))}I{ow=C.1q(C.X(C.1r(w/((F-L)*d),w),mw));oh=C.1q(C.X(C.1r(h/((F-L)*d),h),mh));j.2r=a*(L-c)}j.B(s?W:N,0,0,w,h,0,0,ow,oh);u.B(1o,0,0,ow,oh,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.4W=2k;u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="pull"||P[0]=="4X"){H Q=P[1]||"1K",r=P[0]=="4X"?1:0,hz=Q=="1K"||Q=="1S"?1:0,sc=((hz?w:h)/F),s=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(r?N:W,0,0,w,h,0,0,w,h);s=L*sc;A(Q=="1S"){u.B(r?W:N,0,0,w,h,r?0-s:w-s,0,w,h)}I A(Q=="2A"){u.B(r?W:N,0,0,w,h,0,r?s:s-h,w,h)}I A(Q=="up"){u.B(r?W:N,0,0,w,h,0,r?0-s:h-s,w,h)}I{u.B(r?W:N,0,0,w,h,r?s:s-w,0,w,h)}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="3L"){H Q=P[1]||"1K",hz=Q=="1K"||Q=="1S"?1:0,sc=((hz?w:h)/F),s=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h,0,0,w,h);s=L*sc;A(Q=="1K"){u.B(W,0,0,w,h,s,0,w,h);u.B(N,0,0,w,h,-w+s,0,w,h)}I A(Q=="1S"){u.B(W,0,0,w,h,0-s,0,w,h);u.B(N,0,0,w,h,w-s,0,w,h)}I A(Q=="2A"){u.B(W,0,0,w,h,0,s,w,h);u.B(N,0,0,w,h,0,-h+s,w,h)}I A(Q=="up"){u.B(W,0,0,w,h,0,0-s,w,h);u.B(N,0,0,w,h,0,h-s,w,h)}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="radialgradient"){H r=C.2w(C.1V(w,2)+C.1V(h,2))/2,c=C.1q(F*0.5),s=(r/c),x=w/2,y=h/2,v=0,z=0,wc=Y.2q;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";z=M<=c?0:c;v=C.X(s*(L-z),1);1x=j.4H(x,y,z==0?0:v,x,y,z==0?v:r);1x.1B(0,"1b(0,0,0,0.0)");1x.1B(1,"1b(0,0,0,1.0)");j.1A=1x;1z(j,0,0,w,h,wc);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4e"){H 19=P[1]||"clock",s=0,x=w/2,y=h/2,a=(C.PI/2)*-1,d=C.PI*2,r=C.27(C.2w(C.1V(w,2)+C.1V(h,2))/2);A(19=="4Y"){r=r*2;d=C.PI/2}s=(d/(F*(19=="4Z"?2:1)));M=1;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";j.1Z();A(19=="4Z"){j.1M(x,y);j.2E(x,y,r,a-(L*s),a+(L*s),2k)}I A(19=="4Y"){j.1M(0,0);j.2E(0,0,r,0,L*s,2k)}I{j.1M(x,y);j.2E(x,y,r,a,a+(L*s),2k)}j.20();j.1z();u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4f"){H 19=P[1]||"2t",v=19=="2v"?1:0,a=v?w:h,z=0,ss,cs,l=38 3r();1y(H i=0;i<a;i++){l[i]=i}l.2S();ss=C.27(a/F),cs=l.2T-ss;1g.1j(0,0,w,h);1g.1A="1b(0,0,0,1.0)";1g.1t(0,0,w,h);E.1h();D.E=T.1m(Z(){u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";z=C.1r(ss*M,cs);A(v){1y(H i=z;i<(z+ss);i++){1g.1j(l[i],0,1,h)}}I{1y(H i=z;i<(z+ss);i++){1g.1j(0,l[i],w,1)}}j.B(26,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4g"){H q=1c(1n(1s,2,R),10),gx=C.27(w/q),gy=C.27(h/q),a=gx*gy,x=0,y=0,z=0,ss,cs,b=38 3r();1y(H i=0;i<a;i++){b[i]=i}b.2S();ss=C.27(a/F),cs=b.2T-ss;1g.1j(0,0,w,h);1g.1A="1b(0,0,0,1.0)";1g.1t(0,0,w,h);E.1h();D.E=T.1m(Z(){u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";z=C.1r(ss*M,cs);1y(H i=z;i<(z+ss);i++){y=C.3s(b[i]/gx);x=b[i]-(y*gx);1g.1j(x*q,y*q,q,q)}j.B(26,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="23"){H Q=P[1]||"1w",m=Q=="in"?1:0,z=0,K=0,J=0,d=1/F,a=(C.PI*2)/F;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;z=m?1-(L*d):L*d;K=C.X(w*z,1);J=C.X(h*z,1);j.1j(0,0,w,h);j.2l();j.28(w/2,h/2);j.23(a*L);j.B(m?W:N,0,0,w,h,0-(K/2),0-(J/2),K,J);j.14();u.B(m?N:W,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="3h"){H Q=P[1]||"1w",m=Q=="in"?1:0,z=0,x=0,y=0,K=0,J=0,d=1/F;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;z=m?1-(L*d):L*d;K=C.X(w*z,1);J=C.X(h*z,1);x=(w-K)/2;y=(h-J)/2;j.1j(0,0,w,h);j.B(m?W:N,0,0,w,h,x,y,K,J);u.B(m?N:W,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4h"){H q=1c(1n(1s,1,R),10),19=P[1]||"50",s=(w/F),hw=(w/2),c=0,o=0,O=0,K=0,J=h/q;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;A(19=="3L"){K=L*s;1y(H i=0;i<q;i++){o=i%2;O=i*J;u.B(W,0,O,w,J,(o?K:0-K),O,w,J);u.B(N,0,O,w,J,(o?K-w:w-K),O,w,J)}}I A(19=="swap"){A(c){K=hw+(hw-(L*s));1y(H i=0;i<q;i++){o=i%2;O=i*J;u.B(W,0,O,w,J,(o?K:0-K),O,w,J);u.B(N,0,O,w,J,(o?0-K:K),O,w,J)}}I{K=C.1r(L*s,hw);c=K==hw?2k:24;1y(H i=0;i<q;i++){o=i%2;O=i*J;u.B(N,0,O,w,J,(o?0-K:K),O,w,J);u.B(W,0,O,w,J,(o?K:0-K),O,w,J)}}}I{K=L*s;u.B(N,0,0,w,h,0,0,w,h);1y(H i=0;i<q;i++){o=i%2;O=i*J;u.B(W,0,O,w,J,(o?K:0-K),O,w,J)}}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="smudge"){H tr=C.1q(F*0.8),qr=F-tr,ss=h/tr,k=1/tr,p=1/qr,O=0,J=0,e=0,s=0,o=0,wc=Y.2q;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;A(L<=tr){s=C.X(L*ss,1);o=C.1r(C.X(L*k,0),1);e=C.X(s-ss,0);O=C.1r(s,h-1);J=C.X(h-s,1)}I{o=C.1r(C.X((L-tr)*p,0),1)}u.B(N,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(W,0,O,w,J,0,O,w,J);j.B(W,0,C.X(s-ss,0),w,ss,0,0,w,s);j.1k="1Q-1w";1x=j.2Y(0,0,0,h);1x.1B(0.0,\'1b(0,0,0,1)\');1x.1B(o,\'1b(0,0,0,\'+(L<=tr?0:1)+\')\');1x.1B(1.0,\'1b(0,0,0,0)\');j.1A=1x;1z(j,0,0,w,h,wc);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="2W"){H gx=1c(1n(1s,8,R),10),gy=1c(1n(2o,gx,R),10),m=gx*gy,K=(w/gx),bw=C.27(K),J=(h/gy),bh=C.27(J),lf=(m/F),tt=C.1q(F/m),ct=0,O=0,U=-1,Q=0,xc=gx,yc=gy-1;1g.1j(0,0,w,h);1g.1A="1b(0,0,0,1.0)";1g.1t(0,0,w,h);E.1h();D.E=T.1m(Z(){Z 2W(){A(Q==0&&ct==xc){xc--;Q++;ct=0}I A(Q==1&&ct==yc){yc--;Q++;ct=0}I A(Q==2&&ct==xc){xc--;Q++;ct=0}I A(Q==3&&ct==yc){yc--;Q=0;ct=0}switch(Q){3o 0:U++;3p;3o 1:O++;3p;3o 2:U--;3p;3o 3:O--;3p}ct++;1g.1j(C.1q(U*K),C.1q(O*J),bw,bh)};u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";A(lf<1){A(M!=0&&M%tt==0){2W()}}I{1y(H i=M;i<(M+lf);i++){2W()}}j.B(26,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="3X"){H 22=P[1]||"2t",Q=P[2]||"1w",v=22=="2v"?1:0,m=Q=="in"?1:0,h5=h/2,w5=w/2,sc=(v?h5:w5)/F,s=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;s=C.1r(C.X(L*sc,1),v?m?h:h5:m?w:w5);u.B(m?W:N,0,0,w,h);A(v){u.B(m?N:W,0,0,w,h5,0,0,w,m?s:h5-s);u.B(m?N:W,0,h5,w,h5,0,m?h-s:h5+s,w,m?s:h5-s)}I{u.B(m?N:W,0,0,w5,h,0,0,m?s:w5-s,h);u.B(m?N:W,w5,0,w5,h,m?w-s:w5+s,0,m?s:w5-s,h)}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="squares"){H gx=1c(1n(1s,8,R),10),gy=1c(1n(2o,gx,R),10),Q=P[1]||"1w",m=Q=="in"?1:0,K=(w/gx),J=(h/gy),w5=K/2,h5=J/2,sx=(K/F),sy=(J/F),U=0,O=0,z=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(m?N:W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(m?W:N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";1y(H x=0;x<gx;x++){U=(L*sx)/2;1y(H y=0;y<gy;y++){O=(L*sy)/2;A(m){j.1t((x*K)+w5-U,(y*J)+h5-O,C.X(2*U,1),C.X(2*O,1))}I{j.1t((x*K)+U,(y*J)+O,C.X(K-(2*U),1),C.X(J-(2*O),1))}}}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4l"){H 19=P[1]||"2t",Q=P[2]||"in",m=Q=="in"?1:0,hz=Q=="1K"||Q=="1S"||19=="2t"?1:0,s=((hz?w:h)/F),hw=(w/2),fh=(h/2),U=0,O=0,K=0,J=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;K=hz?C.1r(C.X(L*s,1),w):w;J=hz?h:C.1r(C.X(L*s,1),h);A(19=="3L"){A(Q=="1K"){u.B(W,0,0,w,h,K,0,w-K,J);u.B(N,0,0,w,h,0,0,K,J)}I A(Q=="1S"){u.B(W,0,0,w,h,0,0,w-K,J);u.B(N,0,0,w,h,w-K,0,K,J)}I A(Q=="up"){u.B(W,0,0,w,h,0,0,K,h-J);u.B(N,0,0,w,h,0,h-J,K,J)}I A(Q=="2A"){u.B(W,0,0,w,h,0,J,K,h-J);u.B(N,0,0,w,h,0,0,K,J)}}I A(19=="50"){u.B(W,0,0,w,h);A(Q=="1S"){u.B(N,0,0,w,h,w-K,0,K,J)}I A(Q=="2A"){u.B(N,0,0,w,h,0,0,K,J)}I A(Q=="up"){u.B(N,0,0,w,h,0,h-J,K,J)}I{u.B(N,0,0,w,h,0,0,K,J)}}I{u.B(m?W:N,0,0,w,h);U=hz?m?hw-(K/2):K*.5:0;O=hz?0:m?fh-(J/2):J*.5;u.B(m?N:W,0,0,w,h,U,O,hz?m?K:w-K:K,hz?J:m?J:h-J)}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4m"){H Q=P[1]||"3G",m=(w+h),x=0,y=0,s=(m/F);E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";A(Q==\'3G\'){x=(w-m)+(L*s);y=(h-m)+(L*s);j.1Z();j.1M(w,h);j.S(w,y);j.S(x,h);j.20();j.1z()}I A(Q==\'4O\'){x=(w-m)+(L*s);y=m-(L*s);j.1Z();j.1M(w,0);j.S(w,y);j.S(x,0);j.20();j.1z()}I A(Q==\'3v\'){x=m-(L*s);y=(h-m)+(L*s);j.1Z();j.1M(0,h);j.S(0,y);j.S(x,h);j.20();j.1z()}I A(Q==\'4P\'){x=m-(L*s);y=m-(L*s);j.1Z();j.1M(0,0);j.S(0,y);j.S(x,0);j.20();j.1z()}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="turn"){H q=1c(1n(1s,5,R),10),22=P[1]||"2v",Q=P[2]||"1K",v=22=="2v"?1:0,r=Q=="1S"||Q=="up"?1:0,K=v?(w/q):w,J=v?h:(h/q),sx=(K/F),sy=(J/F),s=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;A(v){s=L*sx;1y(H i=0;i<q;i++){u.B(W,(i*K),0,K,h,(i*K)+(r?0:s),0,C.X(K-s,1),h);u.B(N,(i*K),0,K,h,(i*K)+(r?K-s:0),0,C.X(s,1),h)}}I{s=L*sy;1y(H i=0;i<q;i++){u.B(W,0,(i*J),w,J,0,(i*J)+(r?0:s),w,C.X(J-s,1));u.B(N,0,(i*J),w,J,0,(i*J)+(r?J-s:0),w,C.X(s,1))}}A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="4n"){H q=1c(1n(1s,4,R),10),x=w/2,y=h/2,d=(C.PI*2)/q,r=C.27(C.2w(C.1V(w,2)+C.1V(h,2))/2),s=(d/F);E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";j.1A="1b(0,0,0,1.0)";1y(H i=0;i<q;i++){j.1Z();j.1M(x,y);j.2E(x,y,r,(i*d)+(L*s),(i*d)+(F*s),24);j.20();j.1z()}u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="wrench"){H 22=P[1]||"2v",v=22=="2v"?1:0,c=C.1q(F*.5),a=1/c,U=0,O=0,ow=0,oh=0,s=0;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;s=M<=c?1:0;j.1j(0,0,w,h);A(s){ow=C.1q(C.1r(C.X(w*(1-(L*a)),1),w));U=((w-ow)/2);oh=C.1q(C.1r(C.X(h*(1-(L*a)),1),h));O=((h-oh)/2)}I{ow=C.1q(C.1r(C.X(w*((L-c)*a),1),w));U=((w-ow)/2);oh=C.1q(C.1r(C.X(h*((L-c)*a),1),h));O=((h-oh)/2);j.2r=a*(L-c)}j.B(s?W:N,v?0:U,v?O:0,v?w:ow,v?oh:h,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="2X"){H gx=1c(1n(1s,8,R),10),gy=1c(1n(2o,gx,R),10),m=gx*gy,K=(w/gx),bw=C.27(K),J=(h/gy),bh=C.27(J),lf=(m/F),tt=C.1q(F/m),ct=0,O=0,U=-1,Q=0,xc=gx;1g.1j(0,0,w,h);1g.1A="1b(0,0,0,1.0)";1g.1t(0,0,w,h);E.1h();D.E=T.1m(Z(){Z 2X(){A(Q==0&&ct==xc){Q++;ct=0;U++;O++}I A(Q==1&&ct==(xc+1)){Q=0;ct=0;O++}A(Q==0){U++}I{U--}ct++;1g.1j(C.1q(U*K),C.1q(O*J),bw,bh)};u.B(W,0,0,w,h);j.1j(0,0,w,h);j.1k="1H-1L";j.B(N,0,0,w,h);j.1k="1Q-1w";A(lf<1){A(M!=0&&M%tt==0){2X()}}I{1y(H i=M;i<(M+lf);i++){2X()}}j.B(26,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}I A(P[0]=="zoom"){H Q=P[1]||"1w",m=Q=="in"?1:0,z=0,f=0,x=0,y=0,K=0,J=0,a=1/F,d=a;E.1h();D.E=T.1m(Z(){L=1p[1e](F,M,1l)*F;z=m?L*d:1-(L*d);f=m?a*L:1-(a*L);K=C.1r(C.X(w*z,1),w);J=C.1r(C.X(h*z,1),h);x=(w-K)/2;y=(h-J)/2;j.1j(0,0,w,h);j.2r=f;j.B(m?N:W,x,y,K,J,0,0,w,h);u.B(m?W:N,0,0,w,h);u.B(1o,0,0,w,h);A(G){u.B(G,0,0,w,h)}M++;A(M>F){H t=E.1d()-V;T.1i(D.E);u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();Y.1a(18,R,t,17*((11*1f)/t),D)}},V)}}3y(2K){D.39=2K.3c;u.B(N,0,0,w,h);A(G){u.B(G,0,0,w,h)}u.14();36(\'4r: \',2K.3c+\' - R "\'+R+\'" 4s 4t!\');Y.1a(18,R,0,0,D)}}}}2g 24},1d:Z(D,53){A(Y.34&&D.1E){H 13=D.1E;A(D.2C.2D(13).3b==2){D.2C.2D(13).1d()}}I A(D.E&&D.2L){T.1i(D.E);D.E=0;H u=D.2L(\'2d\'),w=1c(D.2i),h=1c(D.2j);u.B(53,0,0,w,h);u.14()}Y.1a(\'\',\'\',0,0,D);2g 24},1a:Z(18,R,54,17,3q){A(Y.2q){H 2R=1X.55(\'4w\');A(2R){1X.3g.56(2R)}2R=1X.55(\'4C\');A(2R){1X.3g.56(2R)}}3q.1E=2h;3q.37=24;A(18){A(2I T[18]===\'Z\'){T[18](R||"",54||0,17||0,3q.id)}}2g 24}}',[],317,'|||||||||||||||||||cbx|||||||||||ctx||||||if|drawImage|Math|canvas|timer|steps|layer|var|else|hh|ww|val|cnt|img_b|yo|efx|dir|trans|lineTo|window|xo|ival|img_a|max|cvi_trans|function||dur||filter|restore|||fps|callback|typ|_clr|rgba|parseInt|stop|tween|1000|cmx|start|clearInterval|clearRect|globalCompositeOperation|cpa|setInterval|getInt|buffer|cvi_tween|round|min|opt1|fillRect|||out|stl|for|fill|fillStyle|addColorStop||255|TLfilter|duration|ftrans|source||DXIT|right|over|moveTo|progid|||destination||left|||pow||document||beginPath|closePath|cvi_tfx|pos|rotate|false||mask|ceil|translate|||||||alpha|return|null|width|height|true|save|||opt2|substr|isWC|globalAlpha|254|horizontal|100|vertical|sqrt||hex2dec|parseFloat|down||filters|item|arc|||this|typeof|fade|err|getContext|d90|||||ele|shuffle|length|style|toUpperCase|spiral|zigzag|createLinearGradient||||||vml|opera|log|TLbusy|new|TLerror|motion|status|message|ids|with||body|scale|||||||case|break|obj|Array|floor|random|try|leftdown|createElement|position|catch|cvi_stackblur|||||||rightdown|plus||||push|||documentMode|play|console|getRGB|match||cvi_rfx|object|fail|split|Date|getTime||barn|orientation|blinds|bands||checkerboard|cut|Fade|overlap|gradientwipe|inset|iris|pixelate|radialwipe|randombars|randomdissolve|slide|HIDE|gridsizex|gridsizey|stretch|strips|wheel||||Error|has|failed|sba|noids|cvi_trans_buffer|fixed|9999px|top|0px|appendChild|cvi_trans_mask|angle|shade|shadow||createRadialGradient|copy|abs|128|160|||rightup|leftup|diamond|cross|square|circle|fillStar|drawStar|mozImageSmoothingEnabled|reveal|radial|wedge|hide|||img|time|getElementById|removeChild'.split('|'),0,{}))
+ * This license permits free of charge use on non-commercial
+ * and private web sites only under special conditions.
+ * Read more at... http://www.netzgesta.de/cvi/LICENSE.html
+ * Commercial licenses available via... cvi[at]netzgesta[dot]de
+ **/
+var cvi_tfx = new Object();
+cvi_tfx.alpha = {val: 0, min: 0, max: 3, fail: "fade", tween: "linear", buffer: 1, mask: 1, alpha: 1};
+cvi_tfx.barn_horizontal_in = cvi_tfx.barn_vertical_in = cvi_tfx.barn_horizontal_out = cvi_tfx.barn_vertical_out = {tween: "quadEaseOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.blinds_left = cvi_tfx.blinds_right = cvi_tfx.blinds_up = cvi_tfx.blinds_down = {val: 8, min: 1, max: 100, tween: "quadEaseIn", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.blur = {val: 100, min: 8, max: 180, tween: "linear", fail: "pixelate", noids: "pixelate", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.checkerboard_left = cvi_tfx.checkerboard_up = cvi_tfx.checkerboard_right = cvi_tfx.checkerboard_down = {val: 8, min: 2, max: 100, tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.circles_in = cvi_tfx.circles_out = {val: 8, min: 1, max: 50, fail: "checkerboard_right", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.color = {val: "#fff", fail: "fade", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.copy_right = {fail: "gradientwipe_right", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.copy_left = {fail: "gradientwipe_left", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.copy_up = {fail: "gradientwipe_up", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.copy_down = {fail: "gradientwipe_down", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.corner_lefttop_in = cvi_tfx.corner_righttop_in = cvi_tfx.corner_leftbottom_in = cvi_tfx.corner_rightbottom_in = {fail: "radialwipe_radial", tween: "bounceEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.corner_lefttop_out = cvi_tfx.corner_righttop_out = cvi_tfx.corner_leftbottom_out = cvi_tfx.corner_rightbottom_out = {fail: "radialwipe_radial", tween: "backEaseInOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.curl_horizontal = {val: 6, min: 2, max: 10, fail: "gradientwipe_left", tween: "sineEaseOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.curl_vertical = {val: 6, min: 2, max: 10, fail: "gradientwipe_up", tween: "sineEaseOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.cut = {buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.fade = {val: 100, min: 0, max: 100, tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.flash = {fail: "fade", tween: "linear", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.gradientwipe_left = cvi_tfx.gradientwipe_right = cvi_tfx.gradientwipe_up = cvi_tfx.gradientwipe_down = {val: 25, min: 5, max: 100, tween: "sineEaseInOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.inset_leftup = cvi_tfx.inset_rightup = cvi_tfx.inset_leftdown = cvi_tfx.inset_rightdown = {fail: "inset_rightdown", tween: "cubicEaseInOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.iris_cross_in = cvi_tfx.iris_plus_in = cvi_tfx.iris_square_in = cvi_tfx.iris_circle_in = cvi_tfx.iris_diamond_in = cvi_tfx.iris_star_in = {tween: "sineEaseIn", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.iris_cross_out = cvi_tfx.iris_plus_out = cvi_tfx.iris_diamond_out = cvi_tfx.iris_star_out = cvi_tfx.iris_square_out = cvi_tfx.iris_circle_out = {tween: "sineEaseOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.pixelate = {val: 40, min: 10, max: 50, tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.pull_left = cvi_tfx.pull_right = cvi_tfx.pull_up = cvi_tfx.pull_down = {fail: "slide_hide", tween: "backEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.push_left = cvi_tfx.push_right = cvi_tfx.push_up = cvi_tfx.push_down = {fail: "slide_push", tween: "cubicEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.radialgradient = {fail: "fade", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.radialwipe_clock = cvi_tfx.radialwipe_wedge = cvi_tfx.radialwipe_radial = {tween: "sineEaseInOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.randombars_horizontal = cvi_tfx.randombars_vertical = {buffer: 1, mask: 1, alpha: 0};
+cvi_tfx.randomdissolve = {val: 2, min: 1, max: 16, buffer: 1, mask: 1, alpha: 0};
+cvi_tfx.reveal_left = cvi_tfx.reveal_right = cvi_tfx.reveal_up = cvi_tfx.reveal_down = {fail: "slide_hide", tween: "backEaseIn", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.rotate_in = {fail: "iris_circle_out", tween: "backEaseIn", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.rotate_out = {fail: "iris_circle_in", tween: "backEaseOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.scale_in = {fail: "iris_square_out", tween: "backEaseIn", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.scale_out = {fail: "iris_square_in", tween: "backEaseOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.slide_swap = cvi_tfx.slide_push = cvi_tfx.slide_hide = {val: 1, min: 1, max: 100, tween: "sineEaseInOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.spiral = {val: 8, min: 1, max: 100, buffer: 1, mask: 1, alpha: 0};
+cvi_tfx.split_horizontal_in = {fail: "barn_vertical_in", tween: "quadEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.split_vertical_in = {fail: "barn_horizontal_in", tween: "quadEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.split_horizontal_out = {fail: "barn_vertical_out", tween: "quadEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.split_vertical_out = {fail: "barn_horizontal_out", tween: "quadEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.smudge = {fail: "gradientwipe_down", tween: "circEaseInOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.squares_in = cvi_tfx.squares_out = {val: 8, min: 1, max: 50, fail: "checkerboard_right", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.stretch_hide_right = cvi_tfx.stretch_hide_left = cvi_tfx.stretch_hide_up = cvi_tfx.stretch_hide_down = {fail: "stretch_hide_right", tween: "backEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.stretch_push_up = cvi_tfx.stretch_push_down = cvi_tfx.stretch_push_left = cvi_tfx.stretch_push_right = {fail: "stretch_push_right", tween: "backEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.stretch_vertical_out = cvi_tfx.stretch_horizontal_out = cvi_tfx.stretch_vertical_in = cvi_tfx.stretch_horizontal_in = {fail: "stretch_horizontal_in", tween: "backEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.strips_leftup = cvi_tfx.strips_rightup = cvi_tfx.strips_leftdown = cvi_tfx.strips_rightdown = {tween: "cubicEaseInOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.turn_horizontal_down = {val: 4, min: 2, max: 12, fail: "blinds_down", tween: "bounceEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.turn_horizontal_up = {val: 4, min: 2, max: 12, fail: "blinds_up", tween: "bounceEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.turn_vertical_right = {val: 4, min: 2, max: 12, fail: "blinds_right", tween: "bounceEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.turn_vertical_left = {val: 4, min: 2, max: 12, fail: "blinds_left", tween: "bounceEaseOut", buffer: 0, mask: 0, alpha: 0};
+cvi_tfx.wheel = {val: 4, min: 2, max: 20, tween: "sineEaseInOut", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.wrench_horizontal = cvi_tfx.wrench_vertical = {fail: "pixelate", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+cvi_tfx.zigzag = {val: 8, min: 1, max: 100, buffer: 1, mask: 1, alpha: 0};
+cvi_tfx.zoom_in = cvi_tfx.zoom_out = {fail: "fade", tween: "linear", buffer: 1, mask: 0, alpha: 0};
+var cvi_i, cvi_c = 0, cvi_rfx = new Array();
+for(cvi_i in cvi_tfx) {
+	cvi_rfx[cvi_c] = cvi_i;
+	cvi_c++;
+}
+;
+if(typeof cvi_tween !== 'object') {
+	var cvi_tween = new Object();
+	cvi_tween.linear = function(s, c) {return (1 / s) * c;};
+}
+var cvi_trans = {
+	version: 1.3,
+	released: '2011-01-15 12:00:00',
+	duration: 2.0,
+	fps: 30,
+	vml: !-[1, ],
+	play: function(callback, canvas, img_a, img_b, alpha, layer, opt1, opt2, trans, tween, cpa, dur, fps) {
+		Array.prototype.shuffle = shuffle;
+		function shuffle() {
+			var t, r, i;
+			for(i = 0; i != this.length; i++) {
+				r = Math.floor(Math.random() * this.length);
+				t = this[i];
+				this[i] = this[r];
+				this[r] = t
+			}
+		};
+		function log(v, e) {
+			if(window.console) {window.console.log(v + e)} else if(window.opera) {opera.postError(v + e)} else {window.document.title = v + e}
+			return false
+		};
+		function getInt(o, v, t) {return(Math.min(Math.max(o || v, cvi_tfx[t].min), cvi_tfx[t].max) || cvi_tfx[t].val)};
+		function getRGB(v) {
+			function hex2dec(h) {return(Math.max(0, Math.min(parseInt(h, 16), 255)))}
+
+			var r = 0, g = 0, b = 0;
+			v = v || '#fff';
+			if(v.match(/^#[0-9a-f]{3}$/i)) {r = hex2dec(v.substr(1, 1) + v.substr(1, 1)), g = hex2dec(v.substr(2, 1) + v.substr(2, 1)), b = hex2dec(v.substr(3, 1) + v.substr(3, 1))} else if(v.match(/^#[0-9a-f]{6}$/i)) {r = hex2dec(v.substr(1, 2)), g = hex2dec(v.substr(3, 2)), b = hex2dec(v.substr(5, 2))}
+			return r + ',' + g + ',' + b
+		}
+
+		if(canvas && !canvas.TLbusy) {
+			if(trans === 'random') {trans = cvi_rfx[Math.floor(Math.random() * cvi_rfx.length)]}
+			trans = (typeof cvi_tfx[trans] === 'object' ? trans : 'fade');
+			if(cvi_trans.vml && cvi_tfx[trans].fail) {trans = cvi_tfx[trans].fail}
+			dur = Math.min(Math.max(parseFloat(dur) || cvi_trans.duration, 0.5), 5.0) || cvi_trans.duration;
+			var efx = trans.split("_") || ['fade'];
+			var timer = {d: null, t: null, start: function() {
+				timer.d = new Date();
+				timer.t = timer.d.getTime()
+			}, stop: function() {
+				timer.d = new Date();
+				return(timer.d.getTime() - timer.t)
+			}};
+			if(cvi_trans.vml) {
+				var filter = null, ftrans = null, DXIT = "DXImageTransform.Microsoft.", w = parseInt(canvas.style.width), h = parseInt(canvas.style.height);
+				try {
+					canvas.TLbusy = true;
+					canvas.TLerror = null;
+					if(efx[0] == "barn") {
+						var pos = efx[1] || "horizontal", dir = efx[2] || "out";
+						canvas.TLfilter = filter = DXIT + "Barn";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",motion=" + dir + ",orientation=" + pos + ")"
+					} else if(efx[0] == "blinds") {
+						var dir = efx[1] || "down", o = parseInt(getInt(opt1, 8, trans), 10);
+						canvas.TLfilter = filter = DXIT + "Blinds";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",direction=" + dir + ",bands=" + o + ")"
+					} else if(efx[0] == "checkerboard") {
+						var dir = efx[1] || "right", x = parseInt(getInt(opt1, 8, trans), 10), y = parseInt(getInt(opt2, x, trans), 10);
+						canvas.TLfilter = filter = DXIT + "CheckerBoard";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",squaresX=" + x + ",squaresY=" + y + ",Direction=" + dir + ")"
+					} else if(efx[0] == "cut") {
+						canvas.TLfilter = filter = DXIT + "Fade";
+						ftrans = "progid:" + filter + "(duration=0.01,overlap=1.0)"
+					} else if(efx[0] == "fade") {
+						var o = parseFloat(getInt(opt1, 100, trans) / 100);
+						canvas.TLfilter = filter = DXIT + "Fade";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",overlap=" + o + ")"
+					} else if(efx[0] == "gradientwipe") {
+						var dir = efx[1] || "right", o = parseFloat(getInt(opt1, 25, trans) / 100), v = (dir == 'left' || dir == 'right' ? 0 : 1), r = (dir == 'left' || dir == 'up' ? 'reverse' : 'forward');
+						canvas.TLfilter = filter = DXIT + "GradientWipe";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",gradientSize=" + o + ",motion=" + r + ",WipeStyle=" + v + ")"
+					} else if(efx[0] == "inset") {
+						canvas.TLfilter = filter = DXIT + "Inset";
+						ftrans = "progid:" + filter + "(duration=" + dur + ")"
+					} else if(efx[0] == "iris") {
+						var typ = efx[1].toUpperCase() || "PLUS", dir = efx[2] || "out";
+						canvas.TLfilter = filter = DXIT + "Iris";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",irisStyle=" + typ + ",motion=" + dir + ")"
+					} else if(efx[0] == "pixelate") {
+						var o = parseInt(getInt(opt1, 40, trans), 10);
+						canvas.TLfilter = filter = DXIT + "Pixelate";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",maxSquare=" + o + ")"
+					} else if(efx[0] == "radialwipe") {
+						var typ = efx[1].toUpperCase() || "CLOCK";
+						canvas.TLfilter = filter = DXIT + "RadialWipe";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",wipeStyle=" + typ + ")"
+					} else if(efx[0] == "randombars") {
+						var typ = efx[1] || "horizontal";
+						canvas.TLfilter = filter = DXIT + "RandomBars";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",orientation=" + typ + ")"
+					} else if(efx[0] == "randomdissolve") {
+						canvas.TLfilter = filter = DXIT + "RandomDissolve";
+						ftrans = "progid:" + filter + "(duration=" + dur + ")"
+					} else if(efx[0] == "slide") {
+						var typ = efx[1].toUpperCase() || "HIDE", o = parseInt(getInt(opt1, 1, trans), 10);
+						canvas.TLfilter = filter = DXIT + "Slide";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",slideStyle=" + typ + ",bands=" + o + ")"
+					} else if(efx[0] == "spiral") {
+						var x = parseInt(getInt(opt1, 8, trans), 10), y = parseInt(getInt(opt2, x, trans), 10);
+						canvas.TLfilter = filter = DXIT + "Spiral";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",gridsizex=" + x + ",gridsizey=" + y + ")"
+					} else if(efx[0] == "stretch") {
+						var typ = efx[1].toUpperCase() || "HIDE";
+						typ = typ == 'VERTICAL' || typ == 'HORIZONTAL' ? 'SPIN' : typ;
+						canvas.TLfilter = filter = DXIT + "Stretch";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",stretchStyle=" + typ + ")"
+					} else if(efx[0] == "strips") {
+						var typ = efx[1] || "leftdown";
+						canvas.TLfilter = filter = DXIT + "Strips";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",motion=" + typ + ")"
+					} else if(efx[0] == "wheel") {
+						var o = parseInt(getInt(opt1, 4, trans), 10);
+						canvas.TLfilter = filter = DXIT + "Wheel";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",spokes=" + o + ")"
+					} else if(efx[0] == "zigzag") {
+						var x = parseInt(getInt(opt1, 8, trans), 10), y = parseInt(getInt(opt2, x, trans), 10);
+						canvas.TLfilter = filter = DXIT + "Zigzag";
+						ftrans = "progid:" + filter + "(duration=" + dur + ",gridsizex=" + x + ",gridsizey=" + y + ")"
+					}
+					if(efx[0] != "" && filter != null && img_b.nw >= 8 && img_b.nh >= 8) {
+						canvas.style.filter = ftrans;
+						canvas.filters.item(filter).apply();
+						if(canvas.filters.item(filter).status == 1) {
+							var b, a = canvas.firstChild, pw = img_b.wm || w, ph = img_b.hm || h, xo = img_b.ox || 0, yo = img_b.oy || 0;
+							if(a) {
+								b = document.createElement(['<v:fill src="' + img_b.source + '" size="' + pw + 'pt,' + ph + 'pt" origin="' + xo + ',' + yo + '" position="0,0" aspect="ignore" type="frame" />'].join(''));
+								canvas.replaceChild(b, a)
+							}
+							timer.start();
+							canvas.filters.item(filter).play();
+							if(canvas.filters.item(filter).status == 2) {
+								canvas.onfilterchange = function() {
+									if(canvas.filters.item(filter).status == 0) {
+										var t = timer.stop();
+										canvas.TLfilter = null;
+										cvi_trans._clr(callback, trans, t, 30 * ((dur * 1000) / t), canvas)
+									}
+								}
+							}
+						}
+					}
+				} catch(err) {
+					canvas.TLerror = err.message;
+					log('Error: ', err.message + ' - trans "' + trans + '" has failed!');
+					cvi_trans._clr(callback, trans, 0, 0, canvas)
+				}
+			} else if(canvas.tagName.toUpperCase() == "CANVAS") {
+				if(canvas.timer) {window.clearInterval(canvas.timer)}
+				if(canvas.getContext) {
+					var ctx = canvas.getContext('2d'), w = parseInt(canvas.width), h = parseInt(canvas.height), sba = typeof(cvi_stackblur) === "function" ? true : false, ids = false;
+					try {
+						var t = ctx.getImageData(0, 0, 1, 1);
+						ids = true
+					} catch(e) {ids = false}
+					if((!ids || !sba) && cvi_tfx[trans].noids) {
+						trans = cvi_tfx[trans].noids;
+						efx[0] = trans
+					}
+					tween = (typeof(cvi_tween[tween]) === 'function' ? tween : cvi_tfx[trans].tween && typeof(cvi_tween[cvi_tfx[trans].tween]) === 'function' ? cvi_tfx[trans].tween : 'linear');
+					cpa = (cpa == null || typeof cpa !== 'object' ? [0.25, 0.1, 0.25, 1.0] : cpa);
+					fps = Math.min(Math.max(parseInt(fps, 10) || cvi_trans.fps, 15), 100) || cvi_trans.fps;
+					function fill(c, x, y, w, h, wc) {
+						if(wc) {
+							c.beginPath();
+							c.rect(x, y, w, h);
+							c.closePath();
+							c.fill()
+						} else {c.fillRect(x, y, w, h)}
+					};
+					cvi_trans.isWC = navigator.userAgent.indexOf('WebKit') != -1 && !window.external && !document.defaultCharset ? 1 : 0;
+					if(cvi_tfx[trans].buffer) {
+						var buffer = document.createElement('canvas');
+						if(cvi_trans.isWC) {
+							with(buffer) {
+								id = 'cvi_trans_buffer';
+								height = h;
+								width = w
+							}
+							with(buffer.style) {
+								position = 'fixed';
+								left = '-9999px';
+								top = '0px';
+								height = h + 'px';
+								width = w + 'px'
+							}
+							document.body.appendChild(buffer)
+						} else {
+							buffer.width = w;
+							buffer.height = h
+						}
+						var cbx = buffer.getContext('2d')
+					}
+					if(cvi_tfx[trans].mask) {
+						var mask = document.createElement('canvas');
+						if(cvi_trans.isWC) {
+							with(mask) {
+								id = 'cvi_trans_mask';
+								height = h;
+								width = w
+							}
+							with(mask.style) {
+								position = 'fixed';
+								left = '-9999px';
+								top = '0px';
+								height = h + 'px';
+								width = w + 'px'
+							}
+							document.body.appendChild(mask)
+						} else {
+							mask.width = w;
+							mask.height = h
+						}
+						var cmx = mask.getContext('2d')
+					}
+					if(cvi_tfx[trans].alpha) {
+						if(!cbx || !cmx || !alpha || alpha.width < 8 || alpha.height < 8) {
+							efx[0] = "fade";
+							trans = 'fade';
+							opt1 = 100
+						}
+					}
+					var stl = '', val = 0, cnt = 0, ival = Math.round(1000 / fps), steps = Math.round((dur * 1000) / ival);
+					ctx.save();
+					try {
+						canvas.TLbusy = true;
+						canvas.TLerror = null;
+						if(efx[0] == "alpha") {
+							var o = parseInt(getInt(opt1, 0, trans), 10), x = o == 1 || o == 3 ? 1 : 0, y = o == 2 || o == 3 ? 1 : 0, c = Math.round(steps * .5), a = 1 / c;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cmx.clearRect(0, 0, w, h);
+								if(cnt <= c) {
+									cmx.globalCompositeOperation = "source-over";
+									if(x || y) {
+										cmx.save();
+										cmx.translate(x ? w : 0, y ? h : 0);
+										cmx.scale(x ? -1 : 1, y ? -1 : 1);
+										cmx.drawImage(alpha, 0, 0, w, h);
+										cmx.restore()
+									} else {cmx.drawImage(alpha, 0, 0, w, h)}
+									cmx.globalCompositeOperation = "darker";
+									cmx.fillStyle = "rgba(0,0,0," + (1 - (val * a)) + ")";
+									cmx.fillRect(0, 0, w, h)
+								} else {
+									cmx.globalAlpha = 1 - ((val - c) * a);
+									cmx.globalCompositeOperation = "source-over";
+									if(x || y) {
+										cmx.save();
+										cmx.translate(x ? w : 0, y ? h : 0);
+										cmx.scale(x ? -1 : 1, y ? -1 : 1);
+										cmx.drawImage(alpha, 0, 0, w, h);
+										cmx.restore()
+									} else {cmx.drawImage(alpha, 0, 0, w, h)}
+								}
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.drawImage(mask, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "barn") {
+							var pos = efx[1] || "horizontal", dir = efx[2] || "out", v = pos == "vertical" ? 1 : 0, m = dir == "in" ? 1 : 0, ow = w, oh = h, ww = v ? Math.round(w / 2) : w, hh = v ? h : Math.round(h / 2), s = ((v ? w : h) / (steps * 2));
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								if(m) {
+									ow = v ? (val * s) : 0;
+									oh = v ? 0 : (val * s);
+									cbx.fillRect(ow, oh, Math.max(w - (2 * ow), 1), Math.max(h - (2 * oh), 1))
+								} else {
+									ow = v ? ww - (val * s) : w;
+									oh = v ? h : hh - (val * s);
+									cbx.fillRect(0, 0, Math.max(ow, 1), Math.max(oh, 1));
+									cbx.fillRect(w - ow, h - oh, w, h)
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "blinds") {
+							var q = parseInt(getInt(opt1, 8, trans), 10), dir = efx[1] || "right", hz = dir == "right" || dir == "left" ? 1 : 0, r = (dir == "right" ? 1 : 0), d = (dir == "down" ? 1 : 0), ww = hz ? (w / q) : w, hh = hz ? h : (h / q), sx = (ww / steps), sy = (hh / steps), s = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								if(hz) {
+									s = val * sx;
+									for(var i = 0; i < q; i++) {cbx.fillRect((i * ww) + (r ? s : 0), 0, Math.max(ww - s, 1), hh)}
+								} else {
+									s = val * sy;
+									for(var i = 0; i < q; i++) {cbx.fillRect(0, (i * hh) + (d ? s : 0), ww, Math.max(hh - s, 1))}
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "blur") {
+							var q = parseInt(getInt(opt1, 0, trans), 10), c = Math.round(steps * .5), a = 1 / c, d = q / c, b = q / steps, s = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								s = cnt <= c ? 1 : 0;
+								cbx.clearRect(0, 0, w, h);
+								if(s) {
+									k = parseInt(val * b, 10);
+									cbx.drawImage(img_a, 0, 0, w, h);
+									cvi_stackblur(cbx, k, 0, 0, w, h)
+								} else {
+									k = parseInt((steps - val) * b, 10);
+									cbx.globalAlpha = a * (val - c);
+									cbx.drawImage(img_b, 0, 0, w, h);
+									cvi_stackblur(cbx, k, 0, 0, w, h)
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "checkerboard") {
+							var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), dir = efx[1] || "right", hz = (dir == 'left' || dir == 'right' ? 1 : 0), r = (dir == 'right' ? 1 : 0), d = (dir == 'down' ? 1 : 0), ww = (w / gx) * (hz ? 2 : 1), hh = (h / gy) * (hz ? 1 : 2), sx = (ww / steps), sy = (hh / steps), w5 = hz ? ww / 2 : 0, h5 = hz ? 0 : hh / 2, s = 0, p = 0, k = 0, q = 0;
+							if(hz) {gx = Math.ceil(gx / 2) + 1} else {gy = Math.ceil(gy / 2) + 1}
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								for(var y = 0; y < gy; y++) {
+									p = y % 2;
+									for(var x = 0; x < gx; x++) {
+										k = x % 2;
+										if(hz) {
+											s = val * sx;
+											q = Math.max(ww - s, 1);
+											if(p) {cbx.fillRect(((x * ww) + (r ? s : 0)) - w5, y * hh, q, hh)} else {cbx.fillRect((x * ww) + (r ? s : 0), y * hh, q, hh)}
+										} else {
+											s = val * sy;
+											q = Math.max(hh - s, 1);
+											if(k) {cbx.fillRect(x * ww, ((y * hh) + (d ? s : 0)) - h5, ww, q)} else {cbx.fillRect(x * ww, (y * hh) + (d ? s : 0), ww, q)}
+										}
+									}
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "circles") {
+							var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), dir = efx[1] || "out", m = dir == "in" ? 1 : 0, ww = (w / gx), hh = (h / gy), w5 = ww / 2, h5 = hh / 2, r = Math.sqrt(Math.pow(ww, 2) + Math.pow(hh, 2)) / 2, s = (r / steps), z = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(m ? img_b : img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(m ? img_a : img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								z = Math.max(m ? val * s : r - (val * s), 1);
+								for(var x = 0; x < gx; x++) {
+									for(var y = 0; y < gy; y++) {
+										cbx.beginPath();
+										cbx.moveTo((x * ww) + w5, (y * hh) + h5);
+										cbx.arc((x * ww) + w5, (y * hh) + h5, z, 0, Math.PI * 2, true);
+										cbx.closePath();
+										cbx.fill()
+									}
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "color") {
+							var g = getRGB(opt1), c = Math.round(steps * .5), q = 1 / c, v = 0;
+							s = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								s = cnt <= c ? 1 : 0;
+								cbx.clearRect(0, 0, w, h);
+								if(s) {
+									v = parseFloat(val * q);
+									cbx.drawImage(img_a, 0, 0, w, h)
+								} else {
+									v = parseFloat((steps - val) * q);
+									cbx.drawImage(img_b, 0, 0, w, h)
+								}
+								cbx.fillStyle = "rgba(" + g + "," + v + ")";
+								cbx.fillRect(0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "corner") {
+							var pos = efx[1] || "lefttop", dir = efx[2] || "in", d90 = Math.PI / 2, angle = d90 / steps, d = dir == "in" ? 1 : 0, p = pos == "righttop" ? 1 : pos == "leftbottom" ? 2 : pos == "rightbottom" ? 3 : 0, z = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								z = (angle * val);
+								ctx.drawImage(d ? img_a : img_b, 0, 0, w, h);
+								ctx.save();
+								if(p == 3) {
+									ctx.translate(w, h);
+									ctx.rotate((d ? d90 : 0) - z);
+									ctx.drawImage(d ? img_b : img_a, -w, -h, w, h)
+								} else if(p == 2) {
+									ctx.translate(0, h);
+									ctx.rotate((d ? 0 - d90 : 0) + z);
+									ctx.drawImage(d ? img_b : img_a, 0, -h, w, h)
+								} else if(p == 1) {
+									ctx.translate(w, 0);
+									ctx.rotate((d ? d90 : 0) - z);
+									ctx.drawImage(d ? img_b : img_a, -w, 0, w, h)
+								} else {
+									ctx.translate(0, 0);
+									ctx.rotate((d ? 0 - d90 : 0) + z);
+									ctx.drawImage(d ? img_b : img_a, 0, 0, w, h)
+								}
+								ctx.restore();
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "curl") {
+							var d = parseInt(getInt(opt1, 6, trans), 10), dir = efx[1] || "horizontal", v = dir == "vertical" ? 1 : 0, ss = ((v ? h : w) / steps), c = Math.round((v ? h : w) / d), o = .5, p = 0, s = 0, sx = 0, sy = 0, dx = 0, dy = 0, ww = 0, hh = 0, wc = cvi_trans.isWC;
+							cbx.clearRect(0, 0, w, h);
+							cbx.save();
+							cbx.translate(v ? 0 : w, v ? h : 0);
+							cbx.scale(v ? 1 : -1, v ? -1 : 1);
+							cbx.drawImage(img_a, 0, 0, w, h);
+							cbx.restore();
+							timer.start();
+							function shade(c, x, y, w, h, o) {
+								var s = c.createLinearGradient(x, y, w, h);
+								s.addColorStop(0.0, 'rgba(0,0,0,' + o + ')');
+								s.addColorStop(0.2, 'rgba(0,0,0,0)');
+								s.addColorStop(0.3, 'rgba(254,254,254,0)');
+								s.addColorStop(0.45, 'rgba(254,254,254,' + o + ')');
+								s.addColorStop(0.6, 'rgba(254,254,254,0)');
+								s.addColorStop(0.66, 'rgba(0,0,0,0)');
+								s.addColorStop(1.0, 'rgba(0,0,0,' + o + ')');
+								return s
+							};
+							function shadow(c, x, y, w, h, o) {
+								var s = c.createLinearGradient(x, y, w, h);
+								s.addColorStop(0.0, 'rgba(0,0,0,' + o + ')');
+								s.addColorStop(1.0, 'rgba(0,0,0,0)');
+								return s
+							};
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								s = Math.max(val * ss, 1);
+								ctx.drawImage(img_b, 0, 0, w, h);
+								if(v) {
+									hh = Math.min(s, c);
+									ww = w;
+									p = Math.max(h - s - hh, 1);
+									sx = 0;
+									sy = Math.min(h - hh, s);
+									dx = 0;
+									dy = h - s - hh - hh
+								} else {
+									ww = Math.min(s, c);
+									hh = h;
+									p = Math.max(w - s - ww, 1);
+									sy = 0;
+									sx = Math.min(w - ww, s);
+									dy = 0;
+									dx = w - s - ww - ww
+								}
+								ctx.drawImage(img_a, 0, 0, v ? w : p, v ? p : h, 0, 0, v ? w : p, v ? p : h);
+								ctx.drawImage(buffer, sx, sy, ww, hh, dx, dy, ww, hh);
+								ctx.fillStyle = shade(ctx, dx, dy, v ? 0 : dx + ww, v ? dy + hh : 0, o);
+								fill(ctx, dx, dy, ww, hh, wc);
+								ctx.fillStyle = shadow(ctx, v ? 0 : dx + ww, v ? dy + hh : 0, v ? 0 : dx + ww + c, v ? dy + hh + c : 0, o);
+								fill(ctx, v ? 0 : dx + ww, v ? dy + hh : 0, v ? w : c, v ? c : h, wc);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "cut") {
+							var t = ival;
+							ctx.drawImage(img_b, 0, 0, w, h);
+							if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+							ctx.restore();
+							cvi_trans._clr(callback, trans, t, fps, canvas)
+						} else if(efx[0] == "fade") {
+							var o = parseFloat(getInt(opt1, 100, trans) / 100), fa = o + ((1 - o) / 2), fb = 1 - fa, ap = Math.round(steps * fa), bp = Math.round(steps * fb), oa = 1, ob = 0, a = 1 / (steps * fa);
+							ctx.globalAlpha = 1;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								oa = (val > ap ? 0 : a * (ap - val));
+								ob = (val < bp ? 0 : a * (val - bp));
+								ctx.clearRect(0, 0, w, h);
+								ctx.globalAlpha = (o == 1 ? 1 : oa);
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalAlpha = ob;
+								cbx.drawImage(img_b, 0, 0, w, h);
+								ctx.globalAlpha = 1;
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "flash") {
+							var r = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2, a = Math.max(Math.min(Math.round(steps * 0.1), 3), 1), b = 2 * a, c = Math.max(steps - b, 1), s = (r / a), q = (1 / c), x = w / 2, y = h / 2, z = 0, v = 0, wc = cvi_trans.isWC;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								if(cnt <= b) {
+									z = cnt <= a ? 1 : 0;
+									v = Math.max(s * (val - (z ? 0 : a)), 1);
+									ctx.drawImage(img_a, 0, 0, w, h);
+									stl = ctx.createRadialGradient(x, y, z ? 0 : v, x, y, z ? v : r);
+									stl.addColorStop(0, "rgba(255,255,255,1.0)");
+									stl.addColorStop(1, "rgba(255,255,255,0.0)");
+									ctx.fillStyle = stl;
+									fill(ctx, 0, 0, w, h, wc)
+								} else {
+									v = Math.max(1 - (q * (val - b)), 0);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									ctx.fillStyle = "rgba(255,255,255," + v + ")";
+									ctx.fillRect(0, 0, w, h)
+								}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "gradientwipe" || efx[0] == "copy") {
+							var cp = efx[0] == "copy" ? 1 : 0, g = cp ? 0.3 : parseFloat(getInt(opt1, 25, trans) / 100), dir = efx[1] || "right", xo = 0, yo = 0, xp = 0, yp = 0, v = (dir == 'left' || dir == 'right' ? 0 : 1), r = (dir == 'left' || dir == 'up' ? 1 : 0), gw = Math.round(v ? w : w * g), gh = Math.round(v ? h * g : h), sa = (v ? h + gh : w + gw), ss = (sa / steps), wc = cvi_trans.isWC;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								xo = Math.round(v ? 0 : r ? sa - (val * ss) : val * ss);
+								yo = Math.round(v ? r ? sa - (val * ss) : val * ss : 0);
+								xp = v ? 0 : xo - gw;
+								yp = v ? yo - gh : 0;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								if(r) {if(wc || window.opera) {if(v) {if(yp < 0) {cbx.fillRect(0, yp, w, Math.abs(yp))} else {cbx.fillRect(0, 0, w, yp)}} else {if(xp < 0) {cbx.fillRect(xp, 0, Math.abs(xp), h)} else {cbx.fillRect(0, 0, xp, h)}}} else {cbx.fillRect(0, 0, v ? w : xp, v ? yp : h)}} else {cbx.fillRect(xo, yo, w, h)}
+								stl = cbx.createLinearGradient(xp, yp, xo, yo);
+								stl.addColorStop((r ? 1 : 0), "rgba(0,0,0,0.0)");
+								stl.addColorStop((r ? 0 : 1), "rgba(0,0,0,1.0)");
+								cbx.fillStyle = stl;
+								fill(cbx, xp, yp, gw, gh, wc);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(cp) {
+									stl = ctx.createLinearGradient(xp, yp, xo, yo);
+									stl.addColorStop((r ? 1 : 0), "rgba(0,255,0,0.0)");
+									stl.addColorStop((r ? .6 : .4), "rgba(128,255,160,0.6)");
+									stl.addColorStop((r ? .3 : .7), "rgba(255,255,255,0.9)");
+									stl.addColorStop((r ? .25 : .75), "rgba(255,255,255,1.0)");
+									stl.addColorStop((r ? .2 : .8), "rgba(255,255,255,0.9)");
+									stl.addColorStop((r ? 0 : 1), "rgba(128,255,160,0.0)");
+									ctx.fillStyle = stl;
+									fill(ctx, xp, yp, gw, gh, wc)
+								}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "inset") {
+							var dir = efx[1] || "rightdown", sw = (w / steps), sh = (h / steps), ww = 0, hh = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								ww = Math.min(Math.max(val * sw, 1), w);
+								hh = Math.min(Math.max(val * sh, 1), h);
+								if(dir == 'rightup') {ctx.drawImage(img_b, 0, h - hh, ww, hh, 0, h - hh, ww, hh)} else if(dir == 'leftdown') {ctx.drawImage(img_b, w - ww, 0, ww, hh, w - ww, 0, ww, hh)} else if(dir == 'leftup') {ctx.drawImage(img_b, w - ww, h - hh, ww, hh, w - ww, h - hh, ww, hh)} else {ctx.drawImage(img_b, 0, 0, ww, hh, 0, 0, ww, hh)}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "iris") {
+							var typ = efx[1] || "plus", dir = efx[2] || "out", o = dir == "in" ? 0 : 1, x = w / 2, y = h / 2, m = Math.max(w, h), n = m / 2, k = 0;
+							if(typ == 'diamond' || typ == 'cross' || typ == 'star') {var d = Math.sqrt(Math.pow(m, 2) + Math.pow(m, 2)), ss = (m / steps), sr = (d / steps)} else if(typ == 'square' || typ == 'plus') {var d = Math.sqrt(Math.pow(m, 2) + Math.pow(m, 2)), ss = (m / steps)} else if(typ == 'circle') {var d = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)), f = (Math.PI / 4) * -3, g = (Math.PI * 2), n = Math.ceil(d / 2), ss = (d / steps)}
+							var os = (ss / 2), xo = n - x, yo = n - y;
+							timer.start();
+							function fillStar(c, x, y, n, r, p) {
+								var r1 = r, r2 = r * .4;
+								c.translate(x, y);
+								c.rotate(p);
+								c.beginPath();
+								c.moveTo(0, r1);
+								for(var i = 0; i <= n; i++) {
+									c.save();
+									c.rotate(2 * i * Math.PI / n);
+									c.lineTo(0, r1);
+									c.restore();
+									c.save();
+									c.rotate(2 * i * Math.PI / n + (2 * Math.PI / n) / 2);
+									c.lineTo(0, r2);
+									c.restore()
+								}
+								c.closePath();
+								c.fill();
+								c.rotate(-p);
+								c.translate(-x, -y)
+							};
+							function drawStar(c, x, y, n, r, p) {
+								var r1 = r, r2 = r * .4;
+								c.translate(x, y);
+								c.rotate(p);
+								c.lineTo(0, r1);
+								for(var i = 0; i <= n; i++) {
+									c.save();
+									c.rotate(2 * i * Math.PI / n);
+									c.lineTo(0, r1);
+									c.restore();
+									c.save();
+									c.rotate(2 * i * Math.PI / n + (2 * Math.PI / n) / 2);
+									c.lineTo(0, r2);
+									c.restore()
+								}
+								c.rotate(-p);
+								c.translate(-x, -y)
+							};
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								if(typ == 'diamond') {
+									k = (val * ss);
+									cbx.beginPath();
+									if(o) {
+										cbx.moveTo((0 - xo - n) + k, h / 2);
+										cbx.lineTo(0 - xo + n, (0 - yo - n) + k);
+										cbx.lineTo((0 - xo + m + n) - k, h / 2);
+										cbx.lineTo(0 - xo + n, (h + yo + n) - k)
+									} else {
+										cbx.moveTo(0 - xo, 0 - yo);
+										cbx.lineTo(x, y - k);
+										cbx.lineTo(x + k, y);
+										cbx.lineTo(x, y + k);
+										cbx.lineTo(x - k, y);
+										cbx.lineTo(x, y - k);
+										cbx.lineTo(0 - xo, 0 - yo);
+										cbx.lineTo(0 - xo, h + yo);
+										cbx.lineTo(w + xo, h + yo);
+										cbx.lineTo(w + xo, 0 - yo)
+									}
+									cbx.closePath();
+									cbx.fill()
+								} else if(typ == 'cross') {
+									k = (val * os);
+									cbx.beginPath();
+									if(o) {
+										cbx.moveTo(x, 0 - yo + k);
+										cbx.lineTo(0 - xo - k, 0 - yo - n);
+										cbx.lineTo(0 - xo - n, 0 - yo - k);
+										cbx.lineTo(0 - xo + k, y);
+										cbx.lineTo(0 - xo - n, h + yo + k);
+										cbx.lineTo(0 - xo - k, h + yo + n);
+										cbx.lineTo(x, h + yo - k);
+										cbx.lineTo(w + xo + k, h + yo + n);
+										cbx.lineTo(w + xo + n, h + yo + k);
+										cbx.lineTo(w + xo - k, y);
+										cbx.lineTo(w + xo + n, 0 - yo - k);
+										cbx.lineTo(w + xo + k, 0 - yo - n)
+									} else {
+										cbx.moveTo(0 - xo - n, 0 - yo - n);
+										cbx.lineTo(x, 0 - yo - n);
+										cbx.lineTo(x, y - k);
+										cbx.lineTo(0 - xo - n + k, 0 - yo - n);
+										cbx.lineTo(0 - xo - n, 0 - yo - n + k);
+										cbx.lineTo(x - k, y);
+										cbx.lineTo(0 - xo - n, h + yo + n - k);
+										cbx.lineTo(0 - xo - n + k, h + yo + n);
+										cbx.lineTo(x, y + k);
+										cbx.lineTo(w + xo + n - k, h + yo + n);
+										cbx.lineTo(w + xo + n, h + yo + n - k);
+										cbx.lineTo(x + k, y);
+										cbx.lineTo(w + xo + n, 0 - yo - n + k);
+										cbx.lineTo(w + xo + n - k, 0 - yo - n);
+										cbx.lineTo(x, y - k);
+										cbx.lineTo(x, 0 - yo - n);
+										cbx.lineTo(w + xo + n, 0 - yo - n);
+										cbx.lineTo(w + xo + n, h + yo + n);
+										cbx.lineTo(0 - xo - n, h + yo + n)
+									}
+									cbx.closePath();
+									cbx.fill()
+								} else if(typ == 'circle') {
+									k = (val * os);
+									cbx.beginPath();
+									if(o) {
+										cbx.moveTo(x, y);
+										cbx.arc(x, y, Math.max(n - k, 1), 0, g, false)
+									} else {
+										cbx.moveTo(0 - xo, 0 - yo);
+										cbx.lineTo(x, y);
+										cbx.arc(x, y, Math.max(k, 1), f, g + f, false);
+										cbx.lineTo(0 - xo, 0 - yo);
+										cbx.lineTo(0 - xo, h + yo);
+										cbx.lineTo(w + xo, h + yo);
+										cbx.lineTo(w + xo, 0 - yo)
+									}
+									cbx.closePath();
+									cbx.fill()
+								} else if(typ == 'square') {
+									k = (val * os);
+									if(o) {cbx.fillRect(x - n + k, y - n + k, Math.max(m - (k + k), 1), Math.max(m - (k + k), 1))} else {
+										cbx.beginPath();
+										cbx.moveTo(0 - xo, 0 - yo);
+										cbx.lineTo(x - k, y - k);
+										cbx.lineTo(x + k, y - k);
+										cbx.lineTo(x + k, y + k);
+										cbx.lineTo(x - k, y + k);
+										cbx.lineTo(x - k, y - k);
+										cbx.lineTo(0 - xo, 0 - yo);
+										cbx.lineTo(0 - xo, h + yo);
+										cbx.lineTo(w + xo, h + yo);
+										cbx.lineTo(w + xo, 0 - yo);
+										cbx.closePath();
+										cbx.fill()
+									}
+								} else if(typ == 'plus') {
+									k = (val * os);
+									if(o) {
+										cbx.fillRect(0, y - n + k, w, Math.max(m - (k + k), 1));
+										cbx.fillRect(x - n + k, 0, Math.max(m - (k + k), 1), h)
+									} else {
+										cbx.beginPath();
+										cbx.moveTo(0 - xo, 0 - yo);
+										cbx.lineTo(x - k, y - k);
+										cbx.lineTo(x - k, y - n);
+										cbx.lineTo(x + k, y - n);
+										cbx.lineTo(x + k, y - k);
+										cbx.lineTo(x + n, y - k);
+										cbx.lineTo(x + n, y + k);
+										cbx.lineTo(x + k, y + k);
+										cbx.lineTo(x + k, y + n);
+										cbx.lineTo(x - k, y + n);
+										cbx.lineTo(x - k, y + k);
+										cbx.lineTo(x - n, y + k);
+										cbx.lineTo(x - n, y - k);
+										cbx.lineTo(x - k, y - k);
+										cbx.lineTo(0 - xo, 0 - yo);
+										cbx.lineTo(0 - xo, h + yo);
+										cbx.lineTo(w + xo, h + yo);
+										cbx.lineTo(w + xo, 0 - yo);
+										cbx.closePath();
+										cbx.fill()
+									}
+								} else {
+									if(o) {fillStar(cbx, x, y, 5, d - (val * sr), -(Math.PI / 5))} else {
+										cbx.beginPath();
+										cbx.moveTo(0 - xo - n, 0 - yo - n);
+										cbx.lineTo(0 - xo - n, h + yo + n);
+										cbx.lineTo(x, h + yo + n);
+										drawStar(cbx, x, y, 5, (val * sr), -(Math.PI / 5));
+										cbx.lineTo(x, h + yo + n);
+										cbx.lineTo(w + xo + n, h + yo + n);
+										cbx.lineTo(w + xo + n, 0 - yo - n);
+										cbx.closePath();
+										cbx.fill()
+									}
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "pixelate") {
+							var q = parseInt(getInt(opt1, 40, trans), 10), c = Math.round(steps * .5), a = 1 / c, ow = 0, oh = 0, mw = w / q, mh = h / q, d = q / c, s = 0;
+							ctx.mozImageSmoothingEnabled = false;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								s = cnt <= c ? 1 : 0;
+								cbx.clearRect(0, 0, w, h);
+								if(s) {
+									ow = Math.round(Math.min(Math.max(w / ((val * d) + 1), mw), w));
+									oh = Math.round(Math.min(Math.max(h / ((val * d) + 1), mh), h))
+								} else {
+									ow = Math.round(Math.max(Math.min(w / ((steps - val) * d), w), mw));
+									oh = Math.round(Math.max(Math.min(h / ((steps - val) * d), h), mh));
+									cbx.globalAlpha = a * (val - c)
+								}
+								cbx.drawImage(s ? img_a : img_b, 0, 0, w, h, 0, 0, ow, oh);
+								ctx.drawImage(buffer, 0, 0, ow, oh, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.mozImageSmoothingEnabled = true;
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "pull" || efx[0] == "reveal") {
+							var dir = efx[1] || "right", r = efx[0] == "reveal" ? 1 : 0, hz = dir == "right" || dir == "left" ? 1 : 0, sc = ((hz ? w : h) / steps), s = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(r ? img_b : img_a, 0, 0, w, h, 0, 0, w, h);
+								s = val * sc;
+								if(dir == "left") {ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, r ? 0 - s : w - s, 0, w, h)} else if(dir == "down") {ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, 0, r ? s : s - h, w, h)} else if(dir == "up") {ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, 0, r ? 0 - s : h - s, w, h)} else {ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, r ? s : s - w, 0, w, h)}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "push") {
+							var dir = efx[1] || "right", hz = dir == "right" || dir == "left" ? 1 : 0, sc = ((hz ? w : h) / steps), s = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h, 0, 0, w, h);
+								s = val * sc;
+								if(dir == "right") {
+									ctx.drawImage(img_a, 0, 0, w, h, s, 0, w, h);
+									ctx.drawImage(img_b, 0, 0, w, h, -w + s, 0, w, h)
+								} else if(dir == "left") {
+									ctx.drawImage(img_a, 0, 0, w, h, 0 - s, 0, w, h);
+									ctx.drawImage(img_b, 0, 0, w, h, w - s, 0, w, h)
+								} else if(dir == "down") {
+									ctx.drawImage(img_a, 0, 0, w, h, 0, s, w, h);
+									ctx.drawImage(img_b, 0, 0, w, h, 0, -h + s, w, h)
+								} else if(dir == "up") {
+									ctx.drawImage(img_a, 0, 0, w, h, 0, 0 - s, w, h);
+									ctx.drawImage(img_b, 0, 0, w, h, 0, h - s, w, h)
+								}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "radialgradient") {
+							var r = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2, c = Math.round(steps * 0.5), s = (r / c), x = w / 2, y = h / 2, v = 0, z = 0, wc = cvi_trans.isWC;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								z = cnt <= c ? 0 : c;
+								v = Math.max(s * (val - z), 1);
+								stl = cbx.createRadialGradient(x, y, z == 0 ? 0 : v, x, y, z == 0 ? v : r);
+								stl.addColorStop(0, "rgba(0,0,0,0.0)");
+								stl.addColorStop(1, "rgba(0,0,0,1.0)");
+								cbx.fillStyle = stl;
+								fill(cbx, 0, 0, w, h, wc);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "radialwipe") {
+							var typ = efx[1] || "clock", s = 0, x = w / 2, y = h / 2, a = (Math.PI / 2) * -1, d = Math.PI * 2, r = Math.ceil(Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2);
+							if(typ == "radial") {
+								r = r * 2;
+								d = Math.PI / 2
+							}
+							s = (d / (steps * (typ == "wedge" ? 2 : 1)));
+							cnt = 1;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								cbx.beginPath();
+								if(typ == "wedge") {
+									cbx.moveTo(x, y);
+									cbx.arc(x, y, r, a - (val * s), a + (val * s), true)
+								} else if(typ == "radial") {
+									cbx.moveTo(0, 0);
+									cbx.arc(0, 0, r, 0, val * s, true)
+								} else {
+									cbx.moveTo(x, y);
+									cbx.arc(x, y, r, a, a + (val * s), true)
+								}
+								cbx.closePath();
+								cbx.fill();
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "randombars") {
+							var typ = efx[1] || "horizontal", v = typ == "vertical" ? 1 : 0, a = v ? w : h, z = 0, ss, cs, l = new Array();
+							for(var i = 0; i < a; i++) {l[i] = i}
+							l.shuffle();
+							ss = Math.ceil(a / steps), cs = l.length - ss;
+							cmx.clearRect(0, 0, w, h);
+							cmx.fillStyle = "rgba(0,0,0,1.0)";
+							cmx.fillRect(0, 0, w, h);
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								z = Math.min(ss * cnt, cs);
+								if(v) {for(var i = z; i < (z + ss); i++) {cmx.clearRect(l[i], 0, 1, h)}} else {for(var i = z; i < (z + ss); i++) {cmx.clearRect(0, l[i], w, 1)}}
+								cbx.drawImage(mask, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "randomdissolve") {
+							var q = parseInt(getInt(opt1, 2, trans), 10), gx = Math.ceil(w / q), gy = Math.ceil(h / q), a = gx * gy, x = 0, y = 0, z = 0, ss, cs, b = new Array();
+							for(var i = 0; i < a; i++) {b[i] = i}
+							b.shuffle();
+							ss = Math.ceil(a / steps), cs = b.length - ss;
+							cmx.clearRect(0, 0, w, h);
+							cmx.fillStyle = "rgba(0,0,0,1.0)";
+							cmx.fillRect(0, 0, w, h);
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								z = Math.min(ss * cnt, cs);
+								for(var i = z; i < (z + ss); i++) {
+									y = Math.floor(b[i] / gx);
+									x = b[i] - (y * gx);
+									cmx.clearRect(x * q, y * q, q, q)
+								}
+								cbx.drawImage(mask, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "rotate") {
+							var dir = efx[1] || "out", m = dir == "in" ? 1 : 0, z = 0, ww = 0, hh = 0, d = 1 / steps, a = (Math.PI * 2) / steps;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								z = m ? 1 - (val * d) : val * d;
+								ww = Math.max(w * z, 1);
+								hh = Math.max(h * z, 1);
+								cbx.clearRect(0, 0, w, h);
+								cbx.save();
+								cbx.translate(w / 2, h / 2);
+								cbx.rotate(a * val);
+								cbx.drawImage(m ? img_a : img_b, 0, 0, w, h, 0 - (ww / 2), 0 - (hh / 2), ww, hh);
+								cbx.restore();
+								ctx.drawImage(m ? img_b : img_a, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "scale") {
+							var dir = efx[1] || "out", m = dir == "in" ? 1 : 0, z = 0, x = 0, y = 0, ww = 0, hh = 0, d = 1 / steps;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								z = m ? 1 - (val * d) : val * d;
+								ww = Math.max(w * z, 1);
+								hh = Math.max(h * z, 1);
+								x = (w - ww) / 2;
+								y = (h - hh) / 2;
+								cbx.clearRect(0, 0, w, h);
+								cbx.drawImage(m ? img_a : img_b, 0, 0, w, h, x, y, ww, hh);
+								ctx.drawImage(m ? img_b : img_a, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "slide") {
+							var q = parseInt(getInt(opt1, 1, trans), 10), typ = efx[1] || "hide", s = (w / steps), hw = (w / 2), c = 0, o = 0, yo = 0, ww = 0, hh = h / q;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								if(typ == "push") {
+									ww = val * s;
+									for(var i = 0; i < q; i++) {
+										o = i % 2;
+										yo = i * hh;
+										ctx.drawImage(img_a, 0, yo, w, hh, (o ? ww : 0 - ww), yo, w, hh);
+										ctx.drawImage(img_b, 0, yo, w, hh, (o ? ww - w : w - ww), yo, w, hh)
+									}
+								} else if(typ == "swap") {
+									if(c) {
+										ww = hw + (hw - (val * s));
+										for(var i = 0; i < q; i++) {
+											o = i % 2;
+											yo = i * hh;
+											ctx.drawImage(img_a, 0, yo, w, hh, (o ? ww : 0 - ww), yo, w, hh);
+											ctx.drawImage(img_b, 0, yo, w, hh, (o ? 0 - ww : ww), yo, w, hh)
+										}
+									} else {
+										ww = Math.min(val * s, hw);
+										c = ww == hw ? true : false;
+										for(var i = 0; i < q; i++) {
+											o = i % 2;
+											yo = i * hh;
+											ctx.drawImage(img_b, 0, yo, w, hh, (o ? 0 - ww : ww), yo, w, hh);
+											ctx.drawImage(img_a, 0, yo, w, hh, (o ? ww : 0 - ww), yo, w, hh)
+										}
+									}
+								} else {
+									ww = val * s;
+									ctx.drawImage(img_b, 0, 0, w, h, 0, 0, w, h);
+									for(var i = 0; i < q; i++) {
+										o = i % 2;
+										yo = i * hh;
+										ctx.drawImage(img_a, 0, yo, w, hh, (o ? ww : 0 - ww), yo, w, hh)
+									}
+								}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "smudge") {
+							var tr = Math.round(steps * 0.8), qr = steps - tr, ss = h / tr, k = 1 / tr, p = 1 / qr, yo = 0, hh = 0, e = 0, s = 0, o = 0, wc = cvi_trans.isWC;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								if(val <= tr) {
+									s = Math.max(val * ss, 1);
+									o = Math.min(Math.max(val * k, 0), 1);
+									e = Math.max(s - ss, 0);
+									yo = Math.min(s, h - 1);
+									hh = Math.max(h - s, 1)
+								} else {o = Math.min(Math.max((val - tr) * p, 0), 1)}
+								ctx.drawImage(img_b, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_a, 0, yo, w, hh, 0, yo, w, hh);
+								cbx.drawImage(img_a, 0, Math.max(s - ss, 0), w, ss, 0, 0, w, s);
+								cbx.globalCompositeOperation = "destination-out";
+								stl = cbx.createLinearGradient(0, 0, 0, h);
+								stl.addColorStop(0.0, 'rgba(0,0,0,1)');
+								stl.addColorStop(o, 'rgba(0,0,0,' + (val <= tr ? 0 : 1) + ')');
+								stl.addColorStop(1.0, 'rgba(0,0,0,0)');
+								cbx.fillStyle = stl;
+								fill(cbx, 0, 0, w, h, wc);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "spiral") {
+							var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), m = gx * gy, ww = (w / gx), bw = Math.ceil(ww), hh = (h / gy), bh = Math.ceil(hh), lf = (m / steps), tt = Math.round(steps / m), ct = 0, yo = 0, xo = -1, dir = 0, xc = gx, yc = gy - 1;
+							cmx.clearRect(0, 0, w, h);
+							cmx.fillStyle = "rgba(0,0,0,1.0)";
+							cmx.fillRect(0, 0, w, h);
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								function spiral() {
+									if(dir == 0 && ct == xc) {
+										xc--;
+										dir++;
+										ct = 0
+									} else if(dir == 1 && ct == yc) {
+										yc--;
+										dir++;
+										ct = 0
+									} else if(dir == 2 && ct == xc) {
+										xc--;
+										dir++;
+										ct = 0
+									} else if(dir == 3 && ct == yc) {
+										yc--;
+										dir = 0;
+										ct = 0
+									}
+									switch(dir) {
+										case 0:
+											xo++;
+											break;
+										case 1:
+											yo++;
+											break;
+										case 2:
+											xo--;
+											break;
+										case 3:
+											yo--;
+											break
+									}
+									ct++;
+									cmx.clearRect(Math.round(xo * ww), Math.round(yo * hh), bw, bh)
+								};
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								if(lf < 1) {if(cnt != 0 && cnt % tt == 0) {spiral()}} else {for(var i = cnt; i < (cnt + lf); i++) {spiral()}}
+								cbx.drawImage(mask, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "split") {
+							var pos = efx[1] || "horizontal", dir = efx[2] || "out", v = pos == "vertical" ? 1 : 0, m = dir == "in" ? 1 : 0, h5 = h / 2, w5 = w / 2, sc = (v ? h5 : w5) / steps, s = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								s = Math.min(Math.max(val * sc, 1), v ? m ? h : h5 : m ? w : w5);
+								ctx.drawImage(m ? img_a : img_b, 0, 0, w, h);
+								if(v) {
+									ctx.drawImage(m ? img_b : img_a, 0, 0, w, h5, 0, 0, w, m ? s : h5 - s);
+									ctx.drawImage(m ? img_b : img_a, 0, h5, w, h5, 0, m ? h - s : h5 + s, w, m ? s : h5 - s)
+								} else {
+									ctx.drawImage(m ? img_b : img_a, 0, 0, w5, h, 0, 0, m ? s : w5 - s, h);
+									ctx.drawImage(m ? img_b : img_a, w5, 0, w5, h, m ? w - s : w5 + s, 0, m ? s : w5 - s, h)
+								}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "squares") {
+							var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), dir = efx[1] || "out", m = dir == "in" ? 1 : 0, ww = (w / gx), hh = (h / gy), w5 = ww / 2, h5 = hh / 2, sx = (ww / steps), sy = (hh / steps), xo = 0, yo = 0, z = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(m ? img_b : img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(m ? img_a : img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								for(var x = 0; x < gx; x++) {
+									xo = (val * sx) / 2;
+									for(var y = 0; y < gy; y++) {
+										yo = (val * sy) / 2;
+										if(m) {cbx.fillRect((x * ww) + w5 - xo, (y * hh) + h5 - yo, Math.max(2 * xo, 1), Math.max(2 * yo, 1))} else {cbx.fillRect((x * ww) + xo, (y * hh) + yo, Math.max(ww - (2 * xo), 1), Math.max(hh - (2 * yo), 1))}
+									}
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "stretch") {
+							var typ = efx[1] || "horizontal", dir = efx[2] || "in", m = dir == "in" ? 1 : 0, hz = dir == "right" || dir == "left" || typ == "horizontal" ? 1 : 0, s = ((hz ? w : h) / steps), hw = (w / 2), fh = (h / 2), xo = 0, yo = 0, ww = 0, hh = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ww = hz ? Math.min(Math.max(val * s, 1), w) : w;
+								hh = hz ? h : Math.min(Math.max(val * s, 1), h);
+								if(typ == "push") {
+									if(dir == "right") {
+										ctx.drawImage(img_a, 0, 0, w, h, ww, 0, w - ww, hh);
+										ctx.drawImage(img_b, 0, 0, w, h, 0, 0, ww, hh)
+									} else if(dir == "left") {
+										ctx.drawImage(img_a, 0, 0, w, h, 0, 0, w - ww, hh);
+										ctx.drawImage(img_b, 0, 0, w, h, w - ww, 0, ww, hh)
+									} else if(dir == "up") {
+										ctx.drawImage(img_a, 0, 0, w, h, 0, 0, ww, h - hh);
+										ctx.drawImage(img_b, 0, 0, w, h, 0, h - hh, ww, hh)
+									} else if(dir == "down") {
+										ctx.drawImage(img_a, 0, 0, w, h, 0, hh, ww, h - hh);
+										ctx.drawImage(img_b, 0, 0, w, h, 0, 0, ww, hh)
+									}
+								} else if(typ == "hide") {
+									ctx.drawImage(img_a, 0, 0, w, h);
+									if(dir == "left") {ctx.drawImage(img_b, 0, 0, w, h, w - ww, 0, ww, hh)} else if(dir == "down") {ctx.drawImage(img_b, 0, 0, w, h, 0, 0, ww, hh)} else if(dir == "up") {ctx.drawImage(img_b, 0, 0, w, h, 0, h - hh, ww, hh)} else {ctx.drawImage(img_b, 0, 0, w, h, 0, 0, ww, hh)}
+								} else {
+									ctx.drawImage(m ? img_a : img_b, 0, 0, w, h);
+									xo = hz ? m ? hw - (ww / 2) : ww * .5 : 0;
+									yo = hz ? 0 : m ? fh - (hh / 2) : hh * .5;
+									ctx.drawImage(m ? img_b : img_a, 0, 0, w, h, xo, yo, hz ? m ? ww : w - ww : ww, hz ? hh : m ? hh : h - hh)
+								}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "strips") {
+							var dir = efx[1] || "rightdown", m = (w + h), x = 0, y = 0, s = (m / steps);
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								if(dir == 'rightdown') {
+									x = (w - m) + (val * s);
+									y = (h - m) + (val * s);
+									cbx.beginPath();
+									cbx.moveTo(w, h);
+									cbx.lineTo(w, y);
+									cbx.lineTo(x, h);
+									cbx.closePath();
+									cbx.fill()
+								} else if(dir == 'rightup') {
+									x = (w - m) + (val * s);
+									y = m - (val * s);
+									cbx.beginPath();
+									cbx.moveTo(w, 0);
+									cbx.lineTo(w, y);
+									cbx.lineTo(x, 0);
+									cbx.closePath();
+									cbx.fill()
+								} else if(dir == 'leftdown') {
+									x = m - (val * s);
+									y = (h - m) + (val * s);
+									cbx.beginPath();
+									cbx.moveTo(0, h);
+									cbx.lineTo(0, y);
+									cbx.lineTo(x, h);
+									cbx.closePath();
+									cbx.fill()
+								} else if(dir == 'leftup') {
+									x = m - (val * s);
+									y = m - (val * s);
+									cbx.beginPath();
+									cbx.moveTo(0, 0);
+									cbx.lineTo(0, y);
+									cbx.lineTo(x, 0);
+									cbx.closePath();
+									cbx.fill()
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "turn") {
+							var q = parseInt(getInt(opt1, 5, trans), 10), pos = efx[1] || "vertical", dir = efx[2] || "right", v = pos == "vertical" ? 1 : 0, r = dir == "left" || dir == "up" ? 1 : 0, ww = v ? (w / q) : w, hh = v ? h : (h / q), sx = (ww / steps), sy = (hh / steps), s = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								if(v) {
+									s = val * sx;
+									for(var i = 0; i < q; i++) {
+										ctx.drawImage(img_a, (i * ww), 0, ww, h, (i * ww) + (r ? 0 : s), 0, Math.max(ww - s, 1), h);
+										ctx.drawImage(img_b, (i * ww), 0, ww, h, (i * ww) + (r ? ww - s : 0), 0, Math.max(s, 1), h)
+									}
+								} else {
+									s = val * sy;
+									for(var i = 0; i < q; i++) {
+										ctx.drawImage(img_a, 0, (i * hh), w, hh, 0, (i * hh) + (r ? 0 : s), w, Math.max(hh - s, 1));
+										ctx.drawImage(img_b, 0, (i * hh), w, hh, 0, (i * hh) + (r ? hh - s : 0), w, Math.max(s, 1))
+									}
+								}
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "wheel") {
+							var q = parseInt(getInt(opt1, 4, trans), 10), x = w / 2, y = h / 2, d = (Math.PI * 2) / q, r = Math.ceil(Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2), s = (d / steps);
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								cbx.fillStyle = "rgba(0,0,0,1.0)";
+								for(var i = 0; i < q; i++) {
+									cbx.beginPath();
+									cbx.moveTo(x, y);
+									cbx.arc(x, y, r, (i * d) + (val * s), (i * d) + (steps * s), false);
+									cbx.closePath();
+									cbx.fill()
+								}
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "wrench") {
+							var pos = efx[1] || "vertical", v = pos == "vertical" ? 1 : 0, c = Math.round(steps * .5), a = 1 / c, xo = 0, yo = 0, ow = 0, oh = 0, s = 0;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								s = cnt <= c ? 1 : 0;
+								cbx.clearRect(0, 0, w, h);
+								if(s) {
+									ow = Math.round(Math.min(Math.max(w * (1 - (val * a)), 1), w));
+									xo = ((w - ow) / 2);
+									oh = Math.round(Math.min(Math.max(h * (1 - (val * a)), 1), h));
+									yo = ((h - oh) / 2)
+								} else {
+									ow = Math.round(Math.min(Math.max(w * ((val - c) * a), 1), w));
+									xo = ((w - ow) / 2);
+									oh = Math.round(Math.min(Math.max(h * ((val - c) * a), 1), h));
+									yo = ((h - oh) / 2);
+									cbx.globalAlpha = a * (val - c)
+								}
+								cbx.drawImage(s ? img_a : img_b, v ? 0 : xo, v ? yo : 0, v ? w : ow, v ? oh : h, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "zigzag") {
+							var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), m = gx * gy, ww = (w / gx), bw = Math.ceil(ww), hh = (h / gy), bh = Math.ceil(hh), lf = (m / steps), tt = Math.round(steps / m), ct = 0, yo = 0, xo = -1, dir = 0, xc = gx;
+							cmx.clearRect(0, 0, w, h);
+							cmx.fillStyle = "rgba(0,0,0,1.0)";
+							cmx.fillRect(0, 0, w, h);
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								function zigzag() {
+									if(dir == 0 && ct == xc) {
+										dir++;
+										ct = 0;
+										xo++;
+										yo++
+									} else if(dir == 1 && ct == (xc + 1)) {
+										dir = 0;
+										ct = 0;
+										yo++
+									}
+									if(dir == 0) {xo++} else {xo--}
+									ct++;
+									cmx.clearRect(Math.round(xo * ww), Math.round(yo * hh), bw, bh)
+								};
+								ctx.drawImage(img_a, 0, 0, w, h);
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalCompositeOperation = "source-over";
+								cbx.drawImage(img_b, 0, 0, w, h);
+								cbx.globalCompositeOperation = "destination-out";
+								if(lf < 1) {if(cnt != 0 && cnt % tt == 0) {zigzag()}} else {for(var i = cnt; i < (cnt + lf); i++) {zigzag()}}
+								cbx.drawImage(mask, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						} else if(efx[0] == "zoom") {
+							var dir = efx[1] || "out", m = dir == "in" ? 1 : 0, z = 0, f = 0, x = 0, y = 0, ww = 0, hh = 0, a = 1 / steps, d = a;
+							timer.start();
+							canvas.timer = window.setInterval(function() {
+								val = cvi_tween[tween](steps, cnt, cpa) * steps;
+								z = m ? val * d : 1 - (val * d);
+								f = m ? a * val : 1 - (a * val);
+								ww = Math.min(Math.max(w * z, 1), w);
+								hh = Math.min(Math.max(h * z, 1), h);
+								x = (w - ww) / 2;
+								y = (h - hh) / 2;
+								cbx.clearRect(0, 0, w, h);
+								cbx.globalAlpha = f;
+								cbx.drawImage(m ? img_b : img_a, x, y, ww, hh, 0, 0, w, h);
+								ctx.drawImage(m ? img_a : img_b, 0, 0, w, h);
+								ctx.drawImage(buffer, 0, 0, w, h);
+								if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+								cnt++;
+								if(cnt > steps) {
+									var t = timer.stop() - ival;
+									window.clearInterval(canvas.timer);
+									ctx.drawImage(img_b, 0, 0, w, h);
+									if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+									ctx.restore();
+									cvi_trans._clr(callback, trans, t, fps * ((dur * 1000) / t), canvas)
+								}
+							}, ival)
+						}
+					} catch(err) {
+						canvas.TLerror = err.message;
+						ctx.drawImage(img_b, 0, 0, w, h);
+						if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
+						ctx.restore();
+						log('Error: ', err.message + ' - trans "' + trans + '" has failed!');
+						cvi_trans._clr(callback, trans, 0, 0, canvas)
+					}
+				}
+			}
+		}
+		return false
+	}, stop: function(canvas, img) {
+		if(cvi_trans.vml && canvas.TLfilter) {
+			var filter = canvas.TLfilter;
+			if(canvas.filters.item(filter).status == 2) {canvas.filters.item(filter).stop()}
+		} else if(canvas.timer && canvas.getContext) {
+			window.clearInterval(canvas.timer);
+			canvas.timer = 0;
+			var ctx = canvas.getContext('2d'), w = parseInt(canvas.width), h = parseInt(canvas.height);
+			ctx.drawImage(img, 0, 0, w, h);
+			ctx.restore()
+		}
+		cvi_trans._clr('', '', 0, 0, canvas);
+		return false
+	}, _clr: function(callback, trans, time, fps, obj) {
+		if(cvi_trans.isWC) {
+			var ele = document.getElementById('cvi_trans_buffer');
+			if(ele) {document.body.removeChild(ele)}
+			ele = document.getElementById('cvi_trans_mask');
+			if(ele) {document.body.removeChild(ele)}
+		}
+		obj.TLfilter = null;
+		obj.TLbusy = false;
+		if(callback) {if(typeof window[callback] === 'function') {window[callback](trans || "", time || 0, fps || 0, obj.id)}}
+		return false
+	}}
