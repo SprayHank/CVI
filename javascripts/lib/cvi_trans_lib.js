@@ -78,7 +78,7 @@ var cvi_trans = {
 	released: '2011-01-15 12:00:00',
 	duration: 2.0,
 	fps: 30,
-	vml: !-[1, ],
+	vml: !-[1, ] && document.all && document.namespaces ? 1 : 0,
 	play: function(callback, canvas, img_a, img_b, alpha, layer, opt1, opt2, trans, tween, cpa, dur, fps) {
 		Array.prototype.shuffle = shuffle;
 		function shuffle() {
