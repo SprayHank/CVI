@@ -992,8 +992,24 @@ var transm;
                 self.TLbarg = cba;
             }
             transm._prepare(self);
-            if(!trans || trans == '') {if(self.back) {if(typeof window[self.back] === 'function') {try {window[self.back]();} catch(err) {if(self.verbose) {transm.log('error', 'transm: has failed ' + err.message);}}}}}
-            if(self.TLacall) {if(typeof window[self.TLacall] === 'function') {try {window[self.TLacall](self.TLaarg);} catch(err) {if(self.verbose) {transm.log('error', 'transm: has failed ' + err.message);}}}}
+            if((!trans || trans == '') && self.back && typeof window[self.back] === 'function') {
+                try {
+                    window[self.back]();
+                } catch(err) {
+                    if(self.verbose) {
+                        transm.log('error', 'transm: has failed ' + err.message);
+                    }
+                }
+            }
+            if(self.TLacall && typeof window[self.TLacall] === 'function') {
+                try {
+                    window[self.TLacall](self.TLaarg);
+                } catch(err) {
+                    if(self.verbose) {
+                        transm.log('error', 'transm: has failed ' + err.message);
+                    }
+                }
+            }
             self.TLready = true;
             if(self.autoplay) {transm.play(self);}
             return false;
@@ -1258,7 +1274,15 @@ var transm;
             self.TLaarg = caa;
             self.TLbcall = cbf;
             self.TLbarg = cba;
-            if(self.TLbcall) {if(typeof window[self.TLbcall] === 'function') {try {window[self.TLbcall](self.TLbarg);} catch(err) {if(self.verbose) {transm.log('error', 'transm: has failed ' + err.message);}}}}
+            if(self.TLbcall && typeof window[self.TLbcall] === 'function') {
+                try {
+                    window[self.TLbcall](self.TLbarg);
+                } catch(err) {
+                    if(self.verbose) {
+                        transm.log('error', 'transm: has failed ' + err.message);
+                    }
+                }
+            }
             if(self.w3c) {
                 self.fromB = a ? 'b' : 'a';
                 transm._buffer(self, a ? self.b : self.a, i);
