@@ -181,7 +181,7 @@ var transm;
             function h2d(h) {return(Math.max(0, Math.min(parseInt(h, 16), 254)));};
             return h2d(v.substr(1, 2)) + ',' + h2d(v.substr(3, 2)) + ',' + h2d(v.substr(5, 2));
         },
-        vml: function() {return(document.all && document.namespaces && !window.opera && (!document.documentMode || document.documentMode < 9));},
+        vml: function() {return(document.all && document.namespaces && !-[1, ]);},
         log: function(s, v) {
             s = s.toUpperCase() || 'LOG';
             if(window.console) {
@@ -463,7 +463,7 @@ var transm;
                     self.style.position = 'absolute';
                     self.style.left = '0px';
                     self.style.top = '0px';
-                    self.tri = document.all && !window.opera && (!document.documentMode || document.documentMode < 9) ? 1 : 0;
+                    self.tri = document.all && !-[1, ];
                 }
                 if(!self) {
                     if(verbose) {
