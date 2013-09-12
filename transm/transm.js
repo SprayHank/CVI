@@ -404,15 +404,13 @@ var transm;
                             self.csp = transm.canvas('getImageData');
                             self.wcs = navigator.userAgent.indexOf('WebKit') != -1 && !window.external && !document.defaultCharset ? 1 : 0;
                             self.wcf = navigator.userAgent.indexOf('Gecko') > -1 && window.updateCommands && !window.external ? 1 : 0;
-                        } else {
-                            if(document.images && document.getElementById && document.createElement && document.appendChild && document.removeChild && document.childNodes) {
-                                var self = C('img');
-                                self.old = true;
-                                self.style.position = 'absolute';
-                                self.style.left = '0px';
-                                self.style.top = '0px';
-                                self.tri = document.all && !window.opera && (!document.documentMode || document.documentMode < 9) ? 1 : 0;
-                            }
+                        } else if(document.images && document.getElementById && document.createElement && document.appendChild && document.removeChild && document.childNodes) {
+                            var self = C('img');
+                            self.old = true;
+                            self.style.position = 'absolute';
+                            self.style.left = '0px';
+                            self.style.top = '0px';
+                            self.tri = document.all && !window.opera && (!document.documentMode || document.documentMode < 9) ? 1 : 0;
                         }
                         if(self) {
                             self.data = data;
