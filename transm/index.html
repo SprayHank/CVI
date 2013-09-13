@@ -51,12 +51,14 @@ div.inner table th.txt { text-align: left; }
 }
 </style>
 <script type="text/javascript" src="cvi_stackblur.js"></script>
+<script type="text/javascript" src="../javascripts/lib/cvi_lib.js"></script>
 <script type="text/javascript" src="../javascripts/lib/cvi_vml_lib.js"></script>
 <script type="text/javascript" src="../javascripts/lib/cvi_tween_lib.js"></script>
 <script type="text/javascript" src="../javascripts/lib/cvi_trans_lib.js"></script>
 <script type="text/javascript" src="transm.js"></script>
 <script type="text/javascript">
 <!--
+var transm = new TransM();
 function showInfo() {var ele=$("edit");
 	if(ele) {var i=transm.info(ele);
 		if(i) {
