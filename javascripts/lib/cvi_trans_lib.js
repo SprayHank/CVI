@@ -192,6 +192,7 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
             if(cvi_trans.vml) {
                 var filter = null, ftrans = null, DXIT = "DXImageTransform.Microsoft.", w = parseInt(canvas.style.width), h = parseInt(canvas.style.height);
                 try {
+                    this.VML = new VML();
                     canvas.TLbusy = true;
                     canvas.TLerror = null;
                     if(efx[0] == "barn") {
@@ -271,7 +272,7 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                         if(canvas.filters.item(filter).status == 1) {
                             var b, a = canvas.firstChild, pw = img_b.wm || w, ph = img_b.hm || h, xo = img_b.ox || 0, yo = img_b.oy || 0;
                             if(a) {
-                                b = document.createElement(['<v:fill src="' + img_b.source + '" size="' + pw + 'pt,' + ph + 'pt" origin="' + xo + ',' + yo + '" position="0,0" aspect="ignore" type="frame" />'].join(''));
+                                b = document.createElement(['<v:fill src="' + img_b.source + '" size="' + pw + 'pt,' + ph + 'pt" origin="' + xo + ',' + yo + '" position="0,0" aspect="ignore" type="frame"',this.VML.tagEnd].join(''));
                                 canvas.replaceChild(b, a)
                             }
                             timer.start();

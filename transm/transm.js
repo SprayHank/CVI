@@ -211,6 +211,7 @@ var transm;
             function getArg(a, t) {return (typeof options[a.toLowerCase()] === t ? options[a.toLowerCase()] : transm["default" + a]);};
             function getNum(a, n, m) {return Math.max(n, Math.min(m, (typeof options[a.toLowerCase()] === 'number' ? options[a.toLowerCase()] : transm["default" + a])));};
             function finalize() {
+                if(self.verbose) {transm.log('log', 'in finalize')}
                 tmp = C('a');
                 tmp.style.height = height + 'px';
                 tmp.style.width = width + 'px';
@@ -258,15 +259,17 @@ var transm;
                         meter.style.visibility = 'visible';
                         tmp.appendChild(meter);
                         meter.unselectable = true;
+                        if(self.verbose) {transm.log('log', meter.innerHTML)}
                         meter.innerHTML = '<v:oval' +
                             ' strokeweight="0" stroked="f" filled="t" fillcolor="#808080"' +
                             ' style="zoom:1;display:block;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' +
                             self.msize + 'px;height:' + self.msize + 'px;"><v:fill color="' +
-                            self.mbgcolor + '" opacity="' + self.mopacity + '" /></v:oval><v:shape' +
+                            self.mbgcolor + '" opacity="' + self.mopacity + '"'+this.VML.tagEnd+'</v:oval><v:shape' +
                             ' path="m 500,500 ae 500,500,500,500,5898150,23592960 x e" coordorigin="0,0" coordsize="1000,1000"' +
                             ' strokeweight="0" stroked="f" filled="t" fillcolor="#808080" style="zoom:1;display:block;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' +
-                            self.msize + 'px;height:' + self.msize + 'px;"><v:fill color="' + self.mfgcolor + '" opacity="' + self.mopacity + '" /></v:shape>';
+                            self.msize + 'px;height:' + self.msize + 'px;"><v:fill color="' + self.mfgcolor + '" opacity="' + self.mopacity + '"'+this.VML.tagEnd+'</v:shape>';
                         meter.style.visibility = 'hidden';
+                        if(self.verbose) {transm.log('log', meter.innerHTML)}
                     } else {
                         var meter = C('div');
                         meter.id = self.id + "_meter";
@@ -397,34 +400,8 @@ var transm;
             if(nda) {object.style[nda] = 'none';}
             try {
                 if(vml) {
-                    if(document.namespaces['v'] == null) {
-                        var e = [
-                                "shape",
-                                "shapetype",
-                                "group",
-                                "background",
-                                "path",
-                                "formulas",
-                                "handles",
-                                "fill",
-                                "stroke",
-                                "shadow",
-                                "textbox",
-                                "textpath",
-                                "imagedata",
-                                "line",
-                                "polyline",
-                                "curve",
-                                "roundrect",
-                                "oval",
-                                "rect",
-                                "arc",
-                                "image"
-                            ],
-                            s = document.createStyleSheet();
-                        for(i = 0; i < e.length; i++) {s.addRule("v\\:" + e[i], "behavior: url(#default#VML);");}
-                        document.namespaces.add("v", "urn:schemas-microsoft-com:vml");
-                    }
+                    //if(verbose) {transm.log('log', 'in if vml')}
+                    this.VML = new VML();
                     if(radius) {
                         var self = C('v:roundrect');
                         self.vml = true;
@@ -451,6 +428,7 @@ var transm;
                     self.style.visibility = 'visible';
                     self.style.cssText = 'zoom:1;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' + width + 'px;height:' + height + 'px;';
                     self.style.visibility = 'hidden';
+                    //if(verbose) {transm.log('log', self.outerHTML)}
                 } else if(w3c) {
                     var self = C('canvas');
                     self.w3c = true;
@@ -955,22 +933,19 @@ var transm;
                             img = null;
                         }
                         if(self.verbose) {transm.log('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);}
-                        cnt++;
-                        if(self.vml && !self.nocache) {
-                            if(self.timer) {window.clearTimeout(self.timer);}
-                            window.setTimeout(function() {transm._preload(self, cnt);}, 0);
-                        } else {transm._preload(self, cnt);}
                     } else {
                         if(self.verbose) {transm.log('warn', 'transm: failed image > ' + self.data[cnt].source);}
-                        cnt++;
-                        if(self.vml && !self.nocache) {
-                            if(self.timer) {window.clearTimeout(self.timer);}
-                            window.setTimeout(function() {transm._preload(self, cnt);}, 0);
-                        } else {transm._preload(self, cnt);}
                     }
+                    cnt++;
+                    if(self.vml && !self.nocache) {
+                        if(self.timer) {window.clearTimeout(self.timer);}
+                        window.setTimeout(function() {transm._preload(self, cnt);}, 0);
+                    } else {transm._preload(self, cnt);}
                 };
                 img.src = self.data[cnt].source;
-            } else {transm._setup(self);}
+            } else {
+                transm._setup(self);
+            }
             return false;
         },
         _return: function(self, trans, time, fps) {
@@ -1138,14 +1113,20 @@ var transm;
                     }, 40);
                 } else {transm._return(self, false);}
             } else if(self.vml) {
-                var fill = document.createElement(['<v:fill src="' + self.data[0].source + '" size="' +
-                    self.data[0].wm + 'pt,' + self.data[0].hm + 'pt" origin="' + self.data[0].ox + ',' + self.data[0].oy + '" position="0,0" aspect="ignore" type="frame"  />'].join(''));
+                var fill = document.createElement(['<v:fill src="' + self.data[0].source,
+                    '" size="' + self.data[0].wm,
+                    'pt,' + self.data[0].hm,
+                    'pt" origin="' + self.data[0].ox,
+                    ',' + self.data[0].oy,
+                    '" position="0,0" aspect="ignore"',
+                    ' type="frame"',
+                    this.VML.tagEnd, ''].join(''));
                 self.appendChild(fill);
                 self.style.visibility = 'visible';
                 if(self.layer) {
                     var tmp = G(self.id + "_layer");
                     if(tmp) {
-                        fill = document.createElement(['<v:fill src="' + self.layer + '" type="frame" />'].join(''));
+                        fill = document.createElement(['<v:fill src="' + self.layer + '" type="frame"', this.VML.tagEnd].join(''));
                         tmp.appendChild(fill);
                         tmp.style.visibility = 'visible';
                     }
