@@ -66,15 +66,17 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
     cvi_tfx.wrench_horizontal = cvi_tfx.wrench_vertical = {fail: "pixelate", tween: "linear", buffer: 1, mask: 0, alpha: 0};
     cvi_tfx.zigzag = {val: 8, min: 1, max: 100, buffer: 1, mask: 1, alpha: 0};
     cvi_tfx.zoom_in = cvi_tfx.zoom_out = {fail: "fade", tween: "linear", buffer: 1, mask: 0, alpha: 0};
-    var cvi_c = 0,cvi = new CVI();
+    var cvi_c = 0, cvi = new CVI();
     for(var cvi_i in cvi_tfx) {
         cvi_rfx[cvi_c++] = cvi_i;
     }
-
-    if(typeof cvi_tween !== 'object') {
-        var cvi_tween = new Object();
+//    console.log( typeof window['cvi_tween'] === 'undefined');
+//    console.log(window['cvi_tween'])
+    if(typeof window['cvi_tween'] !== 'object') {
+        window['cvi_tween'] = new Object();
         cvi_tween.linear = function(s, c) {return (1 / s) * c;};
     }
+//    console.log(cvi_tween)
     cvi_trans = {
         version: 1.3,
         released: '2011-01-15 12:00:00',
@@ -160,9 +162,7 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                 c.rotate(-p);
                 c.translate(-x, -y)
             };
-
             Array.prototype.shuffle = shuffle;
-
             if(!canvas || canvas.TLbusy)return false;
             if(trans === 'random') {trans = cvi_rfx[Math.floor(Math.random() * cvi_rfx.length)]}
             trans = (typeof cvi_tfx[trans] === 'object' ? trans : 'fade');
@@ -259,7 +259,7 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                         if(canvas.filters.item(filter).status == 1) {
                             var b, a = canvas.firstChild, pw = img_b.wm || w, ph = img_b.hm || h, xo = img_b.ox || 0, yo = img_b.oy || 0;
                             if(a) {
-                                b = document.createElement(['<v:fill src="' + img_b.source + '" size="' + pw + 'pt,' + ph + 'pt" origin="' + xo + ',' + yo + '" position="0,0" aspect="ignore" type="frame"',this.VML.tagEnd].join(''));
+                                b = document.createElement(['<v:fill src="' + img_b.source + '" size="' + pw + 'pt,' + ph + 'pt" origin="' + xo + ',' + yo + '" position="0,0" aspect="ignore" type="frame"', this.VML.tagEnd].join(''));
                                 canvas.replaceChild(b, a)
                             }
                             timer.start();
@@ -283,7 +283,11 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
             } else if(canvas.tagName.toUpperCase() == "CANVAS") {
                 if(canvas.timer) {window.clearInterval(canvas.timer)}
                 if(!canvas.getContext)return false;
-                var ctx = canvas.getContext('2d'), w = parseInt(canvas.width), h = parseInt(canvas.height), sba = typeof(cvi_stackblur) === "function" ? true : false, ids = false;
+                var ctx = canvas.getContext('2d'),
+                    w = parseInt(canvas.width),
+                    h = parseInt(canvas.height),
+                    sba = typeof(cvi_stackblur) === "function" ? true : false,
+                    ids = false;
                 try {
                     var t = ctx.getImageData(0, 0, 1, 1);
                     ids = true
@@ -292,7 +296,7 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                     trans = cvi_tfx[trans].noids;
                     efx[0] = trans
                 }
-                tween = (typeof(cvi_tween[tween]) === 'function' ? tween : cvi_tfx[trans].tween && typeof(cvi_tween[cvi_tfx[trans].tween]) === 'function' ? cvi_tfx[trans].tween : 'linear');
+                tween = (typeof(cvi_tween[tween]) === 'function' ? tween : (cvi_tfx[trans].tween && typeof(cvi_tween[cvi_tfx[trans].tween]) === 'function' ? cvi_tfx[trans].tween : 'linear'));
                 cpa = (cpa == null || typeof cpa !== 'object' ? [0.25, 0.1, 0.25, 1.0] : cpa);
                 fps = Math.min(Math.max(parseInt(fps, 10) || cvi_trans.fps, 15), 100) || cvi_trans.fps;
                 cvi_trans.isWC = navigator.userAgent.indexOf('WebKit') != -1 && !window.external && !document.defaultCharset ? 1 : 0;
@@ -523,7 +527,16 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "circles") {
-                        var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), dir = efx[1] || "out", m = dir == "in" ? 1 : 0, ww = (w / gx), hh = (h / gy), w5 = ww / 2, h5 = hh / 2, r = Math.sqrt(Math.pow(ww, 2) + Math.pow(hh, 2)) / 2, s = (r / steps), z = 0;
+                        var gx = parseInt(getInt(opt1, 8, trans), 10),
+                            gy = parseInt(getInt(opt2, gx, trans), 10),
+                            dir = efx[1] || "out",
+                            m = dir == "in" ? 1 : 0,
+                            ww = (w / gx),
+                            hh = (h / gy),
+                            w5 = ww / 2,
+                            h5 = hh / 2,
+                            r = Math.sqrt(Math.pow(ww, 2) + Math.pow(hh, 2)) / 2,
+                            s = (r / steps), z = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -585,7 +598,13 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "corner") {
-                        var pos = efx[1] || "lefttop", dir = efx[2] || "in", d90 = Math.PI / 2, angle = d90 / steps, d = dir == "in" ? 1 : 0, p = pos == "righttop" ? 1 : pos == "leftbottom" ? 2 : pos == "rightbottom" ? 3 : 0, z = 0;
+                        var pos = efx[1] || "lefttop",
+                            dir = efx[2] || "in",
+                            d90 = Math.PI / 2,
+                            angle = d90 / steps,
+                            d = dir == "in" ? 1 : 0,
+                            p = pos == "righttop" ? 1 : pos == "leftbottom" ? 2 : pos == "rightbottom" ? 3 : 0,
+                            z = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -622,7 +641,21 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "curl") {
-                        var d = parseInt(getInt(opt1, 6, trans), 10), dir = efx[1] || "horizontal", v = dir == "vertical" ? 1 : 0, ss = ((v ? h : w) / steps), c = Math.round((v ? h : w) / d), o = .5, p = 0, s = 0, sx = 0, sy = 0, dx = 0, dy = 0, ww = 0, hh = 0, wc = cvi_trans.isWC;
+                        var d = parseInt(getInt(opt1, 6, trans), 10),
+                            dir = efx[1] || "horizontal",
+                            v = dir == "vertical" ? 1 : 0,
+                            ss = ((v ? h : w) / steps),
+                            c = Math.round((v ? h : w) / d),
+                            o = .5,
+                            p = 0,
+                            s = 0,
+                            sx = 0,
+                            sy = 0,
+                            dx = 0,
+                            dy = 0,
+                            ww = 0,
+                            hh = 0,
+                            wc = cvi_trans.isWC;
                         cbx.clearRect(0, 0, w, h);
                         cbx.save();
                         cbx.translate(v ? 0 : w, v ? h : 0);
