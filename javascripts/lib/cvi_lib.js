@@ -105,6 +105,7 @@ var CVI;
             var F = function() {};
             F.prototype = superClass.prototype;
             subClass.prototype = new F();
+            subClass.prototype.parent = superClass;
             subClass.prototype.constructor = subClass;
         }
     };
