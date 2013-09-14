@@ -92,16 +92,14 @@ function applyGlow(ctx, x, y, w, h, r, o, c) {
         tmp.addColorStop(0.25, 'rgba(' + c + ',' + o + ')');
         tmp.addColorStop(1, 'rgba(' + c + ',0)');
         return tmp;
-    }
-
+    };
     function setLS(ctx, x, y, w, h, o, c) {
         var opt = Math.min(parseFloat(o + 0.1), 1.0), tmp = ctx.createLinearGradient(x, y, w, h);
         tmp.addColorStop(0, 'rgba(' + c + ',' + opt + ')');
         tmp.addColorStop(0.25, 'rgba(' + c + ',' + o + ')');
         tmp.addColorStop(1, 'rgba(' + c + ',0)');
         return tmp;
-    }
-
+    };
     var st, os = Math.round(Math.min(w, h) * (window.opera ? 0.058 : 0.05));
     ctx.beginPath();
     ctx.rect(x + r, y, w - (r * 2), r);
@@ -161,8 +159,7 @@ function applyMask(ctx, x, y, w, h, r, o, c, i, z) {
         if(z == false) {tmp.addColorStop(0.9, 'rgba(' + c + ',' + mg + ')');}
         tmp.addColorStop(1, 'rgba(' + c + ',' + eg + ')');
         return tmp;
-    }
-
+    };
     function setLS(ctx, x, y, w, h, o, c, i, z) {
         var sg = (i == true ? o : 0), eg = (i == true ? 0 : o), mg = eg * (z == true ? 0.9 : 0.7);
         var tmp = ctx.createLinearGradient(x, y, w, h);
@@ -170,8 +167,7 @@ function applyMask(ctx, x, y, w, h, r, o, c, i, z) {
         if(z == false) {tmp.addColorStop(0.9, 'rgba(' + c + ',' + mg + ')');}
         tmp.addColorStop(1, 'rgba(' + c + ',' + eg + ')');
         return tmp;
-    }
-
+    };
     var st, os = r, p = Math.round(r / 8);
     ctx.fillStyle = 'rgba(' + c + ',' + o + ')';
     if(i) {
@@ -259,26 +255,24 @@ function applyMask(ctx, x, y, w, h, r, o, c, i, z) {
 var cvi_bevel;
 (function() {
     "use strict";
-    var cvi = new CVI(),
-        defaultOption = {
-            radius: 20,
-            glow: 33,
-            shine: 40,
-            shade: 50,
-            glowcolor: '#000000',
-            shinecolor: '#ffffff',
-            shadecolor: '#000000',
-            backcolor: '#0080ff',
-            fillcolor: '#0080ff',
-            linear: false,
-            usemask: false,
-            noglow: false,
-            noshine: false,
-            noshade: false,
-            filter: null,
-            callback: null
-        };
-
+    var cvi = new CVI(), defaultOption = {
+        radius: 20,
+        glow: 33,
+        shine: 40,
+        shade: 50,
+        glowcolor: '#000000',
+        shinecolor: '#ffffff',
+        shadecolor: '#000000',
+        backcolor: '#0080ff',
+        fillcolor: '#0080ff',
+        linear: false,
+        usemask: false,
+        noglow: false,
+        noshine: false,
+        noshade: false,
+        filter: null,
+        callback: null
+    };
     cvi_bevel = {
         add: function(image, options) {
             if(image.tagName.toUpperCase() == "IMG") {
@@ -338,7 +332,6 @@ var cvi_bevel;
                 }
             }
         },
-
         modify: function(canvas, options) {
             try {
                 var radius = (typeof options['radius'] == 'number' ? options['radius'] : canvas.options['radius']);
@@ -375,6 +368,7 @@ var cvi_bevel;
                 canvas.options['callback'] = callback;
                 var ww = canvas.width,
                     hh = canvas.height,
+                    Rex = /^#[0-9a-f]{6}$/i,
                     ix = Math.round(Math.min(ww, hh) * 0.05),
                     iy = ix,
                     iw = ww - (2 * ix),
@@ -384,15 +378,15 @@ var cvi_bevel;
                         var glo = Math.min(glow == 0 ? 40 : glow * 1.2, 100),
                             sio = shine == 0 ? 0.5 : shine / 100,
                             sao = shade == 0 ? 0.5 : shade / 100,
-                            rdi = Math.max(Math.min(radius == 0 ? 20 : radius, 40), 20);
-                        var glc = glowcolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? glowcolor : '#000000';
-                        var sic = shinecolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? shinecolor : '#ffffff';
-                        var sac = shadecolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? shadecolor : '#000000';
-                        var bac = backcolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? backcolor : '#0080ff';
-                        var flc = fillcolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? fillcolor : backcolor;
-                        var mask = usemask ? "filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100,finishopacity=50,style=3);" : "";
-                        var head, fill, foot = '</v:group>', high = '', ishine = '', left = '', right = '', ishade = '', iglow = '', oline = '';
-                        var f, p, r, t, ro, ri, outer, inner;
+                            rdi = Math.max(Math.min(radius == 0 ? 20 : radius, 40), 20),
+                            glc = glowcolor.match(Rex) ? glowcolor : '#000000',
+                            sic = shinecolor.match(Rex) ? shinecolor : '#ffffff',
+                            sac = shadecolor.match(Rex) ? shadecolor : '#000000',
+                            bac = backcolor.match(Rex) ? backcolor : '#0080ff',
+                            flc = fillcolor.match(Rex) ? fillcolor : backcolor,
+                            mask = usemask ? "filter:progid:DXImageTransform.Microsoft.Alpha(opacity=100,finishopacity=50,style=3);" : "",
+                            head, fill, foot = '</v:group>', high = '', ishine = '', left = '', right = '', ishade = '', iglow = '', oline = '',
+                            f, p, r, t, ro, ri, outer, inner;
                         if(!noglow) {
                             outer = Math.max(Math.min(radius, 40), 20);
                             ro = Math.round(Math.min(iw, ih) * (outer / 100));
@@ -445,12 +439,12 @@ var cvi_bevel;
                         var glo = glow == 0 ? 0.33 : glow / 100,
                             sio = shine == 0 ? 0.5 : shine / 100,
                             sao = shade == 0 ? 0.5 : shade / 100,
-                            rdi = Math.max(Math.min(radius == 0 ? 0.2 : radius / 100, 0.4), 0.2)                                           ,
-                            glc = cvi.getRGB(glowcolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? glowcolor : '#000000'),
-                            sic = cvi.getRGB(shinecolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? shinecolor : '#ffffff'),
-                            sac = cvi.getRGB(shadecolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? shadecolor : '#000000'),
-                            bac = cvi.getRGB(backcolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? backcolor : '#0080ff'),
-                            flc = cvi.getRGB(fillcolor.match(/^#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]$/i) ? fillcolor : backcolor),
+                            rdi = Math.max(Math.min(radius == 0 ? 0.2 : radius / 100, 0.4), 0.2),
+                            glc = cvi.getRGB(glowcolor.match(Rex) ? glowcolor : '#000000'),
+                            sic = cvi.getRGB(shinecolor.match(Rex) ? shinecolor : '#ffffff'),
+                            sac = cvi.getRGB(shadecolor.match(Rex) ? shadecolor : '#000000'),
+                            bac = cvi.getRGB(backcolor.match(Rex) ? backcolor : '#0080ff'),
+                            flc = cvi.getRGB(fillcolor.match(Rex) ? fillcolor : backcolor),
                             style = '',
                             r = Math.max(Math.min(rdi, 0.4), 0.2),
                             otr = Math.round(Math.min(iw, ih) * r),
@@ -560,9 +554,7 @@ var cvi_bevel;
             } catch(e) {
             }
         },
-
         replace: function(canvas) {
-            var object = canvas.parentNode;
             var img = document.createElement('img');
             img.id = canvas.id;
             img.alt = canvas.alt;
@@ -574,9 +566,8 @@ var cvi_bevel;
             img.style.cssText = canvas.style.cssText;
             img.style.height = canvas.height + 'px';
             img.style.width = canvas.width + 'px';
-            object.replaceChild(img, canvas);
+            canvas.parentNode.replaceChild(img, canvas);
         },
-
         remove: function(canvas) {
             if(canvas.tagName.toUpperCase() == "VAR") {
                 cvi_bevel.replace(canvas);

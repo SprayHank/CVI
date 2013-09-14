@@ -38,27 +38,27 @@
         target: '_self',	//STR optional target
     }]
 
- transm.defaultFadein        = false;    //BOL  (true | false)
- transm.defaultAutoplay      = false;    //BOL  (true | false)
- transm.defaultPingpong      = false;    //BOL  (true | false)
- transm.defaultVerbose       = false;    //BOL  (true | false)
- transm.defaultClearbg       = false;    //BOL  (true | false)
- transm.defaultNocache       = false;    //BOL  (true | false)
- transm.defaultNopreload     = false;    //BOL  (true | false)
- transm.defaultTimeout       = 6;        //FLT  1-60 (seconds)
- transm.defaultTransition    = 'random', //STR  (transition name)
- transm.defaultTweening      = 'default',//STR  (tweening name)
- transm.defaultCparray       = null;     //OBJ  (control points array)
- transm.defaultDuration      = 2.0;      //FLT  0.5-5.0 (seconds)
- transm.defaultFps           = 30;       //INT  15-100 (frames per sec.)
- transm.defaultDelay         = 5;        //FLT  0.0-600.0 (seconds)
- transm.defaultMeter         = false;    //BOL  (true | false)
- transm.defaultMfgcolor      = '#ff0000';//STR  '#000000'-'#ffffff'
- transm.defaultMbgcolor      = '#ffffff';//STR  '#000000'-'#ffffff'
- transm.defaultMopacity      = 0.75;     //FLT  0.1-1.0 (opacity)
- transm.defaultMsize         = 32;       //INT  24-min(width,height)
- transm.defaultMposx         = 0;        //INT  0-(width-msize)
- transm.defaultMposy         = 0;        //INT  0-(height-msize)
+ transm.defaultFadein        = false;        //BOL  (true | false)
+ transm.defaultAutoplay      = false;        //BOL  (true | false)
+ transm.defaultPingpong      = false;        //BOL  (true | false)
+ transm.defaultVerbose       = false;        //BOL  (true | false)
+ transm.defaultClearbg       = false;        //BOL  (true | false)
+ transm.defaultNocache       = false;        //BOL  (true | false)
+ transm.defaultNopreload     = false;        //BOL  (true | false)
+ transm.defaultTimeout       = 6;            //FLT  1-60 (seconds)
+ transm.defaultTransition    = 'random',     //STR  (transition name)
+ transm.defaultTweening      = 'default',    //STR  (tweening name)
+ transm.defaultCparray       = null;         //OBJ  (control points array)
+ transm.defaultDuration      = 2.0;          //FLT  0.5-5.0 (seconds)
+ transm.defaultFps           = 30;           //INT  15-100 (frames per sec.)
+ transm.defaultDelay         = 5;            //FLT  0.0-600.0 (seconds)
+ transm.defaultMeter         = false;        //BOL  (true | false)
+ transm.defaultMfgcolor      = '#ff0000';    //STR  '#000000'-'#ffffff'
+ transm.defaultMbgcolor      = '#ffffff';    //STR  '#000000'-'#ffffff'
+ transm.defaultMopacity      = 0.75;         //FLT  0.1-1.0 (opacity)
+ transm.defaultMsize         = 32;           //INT  24-min(width,height)
+ transm.defaultMposx         = 0;            //INT  0-(width-msize)
+ transm.defaultMposy         = 0;            //INT  0-(height-msize)
 
  STR=trans.add( object, options ); //RETURNS canvas name|id
  STR=trans.add( object, { width: INT, height: INT, radius: INT|OBJ, data: OBJ, layer: STR, name: STR, fadein: BOL, autoplay: BOL, pingpong: BOL,
@@ -84,13 +84,13 @@
 
  VAL=transm.get( canvas, ['busy'|'playing'|'current'|'total'|'transition'|'tweening'|'duration'|'fps'] );
  busy        == transition in action    //BOL
- playing    == autoplay in action       //BOL
- current        == current image number //INT (starting with zero)
- total        == no. of all images      //INT
- transition    == used transition       //STR
+ playing     == autoplay in action      //BOL
+ current     == current image number    //INT (starting with zero)
+ total       == no. of all images       //INT
+ transition  == used transition         //STR
  tweening    == used tweening           //STR
  duration    == real duration value     //FLT
- fps            == real fps value       //FLT
+ fps         == real fps value          //FLT
 
  FLT=transm.version;
  STR=transm.released;
@@ -448,7 +448,11 @@ var TransM;
                         self.nolib = true;
                         this.debug('warn', 'transm: missing "cvi_tween_lib"');
                     }
-                    for(i = 0; i < self.data.length; i++) {if(self.data[i].source.match(/\.(gif|png|jpg|jpeg)(?:\?([^#]*))?(?:#(\.*))?$/i)) {self.data[i].n = getFName(self.data[i].source, true);}}
+                    for(i = 0; i < self.data.length; i++) {
+                        if(self.data[i].source.match(/\.(gif|png|jpg|jpeg)(?:\?([^#]*))?(?:#(\.*))?$/i)) {
+                            self.data[i].n = getFName(self.data[i].source, true);
+                        }
+                    }
                     for(i = 0; i < self.data.length; i++) {
                         if(!self.data[i].n) {
                             self.data.splice(i, 1);
@@ -527,7 +531,8 @@ var TransM;
                     self.TLfps = 0;
                     object.appendChild(self);
                     if(self.w3c) {
-                        var buff_a = this.C('canvas'), buff_b = this.C('canvas');
+                        var buff_a = this.C('canvas'),
+                            buff_b = this.C('canvas');
                         if(self.wcs) {
                             buff_a.id = self.id + '_img_a';
                             buff_a.height = ch;
