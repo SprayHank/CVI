@@ -197,7 +197,7 @@ var TransM;
                 function getArg(a, t) {return (typeof options[a] === t ? options[a] : defopts[a]);};
                 function getNum(a, n, m) {return Math.max(n, Math.min(m, (typeof options[a] === 'number' ? options[a] : defopts[a])));};
                 function finalize() {
-                    //if(self.verbose) {_this.log('log', 'in finalize')}
+                    //_this.debug('log', 'in finalize')
                     tmp = _this.C('a');
                     _this.extend(tmp.style, {
                         height: height + 'px',
@@ -247,7 +247,7 @@ var TransM;
                             meter.style.visibility = 'visible';
                             tmp.appendChild(meter);
                             meter.unselectable = true;
-                            //if(self.verbose) {_this.log('log', meter.innerHTML)}
+                            //_this.debug('log', meter.innerHTML)
                             meter.innerHTML = '<v:oval' +
                                 ' strokeweight="0" stroked="f" filled="t" fillcolor="#808080"' +
                                 ' style="zoom:1;display:block;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' +
@@ -257,7 +257,7 @@ var TransM;
                                 ' strokeweight="0" stroked="f" filled="t" fillcolor="#808080" style="zoom:1;display:block;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' +
                                 self.msize + 'px;height:' + self.msize + 'px;"><v:fill color="' + self.mfgcolor + '" opacity="' + self.mopacity + '"' + this.VML.tagEnd + '</v:shape>';
                             meter.style.visibility = 'hidden';
-                            //if(self.verbose) {_this.log('log', meter.innerHTML)}
+                            //_this.debug('log', meter.innerHTML)
                         } else {
                             var meter = _this.C('div');
                             meter.id = self.id + "_meter";
@@ -279,7 +279,7 @@ var TransM;
                             if(nda) {meter.style[nda] = 'none';}
                         }
                     }
-                    //if(verbose){_this.log('log', 'here');}
+                    //_this.debug('log', 'here');
                     var cover = _this.C('div');
                     cover.id = self.id + "_cover";
                     _this.extend(cover.style, {
@@ -354,17 +354,16 @@ var TransM;
                     _this = this;
                 if(options) {for(i in defopts) {if(!options[i]) {options[i] = defopts[i];}}} else {options = defopts;}
                 verbose = getArg('verbose', 'boolean');
+                this.verbose = verbose;
                 vml = this.vml;
                 if(!vml) {w3c = this.canvas();}
                 nbr = Style('borderRadius');
                 nsa = Style('userSelect');
                 nda = Style('userDrag');
                 opa = Style('opacity');
-                //if(verbose){this.log('log', 'here');}
+                //this.debug('log', 'here');
                 if(typeof cvi_tfx != 'object' || typeof cvi_trans != 'object') {
-                    if(verbose) {
-                        this.log('warn', 'transm: missing "cvi_trans_lib" [exit]');
-                    }
+                    this.debug('warn', 'transm: missing "cvi_trans_lib" [exit]');
                     return false;
                 }
                 width = cw = parseInt(getNum('width', 64, 1024), 10);
@@ -394,7 +393,7 @@ var TransM;
                 if(nda) {object.style[nda] = 'none';}
                 try {
                     if(vml) {
-                        //if(verbose) {this.log('log', 'in if vml')}
+                        //this.debug('log', 'in if vml')
                         this.VML = new VML();
                         if(radius) {
                             var self = this.C('v:roundrect');
@@ -422,7 +421,7 @@ var TransM;
                         self.style.visibility = 'visible';
                         self.style.cssText = 'zoom:1;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' + width + 'px;height:' + height + 'px;';
                         self.style.visibility = 'hidden';
-                        //if(verbose) {this.log('log', self.outerHTML)}
+                        //this.debug('log', self.outerHTML)
                     } else if(w3c) {
                         var self = this.C('canvas');
                         self.w3c = true;
@@ -438,9 +437,7 @@ var TransM;
                         self.tri = document.all && !-[1, ];
                     }
                     if(!self) {
-                        if(verbose) {
-                            this.log('error', 'transm: unsupported browser [exit]');
-                        }
+                        this.debug('error', 'transm: unsupported browser [exit]');
                         return false;
                     }
                     self.data = data;
@@ -449,9 +446,7 @@ var TransM;
                     self.opa = opa ? opa : 'opacity';
                     if(typeof cvi_tween['sineEaseInOut'] != 'function') {
                         self.nolib = true;
-                        if(verbose) {
-                            this.log('warn', 'transm: missing "cvi_tween_lib"');
-                        }
+                        this.debug('warn', 'transm: missing "cvi_tween_lib"');
                     }
                     for(i = 0; i < self.data.length; i++) {if(self.data[i].source.match(/\.(gif|png|jpg|jpeg)(?:\?([^#]*))?(?:#(\.*))?$/i)) {self.data[i].n = getFName(self.data[i].source, true);}}
                     for(i = 0; i < self.data.length; i++) {
@@ -461,9 +456,7 @@ var TransM;
                         }
                     }
                     if(self.data.length < 2) {
-                        if(verbose) {
-                            this.log('warn', 'transm: insufficient images [exit]');
-                        }
+                        this.debug('warn', 'transm: insufficient images [exit]');
                         return false;
                     }
                     self.verbose = verbose;
@@ -660,12 +653,10 @@ var TransM;
                         img.src = self.layer;
                     } else {finalize();}
                 } catch(err) {
-                    if(verbose) {
-                        this.log('error', 'transm: has failed ' + err.message +
-                            (!!err.lineNumber ? ' at line ' + err.lineNumber : '') +
-                            (!!err.fileName ? ' on ' + err.fileName : '') +
-                            ' [exit]');
-                    }
+                    this.debug('error', 'transm: has failed ' + err.message +
+                        (!!err.lineNumber ? ' at line ' + err.lineNumber : '') +
+                        (!!err.fileName ? ' on ' + err.fileName : '') +
+                        ' [exit]');
                 }
                 return false;
             },
@@ -865,25 +856,29 @@ var TransM;
             },
             _preload: function(self, cnt) {
                 if(!self)return false;
+                this.debug('log', 'in _preload');
                 var noi = self.nopreload ? 2 : self.data.length, img = null, _this = this;
                 if(self.timer) {window.clearTimeout(self.timer);}
                 if((!self.nopreload && cnt < self.data.length) || (self.nopreload && self.noiL < noi && cnt < self.data.length)) {
+                    this.debug('log', 'in_preload before timeout');
                     var cw = parseInt((self.cw / 2) - 2, 10), ow = cw / (self.data.length - 1);
                     this.G(self.id + "_progress").style.width = (cnt * ow) + 'px';
-                    self.timer = window.setTimeout("if(" + self.verbose + "){transm.log('warn','transm: [" +
-                        self.timeout + "ms] timeout image > " + self.data[cnt].source + "');}transm._preload(G('" + self.id + "')," + (cnt + 1) + ");", self.timeout);
+                    self.timer = window.setTimeout(function() {
+                        _this.debug('warn', 'transm: [' + self.timeout + 'ms] timeout image > ' + self.data[cnt].source);
+                        _this._preload(_this.G(self.id), (cnt + 1));
+                    }, self.timeout);
                     if(self.vml && !self.nocache) {
                         var pre = this.G(self.id + "_vml_preloader");
                         if(pre) {pre.src = self.data[cnt].source;}
                     }
                     img = new Image();
                     img.onabort = function() {
-                        if(self.verbose) {_this.log('warn', 'transm: onabort image > ' + self.data[cnt].source);}
+                        _this.debug('warn', 'transm: onabort image > ' + self.data[cnt].source);
                         if(self.timer) {window.clearTimeout(self.timer);}
                         transm._setup(self);
                     };
                     img.onerror = function() {
-                        if(self.verbose) {_this.log('warn', 'transm: onerror image > ' + self.data[cnt].source);}
+                        _this.debug('warn', 'transm: onerror image > ' + self.data[cnt].source);
                         cnt++;
                         if(self.vml && !self.nocache) {
                             if(self.timer) {window.clearTimeout(self.timer);}
@@ -943,9 +938,9 @@ var TransM;
                                 img.onload = '';
                                 img = null;
                             }
-                            if(self.verbose) {_this.log('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);}
+                            _this.debug('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);
                         } else {
-                            if(self.verbose) {_this.log('warn', 'transm: failed image > ' + self.data[cnt].source);}
+                            _this.debug('warn', 'transm: failed image > ' + self.data[cnt].source);
                         }
                         cnt++;
                         if(self.vml && !self.nocache) {
@@ -982,18 +977,14 @@ var TransM;
                     try {
                         window[self.back]();
                     } catch(err) {
-                        if(self.verbose) {
-                            this.log('error', 'transm: has failed ' + err.message);
-                        }
+                        this.debug('error', 'transm: has failed ' + err.message);
                     }
                 }
                 if(self.TLacall && typeof window[self.TLacall] === 'function') {
                     try {
                         window[self.TLacall](self.TLaarg);
                     } catch(err) {
-                        if(self.verbose) {
-                            this.log('error', 'transm: has failed ' + err.message);
-                        }
+                        this.debug('error', 'transm: has failed ' + err.message);
                     }
                 }
                 self.TLready = true;
@@ -1066,7 +1057,7 @@ var TransM;
                         this._display(self);
                     } else {this._display(self);}
                 } else {
-                    if(self.verbose) {this.log('warn', 'transm: insufficient images [exit]');}
+                    this.debug('warn', 'transm: insufficient images [exit]');
                     this.remove(self);
                 }
                 return false;
@@ -1183,7 +1174,7 @@ var TransM;
                     }
                     img = new Image();
                     img.onerror = function() {
-                        if(self.verbose) {_this.log('warn', 'transm: onerror image > ' + self.data[cnt].source);}
+                        _this.debug('warn', 'transm: onerror image > ' + self.data[cnt].source);
                         _this.next(self, true);
                     };
                     img.onload = function() {
@@ -1247,10 +1238,10 @@ var TransM;
                                 img.onload = '';
                                 img = null;
                             }
-                            if(self.verbose) {_this.log('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);}
+                            _this.debug('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);
                             _this._exec(self);
                         } else {
-                            if(self.verbose) {_this.log('warn', 'transm: failed image > ' + self.data[cnt].source);}
+                            _this.debug('warn', 'transm: failed image > ' + self.data[cnt].source);
                             _this.next(self, true);
                         }
                     };
@@ -1282,15 +1273,16 @@ var TransM;
                     try {
                         window[self.TLbcall](self.TLbarg);
                     } catch(err) {
-                        if(self.verbose) {
-                            this.log('error', 'transm: has failed ' + err.message);
-                        }
+                        this.debug('error', 'transm: has failed ' + err.message);
                     }
                 }
                 if(self.w3c) {
                     self.fromB = a ? 'b' : 'a';
                     this._buffer(self, a ? self.b : self.a, i);
-                    var mask = self.data[i].alphaimg || null, tween = self.data[i].tweening || self.tweening, cpa = self.data[i].cparray || self.cparray, fps = self.data[i].fps || self.fps;
+                    var mask = self.data[i].alphaimg || null,
+                        tween = self.data[i].tweening || self.tweening,
+                        cpa = self.data[i].cparray || self.cparray,
+                        fps = self.data[i].fps || self.fps;
                     if(mask) {
                         var suf = mask.substring(1 + mask.lastIndexOf(".")).toLowerCase(), todo = (suf == 'jpg' || suf == 'jpeg' ? 1 : 0);
                         if(todo && !self.csp) {
@@ -1313,7 +1305,7 @@ var TransM;
                                         ctx.drawImage(img, 0, 0, w, h);
                                         try {s = ctx.getImageData(0, 0, w, h);} catch(err) {var excep = true;}
                                         if(excep) {
-                                            if(self.verbose) {this.log('error', err.message + ". Explanations:\nhttp://en.wikipedia.org/wiki/Same_origin_policy\nhttp://www.w3.org/TR/XMLHttpRequest/#exceptions");}
+                                            this.debug('error', err.message + ". Explanations:\nhttp://en.wikipedia.org/wiki/Same_origin_policy\nhttp://www.w3.org/TR/XMLHttpRequest/#exceptions");
                                             self.data[i].alphaimg = null;
                                         } else {
                                             for(i = 0, n = s.data.length; i < n; i += 4) {
@@ -1424,8 +1416,7 @@ var TransM;
             var self = document.getElementById(d);
             if(self) {_this._return(self, a, b, c);}
             return false;
-        }
-
+        };
         var _this = this;
         window.transm_return = transm_return;
     };
