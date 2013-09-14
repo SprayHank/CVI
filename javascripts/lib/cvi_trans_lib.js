@@ -8,7 +8,8 @@
  * Read more at... http://www.netzgesta.de/cvi/LICENSE.html
  * Commercial licenses available via... cvi[at]netzgesta[dot]de
  **/
-var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
+var cvi_tfx = new Object(),
+    cvi_rfx = new Array(), cvi_trans;
 (function() {
     "use strict";
 
@@ -66,7 +67,8 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
     cvi_tfx.wrench_horizontal = cvi_tfx.wrench_vertical = {fail: "pixelate", tween: "linear", buffer: 1, mask: 0, alpha: 0};
     cvi_tfx.zigzag = {val: 8, min: 1, max: 100, buffer: 1, mask: 1, alpha: 0};
     cvi_tfx.zoom_in = cvi_tfx.zoom_out = {fail: "fade", tween: "linear", buffer: 1, mask: 0, alpha: 0};
-    var cvi_c = 0, cvi = new CVI();
+    var cvi_c = 0,
+        cvi = new CVI();
     for(var cvi_i in cvi_tfx) {
         cvi_rfx[cvi_c++] = cvi_i;
     }
@@ -124,7 +126,8 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                 return s
             };
             function fillStar(c, x, y, n, r, p) {
-                var r1 = r, r2 = r * .4;
+                var r1 = r,
+                    r2 = r * .4;
                 c.translate(x, y);
                 c.rotate(p);
                 c.beginPath();
@@ -145,7 +148,8 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                 c.translate(-x, -y)
             };
             function drawStar(c, x, y, n, r, p) {
-                var r1 = r, r2 = r * .4;
+                var r1 = r,
+                    r2 = r * .4;
                 c.translate(x, y);
                 c.rotate(p);
                 c.lineTo(0, r1);
@@ -177,21 +181,29 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                 return(timer.d.getTime() - timer.t)
             }};
             if(cvi_trans.vml) {
-                var filter = null, ftrans = null, DXIT = "DXImageTransform.Microsoft.", w = parseInt(canvas.style.width), h = parseInt(canvas.style.height);
+                var filter = null,
+                    ftrans = null,
+                    DXIT = "DXImageTransform.Microsoft.",
+                    w = parseInt(canvas.style.width),
+                    h = parseInt(canvas.style.height);
                 try {
                     this.VML = new VML();
                     canvas.TLbusy = true;
                     canvas.TLerror = null;
                     if(efx[0] == "barn") {
-                        var pos = efx[1] || "horizontal", dir = efx[2] || "out";
+                        var pos = efx[1] || "horizontal",
+                            dir = efx[2] || "out";
                         canvas.TLfilter = filter = DXIT + "Barn";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",motion=" + dir + ",orientation=" + pos + ")"
                     } else if(efx[0] == "blinds") {
-                        var dir = efx[1] || "down", o = parseInt(getInt(opt1, 8, trans), 10);
+                        var dir = efx[1] || "down",
+                            o = parseInt(getInt(opt1, 8, trans), 10);
                         canvas.TLfilter = filter = DXIT + "Blinds";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",direction=" + dir + ",bands=" + o + ")"
                     } else if(efx[0] == "checkerboard") {
-                        var dir = efx[1] || "right", x = parseInt(getInt(opt1, 8, trans), 10), y = parseInt(getInt(opt2, x, trans), 10);
+                        var dir = efx[1] || "right",
+                            x = parseInt(getInt(opt1, 8, trans), 10),
+                            y = parseInt(getInt(opt2, x, trans), 10);
                         canvas.TLfilter = filter = DXIT + "CheckerBoard";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",squaresX=" + x + ",squaresY=" + y + ",Direction=" + dir + ")"
                     } else if(efx[0] == "cut") {
@@ -202,14 +214,18 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                         canvas.TLfilter = filter = DXIT + "Fade";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",overlap=" + o + ")"
                     } else if(efx[0] == "gradientwipe") {
-                        var dir = efx[1] || "right", o = parseFloat(getInt(opt1, 25, trans) / 100), v = (dir == 'left' || dir == 'right' ? 0 : 1), r = (dir == 'left' || dir == 'up' ? 'reverse' : 'forward');
+                        var dir = efx[1] || "right",
+                            o = parseFloat(getInt(opt1, 25, trans) / 100),
+                            v = (dir == 'left' || dir == 'right' ? 0 : 1),
+                            r = (dir == 'left' || dir == 'up' ? 'reverse' : 'forward');
                         canvas.TLfilter = filter = DXIT + "GradientWipe";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",gradientSize=" + o + ",motion=" + r + ",WipeStyle=" + v + ")"
                     } else if(efx[0] == "inset") {
                         canvas.TLfilter = filter = DXIT + "Inset";
                         ftrans = "progid:" + filter + "(duration=" + dur + ")"
                     } else if(efx[0] == "iris") {
-                        var typ = efx[1].toUpperCase() || "PLUS", dir = efx[2] || "out";
+                        var typ = efx[1].toUpperCase() || "PLUS",
+                            dir = efx[2] || "out";
                         canvas.TLfilter = filter = DXIT + "Iris";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",irisStyle=" + typ + ",motion=" + dir + ")"
                     } else if(efx[0] == "pixelate") {
@@ -228,11 +244,13 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                         canvas.TLfilter = filter = DXIT + "RandomDissolve";
                         ftrans = "progid:" + filter + "(duration=" + dur + ")"
                     } else if(efx[0] == "slide") {
-                        var typ = efx[1].toUpperCase() || "HIDE", o = parseInt(getInt(opt1, 1, trans), 10);
+                        var typ = efx[1].toUpperCase() || "HIDE",
+                            o = parseInt(getInt(opt1, 1, trans), 10);
                         canvas.TLfilter = filter = DXIT + "Slide";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",slideStyle=" + typ + ",bands=" + o + ")"
                     } else if(efx[0] == "spiral") {
-                        var x = parseInt(getInt(opt1, 8, trans), 10), y = parseInt(getInt(opt2, x, trans), 10);
+                        var x = parseInt(getInt(opt1, 8, trans), 10),
+                            y = parseInt(getInt(opt2, x, trans), 10);
                         canvas.TLfilter = filter = DXIT + "Spiral";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",gridsizex=" + x + ",gridsizey=" + y + ")"
                     } else if(efx[0] == "stretch") {
@@ -249,7 +267,8 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                         canvas.TLfilter = filter = DXIT + "Wheel";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",spokes=" + o + ")"
                     } else if(efx[0] == "zigzag") {
-                        var x = parseInt(getInt(opt1, 8, trans), 10), y = parseInt(getInt(opt2, x, trans), 10);
+                        var x = parseInt(getInt(opt1, 8, trans), 10),
+                            y = parseInt(getInt(opt2, x, trans), 10);
                         canvas.TLfilter = filter = DXIT + "Zigzag";
                         ftrans = "progid:" + filter + "(duration=" + dur + ",gridsizex=" + x + ",gridsizey=" + y + ")"
                     }
@@ -257,9 +276,17 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                         canvas.style.filter = ftrans;
                         canvas.filters.item(filter).apply();
                         if(canvas.filters.item(filter).status == 1) {
-                            var b, a = canvas.firstChild, pw = img_b.wm || w, ph = img_b.hm || h, xo = img_b.ox || 0, yo = img_b.oy || 0;
+                            var b,
+                                a = canvas.firstChild,
+                                pw = img_b.wm || w,
+                                ph = img_b.hm || h,
+                                xo = img_b.ox || 0,
+                                yo = img_b.oy || 0;
                             if(a) {
-                                b = document.createElement(['<v:fill src="' + img_b.source + '" size="' + pw + 'pt,' + ph + 'pt" origin="' + xo + ',' + yo + '" position="0,0" aspect="ignore" type="frame"', this.VML.tagEnd].join(''));
+                                b = document.createElement(['<v:fill src="' +
+                                    img_b.source + '" size="' + pw +
+                                    'pt,' + ph + 'pt" origin="' + xo +
+                                    ',' + yo + '" position="0,0" aspect="ignore" type="frame"', this.VML.tagEnd].join(''));
                                 canvas.replaceChild(b, a)
                             }
                             timer.start();
@@ -343,13 +370,21 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                         opt1 = 100
                     }
                 }
-                var stl = '', val = 0, cnt = 0, ival = Math.round(1000 / fps), steps = Math.round((dur * 1000) / ival);
+                var stl = '',
+                    val = 0,
+                    cnt = 0,
+                    ival = Math.round(1000 / fps),
+                    steps = Math.round((dur * 1000) / ival);
                 ctx.save();
                 try {
                     canvas.TLbusy = true;
                     canvas.TLerror = null;
                     if(efx[0] == "alpha") {
-                        var o = parseInt(getInt(opt1, 0, trans), 10), x = o == 1 || o == 3 ? 1 : 0, y = o == 2 || o == 3 ? 1 : 0, c = Math.round(steps * .5), a = 1 / c;
+                        var o = parseInt(getInt(opt1, 0, trans), 10),
+                            x = o == 1 || o == 3 ? 1 : 0,
+                            y = o == 2 || o == 3 ? 1 : 0,
+                            c = Math.round(steps * .5),
+                            a = 1 / c;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -396,7 +431,15 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "barn") {
-                        var pos = efx[1] || "horizontal", dir = efx[2] || "out", v = pos == "vertical" ? 1 : 0, m = dir == "in" ? 1 : 0, ow = w, oh = h, ww = v ? Math.round(w / 2) : w, hh = v ? h : Math.round(h / 2), s = ((v ? w : h) / (steps * 2));
+                        var pos = efx[1] || "horizontal",
+                            dir = efx[2] || "out",
+                            v = pos == "vertical" ? 1 : 0,
+                            m = dir == "in" ? 1 : 0,
+                            ow = w,
+                            oh = h,
+                            ww = v ? Math.round(w / 2) : w,
+                            hh = v ? h : Math.round(h / 2),
+                            s = ((v ? w : h) / (steps * 2));
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -429,7 +472,16 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "blinds") {
-                        var q = parseInt(getInt(opt1, 8, trans), 10), dir = efx[1] || "right", hz = dir == "right" || dir == "left" ? 1 : 0, r = (dir == "right" ? 1 : 0), d = (dir == "down" ? 1 : 0), ww = hz ? (w / q) : w, hh = hz ? h : (h / q), sx = (ww / steps), sy = (hh / steps), s = 0;
+                        var q = parseInt(getInt(opt1, 8, trans), 10),
+                            dir = efx[1] || "right",
+                            hz = dir == "right" || dir == "left" ? 1 : 0,
+                            r = (dir == "right" ? 1 : 0),
+                            d = (dir == "down" ? 1 : 0),
+                            ww = hz ? (w / q) : w,
+                            hh = hz ? h : (h / q),
+                            sx = (ww / steps),
+                            sy = (hh / steps),
+                            s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -459,7 +511,12 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "blur") {
-                        var q = parseInt(getInt(opt1, 0, trans), 10), c = Math.round(steps * .5), a = 1 / c, d = q / c, b = q / steps, s = 0;
+                        var q = parseInt(getInt(opt1, 0, trans), 10),
+                            c = Math.round(steps * .5),
+                            a = 1 / c,
+                            d = q / c,
+                            b = q / steps,
+                            s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -488,7 +545,22 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "checkerboard") {
-                        var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), dir = efx[1] || "right", hz = (dir == 'left' || dir == 'right' ? 1 : 0), r = (dir == 'right' ? 1 : 0), d = (dir == 'down' ? 1 : 0), ww = (w / gx) * (hz ? 2 : 1), hh = (h / gy) * (hz ? 1 : 2), sx = (ww / steps), sy = (hh / steps), w5 = hz ? ww / 2 : 0, h5 = hz ? 0 : hh / 2, s = 0, p = 0, k = 0, q = 0;
+                        var gx = parseInt(getInt(opt1, 8, trans), 10),
+                            gy = parseInt(getInt(opt2, gx, trans), 10),
+                            dir = efx[1] || "right",
+                            hz = (dir == 'left' || dir == 'right' ? 1 : 0),
+                            r = (dir == 'right' ? 1 : 0),
+                            d = (dir == 'down' ? 1 : 0),
+                            ww = (w / gx) * (hz ? 2 : 1),
+                            hh = (h / gy) * (hz ? 1 : 2),
+                            sx = (ww / steps),
+                            sy = (hh / steps),
+                            w5 = hz ? ww / 2 : 0,
+                            h5 = hz ? 0 : hh / 2,
+                            s = 0,
+                            p = 0,
+                            k = 0,
+                            q = 0;
                         if(hz) {gx = Math.ceil(gx / 2) + 1} else {gy = Math.ceil(gy / 2) + 1}
                         timer.start();
                         canvas.timer = window.setInterval(function() {
@@ -536,7 +608,8 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             w5 = ww / 2,
                             h5 = hh / 2,
                             r = Math.sqrt(Math.pow(ww, 2) + Math.pow(hh, 2)) / 2,
-                            s = (r / steps), z = 0;
+                            s = (r / steps),
+                            z = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -569,7 +642,10 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "color") {
-                        var g = cvi.getRGB(opt1), c = Math.round(steps * .5), q = 1 / c, v = 0;
+                        var g = cvi.getRGB(opt1),
+                            c = Math.round(steps * .5),
+                            q = 1 / c,
+                            v = 0;
                         s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
@@ -708,7 +784,14 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                         ctx.restore();
                         cvi_trans._clr(callback, trans, t, fps, canvas)
                     } else if(efx[0] == "fade") {
-                        var o = parseFloat(getInt(opt1, 100, trans) / 100), fa = o + ((1 - o) / 2), fb = 1 - fa, ap = Math.round(steps * fa), bp = Math.round(steps * fb), oa = 1, ob = 0, a = 1 / (steps * fa);
+                        var o = parseFloat(getInt(opt1, 100, trans) / 100),
+                            fa = o + ((1 - o) / 2),
+                            fb = 1 - fa,
+                            ap = Math.round(steps * fa),
+                            bp = Math.round(steps * fb),
+                            oa = 1,
+                            ob = 0,
+                            a = 1 / (steps * fa);
                         ctx.globalAlpha = 1;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
@@ -735,7 +818,17 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "flash") {
-                        var r = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2, a = Math.max(Math.min(Math.round(steps * 0.1), 3), 1), b = 2 * a, c = Math.max(steps - b, 1), s = (r / a), q = (1 / c), x = w / 2, y = h / 2, z = 0, v = 0, wc = cvi_trans.isWC;
+                        var r = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2,
+                            a = Math.max(Math.min(Math.round(steps * 0.1), 3), 1),
+                            b = 2 * a,
+                            c = Math.max(steps - b, 1),
+                            s = (r / a),
+                            q = (1 / c),
+                            x = w / 2,
+                            y = h / 2,
+                            z = 0,
+                            v = 0,
+                            wc = cvi_trans.isWC;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -766,7 +859,20 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "gradientwipe" || efx[0] == "copy") {
-                        var cp = efx[0] == "copy" ? 1 : 0, g = cp ? 0.3 : parseFloat(getInt(opt1, 25, trans) / 100), dir = efx[1] || "right", xo = 0, yo = 0, xp = 0, yp = 0, v = (dir == 'left' || dir == 'right' ? 0 : 1), r = (dir == 'left' || dir == 'up' ? 1 : 0), gw = Math.round(v ? w : w * g), gh = Math.round(v ? h * g : h), sa = (v ? h + gh : w + gw), ss = (sa / steps), wc = cvi_trans.isWC;
+                        var cp = efx[0] == "copy" ? 1 : 0,
+                            g = cp ? 0.3 : parseFloat(getInt(opt1, 25, trans) / 100),
+                            dir = efx[1] || "right",
+                            xo = 0,
+                            yo = 0,
+                            xp = 0,
+                            yp = 0,
+                            v = (dir == 'left' || dir == 'right' ? 0 : 1),
+                            r = (dir == 'left' || dir == 'up' ? 1 : 0),
+                            gw = Math.round(v ? w : w * g),
+                            gh = Math.round(v ? h * g : h),
+                            sa = (v ? h + gh : w + gw),
+                            ss = (sa / steps),
+                            wc = cvi_trans.isWC;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -780,7 +886,27 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             cbx.drawImage(img_b, 0, 0, w, h);
                             cbx.globalCompositeOperation = "destination-out";
                             cbx.fillStyle = "rgba(0,0,0,1.0)";
-                            if(r) {if(wc || window.opera) {if(v) {if(yp < 0) {cbx.fillRect(0, yp, w, Math.abs(yp))} else {cbx.fillRect(0, 0, w, yp)}} else {if(xp < 0) {cbx.fillRect(xp, 0, Math.abs(xp), h)} else {cbx.fillRect(0, 0, xp, h)}}} else {cbx.fillRect(0, 0, v ? w : xp, v ? yp : h)}} else {cbx.fillRect(xo, yo, w, h)}
+                            if(r) {
+                                if(wc || window.opera) {
+                                    if(v) {
+                                        if(yp < 0) {
+                                            cbx.fillRect(0, yp, w, Math.abs(yp))
+                                        } else {
+                                            cbx.fillRect(0, 0, w, yp)
+                                        }
+                                    } else {
+                                        if(xp < 0) {
+                                            cbx.fillRect(xp, 0, Math.abs(xp), h)
+                                        } else {
+                                            cbx.fillRect(0, 0, xp, h)
+                                        }
+                                    }
+                                } else {
+                                    cbx.fillRect(0, 0, v ? w : xp, v ? yp : h)
+                                }
+                            } else {
+                                cbx.fillRect(xo, yo, w, h)
+                            }
                             stl = cbx.createLinearGradient(xp, yp, xo, yo);
                             stl.addColorStop((r ? 1 : 0), "rgba(0,0,0,0.0)");
                             stl.addColorStop((r ? 0 : 1), "rgba(0,0,0,1.0)");
@@ -810,14 +936,26 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "inset") {
-                        var dir = efx[1] || "rightdown", sw = (w / steps), sh = (h / steps), ww = 0, hh = 0;
+                        var dir = efx[1] || "rightdown",
+                            sw = (w / steps),
+                            sh = (h / steps),
+                            ww = 0,
+                            hh = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
                             ctx.drawImage(img_a, 0, 0, w, h);
                             ww = Math.min(Math.max(val * sw, 1), w);
                             hh = Math.min(Math.max(val * sh, 1), h);
-                            if(dir == 'rightup') {ctx.drawImage(img_b, 0, h - hh, ww, hh, 0, h - hh, ww, hh)} else if(dir == 'leftdown') {ctx.drawImage(img_b, w - ww, 0, ww, hh, w - ww, 0, ww, hh)} else if(dir == 'leftup') {ctx.drawImage(img_b, w - ww, h - hh, ww, hh, w - ww, h - hh, ww, hh)} else {ctx.drawImage(img_b, 0, 0, ww, hh, 0, 0, ww, hh)}
+                            if(dir == 'rightup') {
+                                ctx.drawImage(img_b, 0, h - hh, ww, hh, 0, h - hh, ww, hh)
+                            } else if(dir == 'leftdown') {
+                                ctx.drawImage(img_b, w - ww, 0, ww, hh, w - ww, 0, ww, hh)
+                            } else if(dir == 'leftup') {
+                                ctx.drawImage(img_b, w - ww, h - hh, ww, hh, w - ww, h - hh, ww, hh)
+                            } else {
+                                ctx.drawImage(img_b, 0, 0, ww, hh, 0, 0, ww, hh)
+                            }
                             if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
                             cnt++;
                             if(cnt > steps) {
@@ -830,9 +968,31 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "iris") {
-                        var typ = efx[1] || "plus", dir = efx[2] || "out", o = dir == "in" ? 0 : 1, x = w / 2, y = h / 2, m = Math.max(w, h), n = m / 2, k = 0;
-                        if(typ == 'diamond' || typ == 'cross' || typ == 'star') {var d = Math.sqrt(Math.pow(m, 2) + Math.pow(m, 2)), ss = (m / steps), sr = (d / steps)} else if(typ == 'square' || typ == 'plus') {var d = Math.sqrt(Math.pow(m, 2) + Math.pow(m, 2)), ss = (m / steps)} else if(typ == 'circle') {var d = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)), f = (Math.PI / 4) * -3, g = (Math.PI * 2), n = Math.ceil(d / 2), ss = (d / steps)}
-                        var os = (ss / 2), xo = n - x, yo = n - y;
+                        var typ = efx[1] || "plus",
+                            dir = efx[2] || "out",
+                            o = dir == "in" ? 0 : 1,
+                            x = w / 2,
+                            y = h / 2,
+                            m = Math.max(w, h),
+                            n = m / 2,
+                            k = 0;
+                        if(typ == 'diamond' || typ == 'cross' || typ == 'star') {
+                            var d = Math.sqrt(Math.pow(m, 2) + Math.pow(m, 2)),
+                                ss = (m / steps),
+                                sr = (d / steps)
+                        } else if(typ == 'square' || typ == 'plus') {
+                            var d = Math.sqrt(Math.pow(m, 2) + Math.pow(m, 2)),
+                                ss = (m / steps)
+                        } else if(typ == 'circle') {
+                            var d = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)),
+                                f = (Math.PI / 4) * -3,
+                                g = (Math.PI * 2),
+                                n = Math.ceil(d / 2),
+                                ss = (d / steps)
+                        }
+                        var os = (ss / 2),
+                            xo = n - x,
+                            yo = n - y;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -992,7 +1152,15 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "pixelate") {
-                        var q = parseInt(getInt(opt1, 40, trans), 10), c = Math.round(steps * .5), a = 1 / c, ow = 0, oh = 0, mw = w / q, mh = h / q, d = q / c, s = 0;
+                        var q = parseInt(getInt(opt1, 40, trans), 10),
+                            c = Math.round(steps * .5),
+                            a = 1 / c,
+                            ow = 0,
+                            oh = 0,
+                            mw = w / q,
+                            mh = h / q,
+                            d = q / c,
+                            s = 0;
                         ctx.mozImageSmoothingEnabled = false;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
@@ -1022,13 +1190,25 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "pull" || efx[0] == "reveal") {
-                        var dir = efx[1] || "right", r = efx[0] == "reveal" ? 1 : 0, hz = dir == "right" || dir == "left" ? 1 : 0, sc = ((hz ? w : h) / steps), s = 0;
+                        var dir = efx[1] || "right",
+                            r = efx[0] == "reveal" ? 1 : 0,
+                            hz = dir == "right" || dir == "left" ? 1 : 0,
+                            sc = ((hz ? w : h) / steps),
+                            s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
                             ctx.drawImage(r ? img_b : img_a, 0, 0, w, h, 0, 0, w, h);
                             s = val * sc;
-                            if(dir == "left") {ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, r ? 0 - s : w - s, 0, w, h)} else if(dir == "down") {ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, 0, r ? s : s - h, w, h)} else if(dir == "up") {ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, 0, r ? 0 - s : h - s, w, h)} else {ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, r ? s : s - w, 0, w, h)}
+                            if(dir == "left") {
+                                ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, r ? 0 - s : w - s, 0, w, h)
+                            } else if(dir == "down") {
+                                ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, 0, r ? s : s - h, w, h)
+                            } else if(dir == "up") {
+                                ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, 0, r ? 0 - s : h - s, w, h)
+                            } else {
+                                ctx.drawImage(r ? img_a : img_b, 0, 0, w, h, r ? s : s - w, 0, w, h)
+                            }
                             if(layer) {ctx.drawImage(layer, 0, 0, w, h)}
                             cnt++;
                             if(cnt > steps) {
@@ -1041,7 +1221,10 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "push") {
-                        var dir = efx[1] || "right", hz = dir == "right" || dir == "left" ? 1 : 0, sc = ((hz ? w : h) / steps), s = 0;
+                        var dir = efx[1] || "right",
+                            hz = dir == "right" || dir == "left" ? 1 : 0,
+                            sc = ((hz ? w : h) / steps),
+                            s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1072,7 +1255,14 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "radialgradient") {
-                        var r = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2, c = Math.round(steps * 0.5), s = (r / c), x = w / 2, y = h / 2, v = 0, z = 0, wc = cvi_trans.isWC;
+                        var r = Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2,
+                            c = Math.round(steps * 0.5),
+                            s = (r / c),
+                            x = w / 2,
+                            y = h / 2,
+                            v = 0,
+                            z = 0,
+                            wc = cvi_trans.isWC;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1101,7 +1291,13 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "radialwipe") {
-                        var typ = efx[1] || "clock", s = 0, x = w / 2, y = h / 2, a = (Math.PI / 2) * -1, d = Math.PI * 2, r = Math.ceil(Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2);
+                        var typ = efx[1] || "clock",
+                            s = 0,
+                            x = w / 2,
+                            y = h / 2,
+                            a = (Math.PI / 2) * -1,
+                            d = Math.PI * 2,
+                            r = Math.ceil(Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2);
                         if(typ == "radial") {
                             r = r * 2;
                             d = Math.PI / 2
@@ -1143,10 +1339,15 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "randombars") {
-                        var typ = efx[1] || "horizontal", v = typ == "vertical" ? 1 : 0, a = v ? w : h, z = 0, ss, cs, l = new Array();
+                        var typ = efx[1] || "horizontal",
+                            v = typ == "vertical" ? 1 : 0,
+                            a = v ? w : h,
+                            z = 0, ss, cs,
+                            l = new Array();
                         for(var i = 0; i < a; i++) {l[i] = i}
                         l.shuffle();
-                        ss = Math.ceil(a / steps), cs = l.length - ss;
+                        ss = Math.ceil(a / steps),
+                            cs = l.length - ss;
                         cmx.clearRect(0, 0, w, h);
                         cmx.fillStyle = "rgba(0,0,0,1.0)";
                         cmx.fillRect(0, 0, w, h);
@@ -1173,10 +1374,18 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "randomdissolve") {
-                        var q = parseInt(getInt(opt1, 2, trans), 10), gx = Math.ceil(w / q), gy = Math.ceil(h / q), a = gx * gy, x = 0, y = 0, z = 0, ss, cs, b = new Array();
+                        var q = parseInt(getInt(opt1, 2, trans), 10),
+                            gx = Math.ceil(w / q),
+                            gy = Math.ceil(h / q),
+                            a = gx * gy,
+                            x = 0,
+                            y = 0,
+                            z = 0, ss, cs,
+                            b = new Array();
                         for(var i = 0; i < a; i++) {b[i] = i}
                         b.shuffle();
-                        ss = Math.ceil(a / steps), cs = b.length - ss;
+                        ss = Math.ceil(a / steps),
+                            cs = b.length - ss;
                         cmx.clearRect(0, 0, w, h);
                         cmx.fillStyle = "rgba(0,0,0,1.0)";
                         cmx.fillRect(0, 0, w, h);
@@ -1207,7 +1416,13 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "rotate") {
-                        var dir = efx[1] || "out", m = dir == "in" ? 1 : 0, z = 0, ww = 0, hh = 0, d = 1 / steps, a = (Math.PI * 2) / steps;
+                        var dir = efx[1] || "out",
+                            m = dir == "in" ? 1 : 0,
+                            z = 0,
+                            ww = 0,
+                            hh = 0,
+                            d = 1 / steps,
+                            a = (Math.PI * 2) / steps;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1234,7 +1449,14 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "scale") {
-                        var dir = efx[1] || "out", m = dir == "in" ? 1 : 0, z = 0, x = 0, y = 0, ww = 0, hh = 0, d = 1 / steps;
+                        var dir = efx[1] || "out",
+                            m = dir == "in" ? 1 : 0,
+                            z = 0,
+                            x = 0,
+                            y = 0,
+                            ww = 0,
+                            hh = 0,
+                            d = 1 / steps;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1259,7 +1481,15 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "slide") {
-                        var q = parseInt(getInt(opt1, 1, trans), 10), typ = efx[1] || "hide", s = (w / steps), hw = (w / 2), c = 0, o = 0, yo = 0, ww = 0, hh = h / q;
+                        var q = parseInt(getInt(opt1, 1, trans), 10),
+                            typ = efx[1] || "hide",
+                            s = (w / steps),
+                            hw = (w / 2),
+                            c = 0,
+                            o = 0,
+                            yo = 0,
+                            ww = 0,
+                            hh = h / q;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1311,7 +1541,17 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "smudge") {
-                        var tr = Math.round(steps * 0.8), qr = steps - tr, ss = h / tr, k = 1 / tr, p = 1 / qr, yo = 0, hh = 0, e = 0, s = 0, o = 0, wc = cvi_trans.isWC;
+                        var tr = Math.round(steps * 0.8),
+                            qr = steps - tr,
+                            ss = h / tr,
+                            k = 1 / tr,
+                            p = 1 / qr,
+                            yo = 0,
+                            hh = 0,
+                            e = 0,
+                            s = 0,
+                            o = 0,
+                            wc = cvi_trans.isWC;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1347,7 +1587,21 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "spiral") {
-                        var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), m = gx * gy, ww = (w / gx), bw = Math.ceil(ww), hh = (h / gy), bh = Math.ceil(hh), lf = (m / steps), tt = Math.round(steps / m), ct = 0, yo = 0, xo = -1, dir = 0, xc = gx, yc = gy - 1;
+                        var gx = parseInt(getInt(opt1, 8, trans), 10),
+                            gy = parseInt(getInt(opt2, gx, trans), 10),
+                            m = gx * gy,
+                            ww = (w / gx),
+                            bw = Math.ceil(ww),
+                            hh = (h / gy),
+                            bh = Math.ceil(hh),
+                            lf = (m / steps),
+                            tt = Math.round(steps / m),
+                            ct = 0,
+                            yo = 0,
+                            xo = -1,
+                            dir = 0,
+                            xc = gx,
+                            yc = gy - 1;
                         cmx.clearRect(0, 0, w, h);
                         cmx.fillStyle = "rgba(0,0,0,1.0)";
                         cmx.fillRect(0, 0, w, h);
@@ -1408,7 +1662,14 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "split") {
-                        var pos = efx[1] || "horizontal", dir = efx[2] || "out", v = pos == "vertical" ? 1 : 0, m = dir == "in" ? 1 : 0, h5 = h / 2, w5 = w / 2, sc = (v ? h5 : w5) / steps, s = 0;
+                        var pos = efx[1] || "horizontal",
+                            dir = efx[2] || "out",
+                            v = pos == "vertical" ? 1 : 0,
+                            m = dir == "in" ? 1 : 0,
+                            h5 = h / 2,
+                            w5 = w / 2,
+                            sc = (v ? h5 : w5) / steps,
+                            s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1433,7 +1694,19 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "squares") {
-                        var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), dir = efx[1] || "out", m = dir == "in" ? 1 : 0, ww = (w / gx), hh = (h / gy), w5 = ww / 2, h5 = hh / 2, sx = (ww / steps), sy = (hh / steps), xo = 0, yo = 0, z = 0;
+                        var gx = parseInt(getInt(opt1, 8, trans), 10),
+                            gy = parseInt(getInt(opt2, gx, trans), 10),
+                            dir = efx[1] || "out",
+                            m = dir == "in" ? 1 : 0,
+                            ww = (w / gx),
+                            hh = (h / gy),
+                            w5 = ww / 2,
+                            h5 = hh / 2,
+                            sx = (ww / steps),
+                            sy = (hh / steps),
+                            xo = 0,
+                            yo = 0,
+                            z = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1447,7 +1720,11 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                                 xo = (val * sx) / 2;
                                 for(var y = 0; y < gy; y++) {
                                     yo = (val * sy) / 2;
-                                    if(m) {cbx.fillRect((x * ww) + w5 - xo, (y * hh) + h5 - yo, Math.max(2 * xo, 1), Math.max(2 * yo, 1))} else {cbx.fillRect((x * ww) + xo, (y * hh) + yo, Math.max(ww - (2 * xo), 1), Math.max(hh - (2 * yo), 1))}
+                                    if(m) {
+                                        cbx.fillRect((x * ww) + w5 - xo, (y * hh) + h5 - yo, Math.max(2 * xo, 1), Math.max(2 * yo, 1))
+                                    } else {
+                                        cbx.fillRect((x * ww) + xo, (y * hh) + yo, Math.max(ww - (2 * xo), 1), Math.max(hh - (2 * yo), 1))
+                                    }
                                 }
                             }
                             ctx.drawImage(buffer, 0, 0, w, h);
@@ -1463,7 +1740,17 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "stretch") {
-                        var typ = efx[1] || "horizontal", dir = efx[2] || "in", m = dir == "in" ? 1 : 0, hz = dir == "right" || dir == "left" || typ == "horizontal" ? 1 : 0, s = ((hz ? w : h) / steps), hw = (w / 2), fh = (h / 2), xo = 0, yo = 0, ww = 0, hh = 0;
+                        var typ = efx[1] || "horizontal",
+                            dir = efx[2] || "in",
+                            m = dir == "in" ? 1 : 0,
+                            hz = dir == "right" || dir == "left" || typ == "horizontal" ? 1 : 0,
+                            s = ((hz ? w : h) / steps),
+                            hw = (w / 2),
+                            fh = (h / 2),
+                            xo = 0,
+                            yo = 0,
+                            ww = 0,
+                            hh = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1485,7 +1772,15 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                                 }
                             } else if(typ == "hide") {
                                 ctx.drawImage(img_a, 0, 0, w, h);
-                                if(dir == "left") {ctx.drawImage(img_b, 0, 0, w, h, w - ww, 0, ww, hh)} else if(dir == "down") {ctx.drawImage(img_b, 0, 0, w, h, 0, 0, ww, hh)} else if(dir == "up") {ctx.drawImage(img_b, 0, 0, w, h, 0, h - hh, ww, hh)} else {ctx.drawImage(img_b, 0, 0, w, h, 0, 0, ww, hh)}
+                                if(dir == "left") {
+                                    ctx.drawImage(img_b, 0, 0, w, h, w - ww, 0, ww, hh)
+                                } else if(dir == "down") {
+                                    ctx.drawImage(img_b, 0, 0, w, h, 0, 0, ww, hh)
+                                } else if(dir == "up") {
+                                    ctx.drawImage(img_b, 0, 0, w, h, 0, h - hh, ww, hh)
+                                } else {
+                                    ctx.drawImage(img_b, 0, 0, w, h, 0, 0, ww, hh)
+                                }
                             } else {
                                 ctx.drawImage(m ? img_a : img_b, 0, 0, w, h);
                                 xo = hz ? m ? hw - (ww / 2) : ww * .5 : 0;
@@ -1504,7 +1799,11 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "strips") {
-                        var dir = efx[1] || "rightdown", m = (w + h), x = 0, y = 0, s = (m / steps);
+                        var dir = efx[1] || "rightdown",
+                            m = (w + h),
+                            x = 0,
+                            y = 0,
+                            s = (m / steps);
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1564,7 +1863,16 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "turn") {
-                        var q = parseInt(getInt(opt1, 5, trans), 10), pos = efx[1] || "vertical", dir = efx[2] || "right", v = pos == "vertical" ? 1 : 0, r = dir == "left" || dir == "up" ? 1 : 0, ww = v ? (w / q) : w, hh = v ? h : (h / q), sx = (ww / steps), sy = (hh / steps), s = 0;
+                        var q = parseInt(getInt(opt1, 5, trans), 10),
+                            pos = efx[1] || "vertical",
+                            dir = efx[2] || "right",
+                            v = pos == "vertical" ? 1 : 0,
+                            r = dir == "left" || dir == "up" ? 1 : 0,
+                            ww = v ? (w / q) : w,
+                            hh = v ? h : (h / q),
+                            sx = (ww / steps),
+                            sy = (hh / steps),
+                            s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1593,7 +1901,12 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "wheel") {
-                        var q = parseInt(getInt(opt1, 4, trans), 10), x = w / 2, y = h / 2, d = (Math.PI * 2) / q, r = Math.ceil(Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2), s = (d / steps);
+                        var q = parseInt(getInt(opt1, 4, trans), 10),
+                            x = w / 2,
+                            y = h / 2,
+                            d = (Math.PI * 2) / q,
+                            r = Math.ceil(Math.sqrt(Math.pow(w, 2) + Math.pow(h, 2)) / 2),
+                            s = (d / steps);
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1623,7 +1936,15 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "wrench") {
-                        var pos = efx[1] || "vertical", v = pos == "vertical" ? 1 : 0, c = Math.round(steps * .5), a = 1 / c, xo = 0, yo = 0, ow = 0, oh = 0, s = 0;
+                        var pos = efx[1] || "vertical",
+                            v = pos == "vertical" ? 1 : 0,
+                            c = Math.round(steps * .5),
+                            a = 1 / c,
+                            xo = 0,
+                            yo = 0,
+                            ow = 0,
+                            oh = 0,
+                            s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1655,7 +1976,20 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "zigzag") {
-                        var gx = parseInt(getInt(opt1, 8, trans), 10), gy = parseInt(getInt(opt2, gx, trans), 10), m = gx * gy, ww = (w / gx), bw = Math.ceil(ww), hh = (h / gy), bh = Math.ceil(hh), lf = (m / steps), tt = Math.round(steps / m), ct = 0, yo = 0, xo = -1, dir = 0, xc = gx;
+                        var gx = parseInt(getInt(opt1, 8, trans), 10),
+                            gy = parseInt(getInt(opt2, gx, trans), 10),
+                            m = gx * gy,
+                            ww = (w / gx),
+                            bw = Math.ceil(ww),
+                            hh = (h / gy),
+                            bh = Math.ceil(hh),
+                            lf = (m / steps),
+                            tt = Math.round(steps / m),
+                            ct = 0,
+                            yo = 0,
+                            xo = -1,
+                            dir = 0,
+                            xc = gx;
                         cmx.clearRect(0, 0, w, h);
                         cmx.fillStyle = "rgba(0,0,0,1.0)";
                         cmx.fillRect(0, 0, w, h);
@@ -1696,7 +2030,16 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "zoom") {
-                        var dir = efx[1] || "out", m = dir == "in" ? 1 : 0, z = 0, f = 0, x = 0, y = 0, ww = 0, hh = 0, a = 1 / steps, d = a;
+                        var dir = efx[1] || "out",
+                            m = dir == "in" ? 1 : 0,
+                            z = 0,
+                            f = 0,
+                            x = 0,
+                            y = 0,
+                            ww = 0,
+                            hh = 0,
+                            a = 1 / steps,
+                            d = a;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
                             val = cvi_tween[tween](steps, cnt, cpa) * steps;
@@ -1740,7 +2083,9 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
             } else if(canvas.timer && canvas.getContext) {
                 window.clearInterval(canvas.timer);
                 canvas.timer = 0;
-                var ctx = canvas.getContext('2d'), w = parseInt(canvas.width), h = parseInt(canvas.height);
+                var ctx = canvas.getContext('2d'),
+                    w = parseInt(canvas.width),
+                    h = parseInt(canvas.height);
                 ctx.drawImage(img, 0, 0, w, h);
                 ctx.restore()
             }
