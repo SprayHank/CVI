@@ -15,7 +15,10 @@ var CVI;
             }
             return supportsVml.supported
         })(),
-        cvs: (function(){return ''})(),
+        cvs: (function isCanvasSupported(){
+            var elem = document.createElement('CANVAS');
+            return !!(elem.getContext && elem.getContext('2D'));
+        })(),
         Color: function(v) {
             if(v.match(/^#[0-9a-f]{6}$/i)) {return v;}
             else if(v.match(/^#[0-9a-f]{3}$/i)) {
