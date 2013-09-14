@@ -4,6 +4,7 @@ var CVI;
     "use strict";
     CVI = function() {};
     CVI.prototype = {
+        //VML Support detection
         vml: (function supportsVml() {
             if(typeof supportsVml.supported == "undefined") {
                 var a = document.documentElement.appendChild(document.createElement('div'));
@@ -15,16 +16,19 @@ var CVI;
             }
             return supportsVml.supported
         })(),
+        //Canvas Support detection
         cvs: (function isCanvasSupported(){
             var elem = document.createElement('CANVAS');
             return !!(elem.getContext && elem.getContext('2D'));
         })(),
+        //Format the Color to #XXXXXX from #XXX even if not color , turn to #000000
         Color: function(v) {
             if(v.match(/^#[0-9a-f]{6}$/i)) {return v;}
             else if(v.match(/^#[0-9a-f]{3}$/i)) {
                 return '#' + v.substr(1, 1) + v.substr(1, 1) + v.substr(2, 1) + v.substr(2, 1) + v.substr(3, 1) + v.substr(3, 1);
             } else {return '#000000';}
         },
+        //get the Color from hex to rgb ,return like '35, 98, 106'
         getRGB: function(v) {
             function hex2dec(h) {return(Math.max(0, Math.min(parseInt(h, 16), 255)))}
 
@@ -32,10 +36,15 @@ var CVI;
             v = this.Color(v);
             return hex2dec(v.substr(1, 2)) + ', ' + hex2dec(v.substr(3, 2)) + ', ' + hex2dec(v.substr(5, 2))
         },
+        //return the element by id
         G: function(v) {return(document.getElementById(v));},
+        //remove the element
         R: function(v) {return(document.body.removeChild(v));},
+        //append the element to the page
         A: function(v) {return(document.body.appendChild(v));},
+        //create a element
         C: function(v) {return(document.createElement(v));},
+        //extend an object like jQuery but no deep
         extend: function() {
             var destination = arguments[0] || {},
                 source = arguments[1] || {};
@@ -51,6 +60,7 @@ var CVI;
             }
             return destination;
         },
+        //extend a class
         extends: function(subClass, superClass) {
             //见到网上有人是这样写的
             //subClass.prototype=superClass.prototype;
