@@ -15,18 +15,19 @@ var CVI;
             }
             return supportsVml.supported
         })(),
-        cvs: !this.vml,
+        cvs: (function(){return ''})(),
+        Color: function(v) {
+            if(v.match(/^#[0-9a-f]{6}$/i)) {return v;}
+            else if(v.match(/^#[0-9a-f]{3}$/i)) {
+                return '#' + v.substr(1, 1) + v.substr(1, 1) + v.substr(2, 1) + v.substr(2, 1) + v.substr(3, 1) + v.substr(3, 1);
+            } else {return '#000000';}
+        },
         getRGB: function(v) {
             function hex2dec(h) {return(Math.max(0, Math.min(parseInt(h, 16), 255)))}
 
-            var r = 0, g = 0, b = 0;
-            v = v || '#fff';
-            if(v.match(/^#[0-9a-f]{3}$/i)) {
-                r = hex2dec(v.substr(1, 1) + v.substr(1, 1)), g = hex2dec(v.substr(2, 1) + v.substr(2, 1)), b = hex2dec(v.substr(3, 1) + v.substr(3, 1))
-            } else if(v.match(/^#[0-9a-f]{6}$/i)) {
-                r = hex2dec(v.substr(1, 2)), g = hex2dec(v.substr(3, 2)), b = hex2dec(v.substr(5, 2))
-            }
-            return r + ',' + g + ',' + b
+            v = v || '#FFFFFF';
+            v = this.Color(v);
+            return hex2dec(v.substr(1, 2)) + ', ' + hex2dec(v.substr(3, 2)) + ', ' + hex2dec(v.substr(5, 2))
         },
         G: function(v) {return(document.getElementById(v));},
         R: function(v) {return(document.body.removeChild(v));},
