@@ -102,20 +102,6 @@ var TransM;
 (function() {
     "use strict";
     var cvi = new CVI(),
-        extend = function() {
-            var destination = arguments[0] || {}, source = arguments[1] || {};
-//            console.log('before all:');
-//            console.log(destination);
-            for(var property in source) {
-//                console.log('before operation :');
-//                console.log(destination);
-//                console.log('the attribute:' + property);
-                destination[property] = source[property];
-//                console.log('after operation :');
-//                console.log(destination);
-            }
-            return destination;
-        },
         engine = (window.opera ? "O" : document.all && !window.opera ? "Ms"
             : navigator.userAgent.indexOf('WebKit') > -1 ? "Webkit"
             : navigator.userAgent.indexOf('KHTML') > -1 && navigator.userAgent.indexOf('WebKit') == -1 ? "Khtml"
@@ -182,16 +168,6 @@ var TransM;
                 if(o.currentStyle) {s = o.currentStyle;} else if(document.defaultView && document.defaultView.getComputedStyle) {s = document.defaultView.getComputedStyle(o, "");} else {s = o.style;}
                 return s;
             },
-            color: function(v) {
-                if(v.toLowerCase().match(/^#[0-9a-f]{6}$/i)) {return v;}
-                else if(v.toLowerCase().match(/^#[0-9a-f]{3}$/i)) {
-                    return '#' + v.substr(1, 1) + v.substr(1, 1) + v.substr(2, 1) + v.substr(2, 1) + v.substr(3, 1) + v.substr(3, 1);
-                } else {return '#000000';}
-            },
-            rgb: function(v) {
-                function h2d(h) {return(Math.max(0, Math.min(parseInt(h, 16), 254)));};
-                return h2d(v.substr(1, 2)) + ',' + h2d(v.substr(3, 2)) + ',' + h2d(v.substr(5, 2));
-            },
             //vml: function() {return(document.all && document.namespaces && !-[1, ]);},
             log: function(s, v) {
                 s = s.toUpperCase() || 'LOG';
@@ -212,19 +188,18 @@ var TransM;
                 function uniqueID() {
                     var v = Date.parse(new Date()) + Math.floor(Math.random() * 100000000000);
                     return v.toString(16);
-                }
-
+                };
                 function getFName(v, s) {
                     var fn = v.replace(/^.*[\/\\]/g, ''), t = fn.lastIndexOf(".");
                     if(s && t > 0) {fn = fn.substring(0, t);}
                     return fn;
                 };
-                function getArg(a, t) {return (typeof options[a.toLowerCase()] === t ? options[a.toLowerCase()] : transm["default" + a]);};
-                function getNum(a, n, m) {return Math.max(n, Math.min(m, (typeof options[a.toLowerCase()] === 'number' ? options[a.toLowerCase()] : transm["default" + a])));};
+                function getArg(a, t) {return (typeof options[a] === t ? options[a] : defopts[a]);};
+                function getNum(a, n, m) {return Math.max(n, Math.min(m, (typeof options[a] === 'number' ? options[a] : defopts[a])));};
                 function finalize() {
-                    //if(self.verbose) {transm.log('log', 'in finalize')}
+                    //if(self.verbose) {_this.log('log', 'in finalize')}
                     tmp = _this.C('a');
-                    extend(tmp.style, {
+                    _this.extend(tmp.style, {
                         height: height + 'px',
                         width: width + 'px',
                         display: 'block',
@@ -272,7 +247,7 @@ var TransM;
                             meter.style.visibility = 'visible';
                             tmp.appendChild(meter);
                             meter.unselectable = true;
-                            //if(self.verbose) {transm.log('log', meter.innerHTML)}
+                            //if(self.verbose) {_this.log('log', meter.innerHTML)}
                             meter.innerHTML = '<v:oval' +
                                 ' strokeweight="0" stroked="f" filled="t" fillcolor="#808080"' +
                                 ' style="zoom:1;display:block;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' +
@@ -282,7 +257,7 @@ var TransM;
                                 ' strokeweight="0" stroked="f" filled="t" fillcolor="#808080" style="zoom:1;display:block;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' +
                                 self.msize + 'px;height:' + self.msize + 'px;"><v:fill color="' + self.mfgcolor + '" opacity="' + self.mopacity + '"' + this.VML.tagEnd + '</v:shape>';
                             meter.style.visibility = 'hidden';
-                            //if(self.verbose) {transm.log('log', meter.innerHTML)}
+                            //if(self.verbose) {_this.log('log', meter.innerHTML)}
                         } else {
                             var meter = _this.C('div');
                             meter.id = self.id + "_meter";
@@ -304,9 +279,10 @@ var TransM;
                             if(nda) {meter.style[nda] = 'none';}
                         }
                     }
+                    //if(verbose){_this.log('log', 'here');}
                     var cover = _this.C('div');
                     cover.id = self.id + "_cover";
-                    extend(cover.style, {
+                    _this.extend(cover.style, {
                         width: parseInt(self.cw / 2, 10) + 'px',
                         height: '16px',
                         fontSize: '12px',
@@ -352,7 +328,7 @@ var TransM;
                         tmp.style.cssText = 'zoom:1;position:absolute;left:-9999px;top:0px;margin:0px;padding:0px;width:' + self.cw + 'px;height:' + self.ch + 'px;';
                         _this.A(tmp);
                     }
-                    transm._preload(self, 0);
+                    _this._preload(self, 0);
                     return self.id;
                 };
                 var width,
@@ -377,31 +353,32 @@ var TransM;
                     defopts = defaultOption,
                     _this = this;
                 if(options) {for(i in defopts) {if(!options[i]) {options[i] = defopts[i];}}} else {options = defopts;}
-                verbose = getArg('Verbose', 'boolean');
+                verbose = getArg('verbose', 'boolean');
                 vml = this.vml;
                 if(!vml) {w3c = this.canvas();}
                 nbr = Style('borderRadius');
                 nsa = Style('userSelect');
                 nda = Style('userDrag');
                 opa = Style('opacity');
+                //if(verbose){this.log('log', 'here');}
                 if(typeof cvi_tfx != 'object' || typeof cvi_trans != 'object') {
                     if(verbose) {
-                        transm.log('warn', 'transm: missing "cvi_trans_lib" [exit]');
+                        this.log('warn', 'transm: missing "cvi_trans_lib" [exit]');
                     }
                     return false;
                 }
-                width = cw = parseInt(getNum('Width', 64, 1024), 10);
-                height = ch = parseInt(getNum('Height', 64, 1024), 10);
-                if(typeof options['radius'] === 'number') {radius = parseInt(getNum('Radius', 0, Math.min(width / 2, height / 2)), 10);}
+                width = cw = parseInt(getNum('width', 64, 1024), 10);
+                height = ch = parseInt(getNum('height', 64, 1024), 10);
+                if(typeof options['radius'] === 'number') {radius = parseInt(getNum('radius', 0, Math.min(width / 2, height / 2)), 10);}
                 radii = (typeof options['radius'] === 'object' ? options['radius'] : new Array());
                 for(i = 0; i < 4; i++) {radii[i] = parseInt(Math.min(width / 2, height / 2, Math.max(radii[i] || 0, 0)), 10);}
                 object.id = (object.id != 'undefined' ? object.id : uniqueID());
-                id = getArg('Name', 'string');
+                id = getArg('name', 'string');
                 tmp = (id == '' || id == null ? object.id + '_transm' : id);
                 data = (typeof options['data'] === 'object' ? options['data'] : new Array());
-                //if(verbose) { transm.log('error', this); }
+                //if(verbose) { this.log('error', this); }
                 if(this.G(tmp) || data == null || !data.length || data.length < 2) { return false; }
-                tmp = transm.current(object);
+                tmp = this.current(object);
                 if(tmp.display.match(/^none|inline|run-in|compact|marker$/i)) {object.style.display = 'block';}
                 if(tmp.position.match(/^none|static$/i)) {object.style.position = 'relative';}
                 object.innerHTML = '';
@@ -417,7 +394,7 @@ var TransM;
                 if(nda) {object.style[nda] = 'none';}
                 try {
                     if(vml) {
-                        //if(verbose) {transm.log('log', 'in if vml')}
+                        //if(verbose) {this.log('log', 'in if vml')}
                         this.VML = new VML();
                         if(radius) {
                             var self = this.C('v:roundrect');
@@ -445,11 +422,11 @@ var TransM;
                         self.style.visibility = 'visible';
                         self.style.cssText = 'zoom:1;position:absolute;left:0px;top:0px;margin:0px;padding:0px;width:' + width + 'px;height:' + height + 'px;';
                         self.style.visibility = 'hidden';
-                        //if(verbose) {transm.log('log', self.outerHTML)}
+                        //if(verbose) {this.log('log', self.outerHTML)}
                     } else if(w3c) {
                         var self = this.C('canvas');
                         self.w3c = true;
-                        self.csp = transm.canvas('getImageData');
+                        self.csp = this.canvas('getImageData');
                         self.wcs = navigator.userAgent.indexOf('WebKit') != -1 && !window.external && !document.defaultCharset ? 1 : 0;
                         self.wcf = navigator.userAgent.indexOf('Gecko') > -1 && window.updateCommands && !window.external ? 1 : 0;
                     } else if(document.images && document.getElementById && document.createElement && document.appendChild && document.removeChild && document.childNodes) {
@@ -462,7 +439,7 @@ var TransM;
                     }
                     if(!self) {
                         if(verbose) {
-                            transm.log('error', 'transm: unsupported browser [exit]');
+                            this.log('error', 'transm: unsupported browser [exit]');
                         }
                         return false;
                     }
@@ -490,30 +467,30 @@ var TransM;
                         return false;
                     }
                     self.verbose = verbose;
-                    self.autoplay = getArg('Autoplay', 'boolean');
-                    self.pingpong = getArg('Pingpong', 'boolean');
-                    self.clearbg = getArg('Clearbg', 'boolean');
-                    self.fadein = getArg('Fadein', 'boolean');
-                    self.nocache = getArg('Nocache', 'boolean');
-                    self.nopreload = getArg('Nopreload', 'boolean');
-                    self.timeout = parseInt(getNum('Timeout', 1, 60), 10) * 1000;
-                    self.transition = getArg('Transition', 'string');
-                    self.tweening = getArg('Tweening', 'string');
-                    self.cparray = getArg('Cparray', 'object');
-                    self.duration = parseFloat(getNum('Duration', 0.5, 5));
-                    self.delay = parseFloat(getNum('Delay', 0, 600));
-                    self.fps = parseInt(getNum('Fps', 15, 100), 10);
-                    self.layer = getArg('Layer', 'string');
-                    self.back = getArg('Callback', 'string');
+                    self.autoplay = getArg('autoplay', 'boolean');
+                    self.pingpong = getArg('pingpong', 'boolean');
+                    self.clearbg = getArg('clearbg', 'boolean');
+                    self.fadein = getArg('fadein', 'boolean');
+                    self.nocache = getArg('nocache', 'boolean');
+                    self.nopreload = getArg('nopreload', 'boolean');
+                    self.timeout = parseInt(getNum('timeout', 1, 60), 10) * 1000;
+                    self.transition = getArg('transition', 'string');
+                    self.tweening = getArg('tweening', 'string');
+                    self.cparray = getArg('cparray', 'object');
+                    self.duration = parseFloat(getNum('duration', 0.5, 5));
+                    self.delay = parseFloat(getNum('delay', 0, 600));
+                    self.fps = parseInt(getNum('fps', 15, 100), 10);
+                    self.layer = getArg('layer', 'string');
+                    self.back = getArg('callback', 'string');
                     self.meter = getArg('Meter', 'boolean');
-                    self.mfgcolor = transm.color(getArg('Mfgcolor', 'string'));
-                    self.mbgcolor = transm.color(getArg('Mbgcolor', 'string'));
-                    self.mfgc = transm.rgb(self.mfgcolor);
-                    self.mbgc = transm.rgb(self.mbgcolor);
-                    self.mopacity = parseFloat(getNum('Mopacity', 0.1, 1.0));
-                    self.msize = parseInt(getNum('Msize', 24, Math.min(width, height)), 10);
-                    self.mposx = parseInt(getNum('Mposx', 0, width - self.msize), 10);
-                    self.mposy = parseInt(getNum('Mposy', 0, height - self.msize), 10);
+                    self.mfgcolor = this.Color(getArg('mfgcolor', 'string'));
+                    self.mbgcolor = this.Color(getArg('mbgcolor', 'string'));
+                    self.mfgc = this.getRGB(self.mfgcolor);
+                    self.mbgc = this.getRGB(self.mbgcolor);
+                    self.mopacity = parseFloat(getNum('mopacity', 0.1, 1.0));
+                    self.msize = parseInt(getNum('msize', 24, Math.min(width, height)), 10);
+                    self.mposx = parseInt(getNum('mposx', 0, width - self.msize), 10);
+                    self.mposy = parseInt(getNum('mposy', 0, height - self.msize), 10);
                     self.xfac = width > height ? 1 : height > width ? width / height : 1;
                     self.yfac = height > width ? 1 : width > height ? height / width : 1;
                     self.ifac = self.xfac == 1 ? (width / height) : (height / width);
@@ -684,7 +661,7 @@ var TransM;
                     } else {finalize();}
                 } catch(err) {
                     if(verbose) {
-                        transm.log('error', 'transm: has failed ' + err.message +
+                        this.log('error', 'transm: has failed ' + err.message +
                             (!!err.lineNumber ? ' at line ' + err.lineNumber : '') +
                             (!!err.fileName ? ' on ' + err.fileName : '') +
                             ' [exit]');
@@ -701,7 +678,17 @@ var TransM;
                     var meter = this.G(self.id + "_meter");
                     if(meter.timer) {window.clearInterval(meter.timer);}
                     if(self.w3c) {
-                        var ctx = meter.getContext("2d"), t = Math.round(delay / 40), d = Math.PI * 2, s = d / t, c = 0, w = meter.width, h = meter.height, x = w / 2, y = h / 2, a = (Math.PI / 2) * -1, r = x;
+                        var ctx = meter.getContext("2d"),
+                            t = Math.round(delay / 40),
+                            d = Math.PI * 2,
+                            s = d / t,
+                            c = 0,
+                            w = meter.width,
+                            h = meter.height,
+                            x = w / 2,
+                            y = h / 2,
+                            a = (Math.PI / 2) * -1,
+                            r = x;
                         meter.timer = window.setInterval(function() {
                             ctx.clearRect(0, 0, w, h);
                             ctx.save();
@@ -719,7 +706,7 @@ var TransM;
                             if(c > t) {
                                 window.clearInterval(meter.timer);
                                 ctx.clearRect(0, 0, w, h);
-                                transm.next(self, true);
+                                this.next(self, true);
                             }
                         }, 40);
                     } else if(self.vml) {
@@ -736,7 +723,7 @@ var TransM;
                             if(c > t) {
                                 window.clearInterval(meter.timer);
                                 meter.style.visibility = 'hidden';
-                                transm.next(self, true);
+                                this.next(self, true);
                             }
                         }, 40);
                     } else {
@@ -748,13 +735,13 @@ var TransM;
                             if(c > t) {
                                 window.clearInterval(meter.timer);
                                 meter.style.visibility = 'hidden';
-                                transm.next(self, true);
+                                this.next(self, true);
                             }
                         }, 40);
                     }
                 } else {
                     self.parentNode.timer = window.setInterval(function() {
-                        transm.next(self, true);
+                        this.next(self, true);
                         if(!self.autoplay) {window.clearInterval(self.parentNode.timer);}
                     }, delay);
                 }
@@ -779,7 +766,7 @@ var TransM;
                 if(self && !self.autoplay && !self.TLbusy && self.curI != 0) {
                     self.preI = self.curI;
                     self.curI = 0;
-                    transm._wipe(self);
+                    this._wipe(self);
                 }
                 return false;
             },
@@ -787,7 +774,7 @@ var TransM;
                 if(self && !self.autoplay && !self.TLbusy) {
                     self.preI = self.curI;
                     if(self.curI > 0) {self.curI--;} else {self.curI = self.noi;}
-                    transm._wipe(self);
+                    this._wipe(self);
                 }
                 return false;
             },
@@ -795,7 +782,7 @@ var TransM;
                 if(self && !self.autoplay && !self.TLbusy) {
                     self.preI = self.curI;
                     self.curI = Math.min(Math.max(v || 0, 0), self.noi);
-                    transm._wipe(self);
+                    this._wipe(self);
                 }
                 return false;
             },
@@ -809,7 +796,7 @@ var TransM;
                         }
                         if(self.curD) {self.curI++;} else {self.curI--;}
                     } else {if(self.curI < self.noi) {self.curI++;} else {self.curI = 0;}}
-                    transm._wipe(self);
+                    this._wipe(self);
                 }
                 return false;
             },
@@ -817,7 +804,7 @@ var TransM;
                 if(self && !self.autoplay && !self.TLbusy && self.curI != self.noi) {
                     self.preI = self.curI;
                     self.curI = self.noi;
-                    transm._wipe(self);
+                    this._wipe(self);
                 }
                 return false;
             },
@@ -878,7 +865,7 @@ var TransM;
             },
             _preload: function(self, cnt) {
                 if(!self)return false;
-                var noi = self.nopreload ? 2 : self.data.length, img = null;
+                var noi = self.nopreload ? 2 : self.data.length, img = null, _this = this;
                 if(self.timer) {window.clearTimeout(self.timer);}
                 if((!self.nopreload && cnt < self.data.length) || (self.nopreload && self.noiL < noi && cnt < self.data.length)) {
                     var cw = parseInt((self.cw / 2) - 2, 10), ow = cw / (self.data.length - 1);
@@ -891,17 +878,17 @@ var TransM;
                     }
                     img = new Image();
                     img.onabort = function() {
-                        if(self.verbose) {transm.log('warn', 'transm: onabort image > ' + self.data[cnt].source);}
+                        if(self.verbose) {_this.log('warn', 'transm: onabort image > ' + self.data[cnt].source);}
                         if(self.timer) {window.clearTimeout(self.timer);}
                         transm._setup(self);
                     };
                     img.onerror = function() {
-                        if(self.verbose) {transm.log('warn', 'transm: onerror image > ' + self.data[cnt].source);}
+                        if(self.verbose) {_this.log('warn', 'transm: onerror image > ' + self.data[cnt].source);}
                         cnt++;
                         if(self.vml && !self.nocache) {
                             if(self.timer) {window.clearTimeout(self.timer);}
-                            window.setTimeout(function() {transm._preload(self, cnt);}, 0);
-                        } else {transm._preload(self, cnt);}
+                            window.setTimeout(function() {_this._preload(self, cnt);}, 0);
+                        } else {_this._preload(self, cnt);}
                     };
                     img.onload = function() {
                         if(img.width && img.height && img.width >= 64 && img.height >= 64) {
@@ -956,15 +943,15 @@ var TransM;
                                 img.onload = '';
                                 img = null;
                             }
-                            if(self.verbose) {transm.log('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);}
+                            if(self.verbose) {_this.log('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);}
                         } else {
-                            if(self.verbose) {transm.log('warn', 'transm: failed image > ' + self.data[cnt].source);}
+                            if(self.verbose) {_this.log('warn', 'transm: failed image > ' + self.data[cnt].source);}
                         }
                         cnt++;
                         if(self.vml && !self.nocache) {
                             if(self.timer) {window.clearTimeout(self.timer);}
-                            window.setTimeout(function() {transm._preload(self, cnt);}, 0);
-                        } else {transm._preload(self, cnt);}
+                            window.setTimeout(function() {_this._preload(self, cnt);}, 0);
+                        } else {_this._preload(self, cnt);}
                     };
                     img.src = self.data[cnt].source;
                 } else {
@@ -990,13 +977,13 @@ var TransM;
                     self.TLbcall = cbf;
                     self.TLbarg = cba;
                 }
-                transm._prepare(self);
+                this._prepare(self);
                 if((!trans || trans == '') && self.back && typeof window[self.back] === 'function') {
                     try {
                         window[self.back]();
                     } catch(err) {
                         if(self.verbose) {
-                            transm.log('error', 'transm: has failed ' + err.message);
+                            this.log('error', 'transm: has failed ' + err.message);
                         }
                     }
                 }
@@ -1005,12 +992,12 @@ var TransM;
                         window[self.TLacall](self.TLaarg);
                     } catch(err) {
                         if(self.verbose) {
-                            transm.log('error', 'transm: has failed ' + err.message);
+                            this.log('error', 'transm: has failed ' + err.message);
                         }
                     }
                 }
                 self.TLready = true;
-                if(self.autoplay) {transm.play(self);}
+                if(self.autoplay) {this.play(self);}
                 return false;
             },
             _prepare: function(self) {
@@ -1061,7 +1048,10 @@ var TransM;
                 }
                 if(self.data.length > 1) {
                     self.noi = self.data.length - 1;
-                    var caf = self.data[0].callafter || null, caa = self.data[0].argafter || null, cbf = self.data[0].callbefore || null, cba = self.data[0].argbefore || null;
+                    var caf = self.data[0].callafter || null,
+                        caa = self.data[0].argafter || null,
+                        cbf = self.data[0].callbefore || null,
+                        cba = self.data[0].argbefore || null;
                     self.TLacall = caf;
                     self.TLaarg = caa;
                     self.TLbcall = cbf;
@@ -1072,12 +1062,12 @@ var TransM;
                         par.style.backgroundImage = 'none';
                     }
                     if(self.w3c) {
-                        transm._buffer(self, self.a, 0);
-                        transm._display(self);
-                    } else {transm._display(self);}
+                        this._buffer(self, self.a, 0);
+                        this._display(self);
+                    } else {this._display(self);}
                 } else {
-                    if(self.verbose) {transm.log('warn', 'transm: insufficient images [exit]');}
-                    transm.remove(self);
+                    if(self.verbose) {this.log('warn', 'transm: insufficient images [exit]');}
+                    this.remove(self);
                 }
                 return false;
             },
@@ -1132,10 +1122,10 @@ var TransM;
                             if(c > t) {
                                 window.clearInterval(self.timer);
                                 self.style.opacity = 1;
-                                transm._return(self, false);
+                                this._return(self, false);
                             }
                         }, 40);
-                    } else {transm._return(self, false);}
+                    } else {this._return(self, false);}
                 } else if(self.vml) {
                     var fill = this.C(['<v:fill src="' + self.data[0].source,
                         '" size="' + self.data[0].wm,
@@ -1155,7 +1145,7 @@ var TransM;
                             tmp.style.visibility = 'visible';
                         }
                     }
-                    transm._return(self, false);
+                    this._return(self, false);
                 } else {
                     self.src = self.data[0].source;
                     self.style.zIndex = 2;
@@ -1177,24 +1167,24 @@ var TransM;
                                 window.clearInterval(self.timer);
                                 self.style[self.opa] = 1;
                                 self.style.filter = "alpha(opacity=100)";
-                                transm._return(self, false);
+                                this._return(self, false);
                             }
                         }, 40);
-                    } else {transm._return(self, false);}
+                    } else {this._return(self, false);}
                 }
                 return false;
             },
             _wipe: function(self) {
                 if(self && self.nopreload && !self.data[self.curI].l) {
-                    var pre = null, cnt = self.curI, img = null;
+                    var pre = null, cnt = self.curI, img = null, _this = this;
                     if(self.vml && !self.nocache) {
                         pre = this.G(self.id + "_vml_preloader");
                         if(pre) {pre.src = self.data[cnt].source;}
                     }
                     img = new Image();
                     img.onerror = function() {
-                        if(self.verbose) {transm.log('warn', 'transm: onerror image > ' + self.data[cnt].source);}
-                        transm.next(self, true);
+                        if(self.verbose) {_this.log('warn', 'transm: onerror image > ' + self.data[cnt].source);}
+                        _this.next(self, true);
                     };
                     img.onload = function() {
                         if(img.width && img.height && img.width >= 64 && img.height >= 64) {
@@ -1205,8 +1195,17 @@ var TransM;
                             tmp = self.data[cnt].imgshift;
                             tmp = tmp > 0 && tmp <= 0.001 ? 0 : tmp;
                             pos = Math.max(Math.min(self.data[cnt].imgshift || 0.5, 1.0), 0.0);
-                            var nw = self.data[cnt].nw, nh = self.data[cnt].nh, ix = 0, iy = 0, iw = nw, ih = nh, xf = iw > ih ? 1 : ih > iw ? iw / ih : 1, yf = ih > iw ? 1 : iw > ih ? ih / iw : 1;
-                            if(self.xfac == 1 && self.yfac == 1 && xf == 1 && yf == 1) {} else if(self.xfac == 1 && self.yfac == 1 && xf == 1) {
+                            var nw = self.data[cnt].nw,
+                                nh = self.data[cnt].nh,
+                                ix = 0,
+                                iy = 0,
+                                iw = nw,
+                                ih = nh,
+                                xf = iw > ih ? 1 : ih > iw ? iw / ih : 1,
+                                yf = ih > iw ? 1 : iw > ih ? ih / iw : 1;
+                            if(self.xfac == 1 && self.yfac == 1 && xf == 1 && yf == 1) {
+
+                            } else if(self.xfac == 1 && self.yfac == 1 && xf == 1) {
                                 iw = ih;
                                 ix = (nw - iw) * pos;
                             } else if(self.xfac == 1 && self.yfac == 1 && yf == 1) {
@@ -1248,22 +1247,22 @@ var TransM;
                                 img.onload = '';
                                 img = null;
                             }
-                            if(self.verbose) {transm.log('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);}
-                            transm._exec(self);
+                            if(self.verbose) {_this.log('log', 'transm: ' + self.data[cnt].nw + 'x' + self.data[cnt].nh + ' > ' + self.data[cnt].source);}
+                            _this._exec(self);
                         } else {
-                            if(self.verbose) {transm.log('warn', 'transm: failed image > ' + self.data[cnt].source);}
-                            transm.next(self, true);
+                            if(self.verbose) {_this.log('warn', 'transm: failed image > ' + self.data[cnt].source);}
+                            _this.next(self, true);
                         }
                     };
                     img.src = self.data[cnt].source;
-                } else {transm._exec(self);}
+                } else {this._exec(self);}
                 return false;
             },
             _exec: function(self) {
                 function callTrans() {cvi_trans.play('transm_return', self, a ? self.a : self.b, a ? self.b : self.a, alpha, self.layer ? self.c : null, opt1, opt2, trans, tween, cpa, dur, fps);};
                 if(!self || self.TLbusy)return false;
                 if(self.parentNode.timer) {window.clearInterval(self.parentNode.timer);}
-                transm._clear(self);
+                this._clear(self);
                 var alpha = null, _this = this,
                     a = self.fromB == 'a' ? 1 : 0,
                     i = self.curI,
@@ -1284,17 +1283,19 @@ var TransM;
                         window[self.TLbcall](self.TLbarg);
                     } catch(err) {
                         if(self.verbose) {
-                            transm.log('error', 'transm: has failed ' + err.message);
+                            this.log('error', 'transm: has failed ' + err.message);
                         }
                     }
                 }
                 if(self.w3c) {
                     self.fromB = a ? 'b' : 'a';
-                    transm._buffer(self, a ? self.b : self.a, i);
+                    this._buffer(self, a ? self.b : self.a, i);
                     var mask = self.data[i].alphaimg || null, tween = self.data[i].tweening || self.tweening, cpa = self.data[i].cparray || self.cparray, fps = self.data[i].fps || self.fps;
                     if(mask) {
                         var suf = mask.substring(1 + mask.lastIndexOf(".")).toLowerCase(), todo = (suf == 'jpg' || suf == 'jpeg' ? 1 : 0);
-                        if(todo && !self.csp) {callTrans();} else {
+                        if(todo && !self.csp) {
+                            callTrans();
+                        } else {
                             var img = new Image();
                             img.onerror = function() {
                                 self.data[i].alphaimg = null;
@@ -1312,7 +1313,7 @@ var TransM;
                                         ctx.drawImage(img, 0, 0, w, h);
                                         try {s = ctx.getImageData(0, 0, w, h);} catch(err) {var excep = true;}
                                         if(excep) {
-                                            if(self.verbose) {transm.log('error', err.message + ". Explanations:\nhttp://en.wikipedia.org/wiki/Same_origin_policy\nhttp://www.w3.org/TR/XMLHttpRequest/#exceptions");}
+                                            if(self.verbose) {this.log('error', err.message + ". Explanations:\nhttp://en.wikipedia.org/wiki/Same_origin_policy\nhttp://www.w3.org/TR/XMLHttpRequest/#exceptions");}
                                             self.data[i].alphaimg = null;
                                         } else {
                                             for(i = 0, n = s.data.length; i < n; i += 4) {
@@ -1373,12 +1374,12 @@ var TransM;
                                     buffer.style[self.opa] = 1;
                                     buffer.style.filter = "alpha(opacity=100)";
                                     self.TLbusy = false;
-                                    transm._return(self, 'fade', t, fps * ((dur * 1000) / t));
+                                    this._return(self, 'fade', t, fps * ((dur * 1000) / t));
                                 }
                             }, ival);
                         } else {
                             self.TLbusy = false;
-                            transm._return(self, 'cut', 0, fps);
+                            this._return(self, 'cut', 0, fps);
                         }
                     } else {
                         if(trans != 'cut') {
@@ -1406,24 +1407,28 @@ var TransM;
                                     self.style[self.opa] = 1;
                                     self.style.filter = "alpha(opacity=100)";
                                     self.TLbusy = false;
-                                    transm._return(self, 'fade', t, fps * ((dur * 1000) / t));
+                                    this._return(self, 'fade', t, fps * ((dur * 1000) / t));
                                 }
                             }, ival);
                         } else {
                             self.TLbusy = false;
-                            transm._return(self, 'cut', 0, fps);
+                            this._return(self, 'cut', 0, fps);
                         }
                     }
                 }
                 return false;
             }
         };
-    TransM = function() {};
-    cvi.extend(TransM, CVI);
-    extend(TransM.prototype, sTransM);
+    TransM = function() {
+        function transm_return(a, b, c, d) {
+            var self = document.getElementById(d);
+            if(self) {_this._return(self, a, b, c);}
+            return false;
+        }
+
+        var _this = this;
+        window.transm_return = transm_return;
+    };
+    cvi.extends(TransM, CVI);
+    cvi.extend(TransM.prototype, sTransM);
 })();
-function transm_return(a, b, c, d) {
-    var self = document.getElementById(d);
-    if(self) {transm._return(self, a, b, c);}
-    return false;
-}

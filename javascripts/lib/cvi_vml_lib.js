@@ -7,7 +7,7 @@ var VML;
         R = function(v) {return(document.body.removeChild(v));},
         A = function(v) {return(document.body.appendChild(v));},
         C = function(v) {return(document.createElement(v));},
-        aaa;
+        cvi = new CVI();
     VML = function() {
         if(document.namespaces['v'] == null) {
             var e = ["shape", "shapetype", "group", "background",

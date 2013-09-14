@@ -66,7 +66,7 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
     cvi_tfx.wrench_horizontal = cvi_tfx.wrench_vertical = {fail: "pixelate", tween: "linear", buffer: 1, mask: 0, alpha: 0};
     cvi_tfx.zigzag = {val: 8, min: 1, max: 100, buffer: 1, mask: 1, alpha: 0};
     cvi_tfx.zoom_in = cvi_tfx.zoom_out = {fail: "fade", tween: "linear", buffer: 1, mask: 0, alpha: 0};
-    var cvi_c = 0;
+    var cvi_c = 0,cvi = new CVI();
     for(var cvi_i in cvi_tfx) {
         cvi_rfx[cvi_c++] = cvi_i;
     }
@@ -96,19 +96,6 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                 return false
             };
             function getInt(o, v, t) {return(Math.min(Math.max(o || v, cvi_tfx[t].min), cvi_tfx[t].max) || cvi_tfx[t].val)};
-            function getRGB(v) {
-                function hex2dec(h) {return(Math.max(0, Math.min(parseInt(h, 16), 255)))}
-
-                var r = 0, g = 0, b = 0;
-                v = v || '#fff';
-                if(v.match(/^#[0-9a-f]{3}$/i)) {
-                    r = hex2dec(v.substr(1, 1) + v.substr(1, 1)), g = hex2dec(v.substr(2, 1) + v.substr(2, 1)), b = hex2dec(v.substr(3, 1) + v.substr(3, 1))
-                } else if(v.match(/^#[0-9a-f]{6}$/i)) {
-                    r = hex2dec(v.substr(1, 2)), g = hex2dec(v.substr(3, 2)), b = hex2dec(v.substr(5, 2))
-                }
-                return r + ',' + g + ',' + b
-            }
-
             function fill(c, x, y, w, h, wc) {
                 if(wc) {
                     c.beginPath();
@@ -569,7 +556,7 @@ var cvi_tfx = new Object(), cvi_rfx = new Array(), cvi_trans;
                             }
                         }, ival)
                     } else if(efx[0] == "color") {
-                        var g = getRGB(opt1), c = Math.round(steps * .5), q = 1 / c, v = 0;
+                        var g = cvi.getRGB(opt1), c = Math.round(steps * .5), q = 1 / c, v = 0;
                         s = 0;
                         timer.start();
                         canvas.timer = window.setInterval(function() {
